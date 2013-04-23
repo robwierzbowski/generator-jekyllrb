@@ -1,0 +1,51 @@
+{
+  "name": "generator-jekyll",
+  "version": "0.1.0",
+  "description": "Comprehensive Yeoman generator for Jekyll projects. Yo, Jekyll!",
+  "keywords": [
+    // RWRW Edit when complete
+    "yeoman-generator",
+    "jekyll",
+    "static-site",
+    "h5bp",
+    "sass",
+    "compass",
+    "coffeescript"
+  ],
+  "homepage": "https://github.com/robwierzbowski/generator-jekyll",
+  "bugs": "https://github.com/robwierzbowski/generator-jekyll/issues",
+  "author": {
+    "name": "Rob Wierzbowski",
+    "email": "hello@robwierzbowski.com",
+    "url": "http://robwierzbowski.com"
+  },
+  "main": "app/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/robwierzbowski/generator-jekyll.git"
+  },
+  "scripts": {
+     "test": "mocha"
+  },
+  "dependencies": {
+    // RWRW To launch/ generate
+    "yeoman-generator": "~0.10.3",
+    // RWRW JQ for node
+    //"cheerio": "~0.10.6",
+    // RWRW From old yeo-jek generator
+    //"request": "~2.11.4",
+    //"underscore": "~1.4.2"
+  },
+  "devDependencies": {
+    "mocha": "~1.9.0"
+  },
+
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "licenses": [
+    {
+      "type": "BSD-new"
+    }
+  ]
+}

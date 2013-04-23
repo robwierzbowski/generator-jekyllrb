@@ -1,0 +1,9 @@
+# robotstxt.org/
+
+User-agent: *
+
+# Example Disallow
+# Disallow directories with duplicate content 
+# Disallow: /blog/tags/*
+# Disallow media library 
+# Disallow: /media

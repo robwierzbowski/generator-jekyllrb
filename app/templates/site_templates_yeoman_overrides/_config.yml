@@ -1,0 +1,88 @@
+
+# Site configuration for RWRW Jek proj
+
+# Subgenerate anything that requiers dependencies to be downloaded, or changes paths.
+
+name: RWRW add var
+description: RWRW blank
+# If Yo is setting up do we need this?
+# url: 'http://localhost:9000'
+
+# author :
+#   name       : RWRW populate
+#   email      : RWRW populate
+#   github     : RWRW populate username
+#   twitter    : RWRW populate username
+
+## RWRW Settings
+
+## Custom paths?
+source:      .
+destination: ./_site
+plugins:     ./_plugins
+
+## RWRW let command line and grunt handle server.
+server: false
+auto: false
+
+## RWRW Custom excludes for grunt/yo
+# Exclude files from compilation
+# A list of directories and files to exclude from the conversion.
+# auto excludes .dot and _underscore files and directories
+exclude: RWRW [scss, config.rb, readme.md]
+# exclude: Gemfile, Gemfile.lock, Gruntfile.js, grunt.js, package.json, readme.md
+# A list of directories and files to specifically include in the conversion. .htaccess is a good example since dotfiles are excluded by default.
+include: RWRW [dir1, file1, dir2]
+
+
+## RWRW for subgenerator
+
+## Anything with a component into subgen, so we can pull it in with Bower at scaffolding.
+## Also, little configurables
+
+# Default post path
+# one of: (or construct your own?)
+# date  /:categories/:year/:month/:day/:title.html
+# pretty  /:categories/:year/:month/:day/:title/
+# none  /:categories/:title.html
+permalink: RWRW var
+
+## RWRW prebuilt config blocks for each? Maybe not. Maruku by default, so if maruku chosen do not render
+# Might need further conig (smartypants)
+markdown: RWRW var
+# rdiscount
+# kramdown
+# redcarpet
+# maruku
+
+### RWRW These are the defaults
+# maruku:
+#   use_tex:    false
+#   use_divs:   false
+#   png_engine: blahtex
+#   png_dir:    images/latex
+#   png_url:    /images/latex
+# rdiscount:
+#   extensions: []
+# redcarpet:
+#   extensions: [ fenced_code_blocks, smart ]
+# kramdown:
+#   auto_ids: true
+#   footnote_nr: 1
+#   entity_output: as_char
+#   toc_levels: 1..6
+#   use_coderay: false
+#   coderay:
+#     coderay_wrap: div
+#     coderay_line_numbers: inline
+#     coderay_line_numbers_start: 1
+#     coderay_tab_width: 4
+#     coderay_bold_every: 10
+#     coderay_css: style
+
+# Enables highlight tag with Pygments.
+pygments: RWRW Var bool (def false or true)
+# Publish posts with future date.
+future: RWRW [boolean]
+# Splits your posts up over multiple subdirectories called “page2”, “page3”, … “pageN”
+paginate: [per_page]

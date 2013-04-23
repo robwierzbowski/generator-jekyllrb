@@ -1,0 +1,49 @@
+# .gitignore for Yoeoman-Jekyll projects
+
+# Ignore hidden folders #
+# This takes care of .tmp, .sass-cache, and many others #
+.*/
+
+# Ignore OS generated files #
+.DS_Store*
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# Always-ignore files and folders #
+*.diff
+*.err
+*.log
+*.orig
+*.rej
+*.swn
+*.swo
+*.swp
+._*
+*~
+
+# Ignore packages #
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Ignore for Yeoman-Jekyll projects #
+app/components
+app/_site
+dist
+node_modules
+temp
+
+## RWRW Based on generator:
+## RWRW Very opinionated, maybe even ask in build
+
+# if css preprocessor
+app/css
+
+# if js preprocessor
+app/js

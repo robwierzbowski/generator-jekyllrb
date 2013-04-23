@@ -1,0 +1,19 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+  // RWRW include yeoman variables
+
+    <name> -- Creation Master -- <twitter>
+
+# THANKS
+
+    <name>
+
+# TECHNOLOGY COLOPHON
+
+  // RWRW include yeoman variables
+  
+    HTML5, CSS3
+    Normalize.css, jQuery, Modernizr
