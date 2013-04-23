@@ -1,9 +1,10 @@
 Description:
-    Creates a default AngularJS app
+    Creates a Jekyll site and wires watch, test, and build tasks for Grunt.
 
 Example:
-    yo angular
+    yo jekyll
 
+    RWRW TO EDIT
     This will create:
         Gruntfile.js
         component.json
