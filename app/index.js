@@ -34,33 +34,27 @@ var Generator = module.exports = function Generator() {
 
 util.inherits(Generator, yeoman.generators.Base);
 
+///////////////////////////////////////////////
+// Gather user input
+
+// TODO: When new prompt library lands in Yeoman 1.0:
+//   Rewrite for conditional prompts
+//   Auto populate with magicDefaults
+//   Make some prompts required
+//   Add custom validation
+//   Make defaults editable with an equivalent of read module's edit: true
+
+// Basic direcory structure
 Generator.prototype.askFor = function askFor() {
   var cb = this.async();
 
-  var welcome =
-  'This generator will scaffold and wire a Jekyll site. Yo, Jekyll!'.yellow.bold +
-  '\n ';
-
-  // TODO: Validate multiple choice options with prompt schema when next
-  // version of yo is released.
-  // var cssPrep      = ['s','c','n'];
-  // var jsPrep       = ['c','n'];
-  // var templateType = ['d','H5'];
-  // var jekPost      = ['d','p','n'];
-  // var jekMkd       = ['m','rd','k','rc'];
-
-  console.log(welcome);
-
-  // TODO: Rewrite when conditional prompts land in Yeoman Generator
-  //       Silent to hidden, if it's accepted, but better as separate
-  //       prompts with consol.log messages in between.
+  console.log(
+    'This generator will scaffold and wire a Jekyll site. Yo, Jekyll!'.yellow.bold +
+    '\n ' +
+    '\nFirst let\'s set up some directories.'.yellow + ' ☛'
+  );
 
   var prompts = [{
-    name: 'titleDirs',
-    message: 'First let\'s set up some directories.'.yellow + ' ☛',
-    silent: true
-  },
-  {
     name: 'cssDir',
     message: 'Choose a css directory:',
     default: 'css/'
@@ -77,14 +71,34 @@ Generator.prototype.askFor = function askFor() {
     message: 'Choose an image file directory:',
     default: 'images/'
     // Required, edit
-  },
-  // Tools and Preprocessors
-  {
-    name: 'titleTools',
-    message: 'Wire up tools and preprocessors.'.yellow + ' ☛',
-    silent: true
-  },
-  {
+  }];
+
+  this.prompt(prompts, function (err, props) {
+    if (err) {
+      return this.emit('error', err);
+    }
+
+    // Assign prompt results to Generator object
+    // String properties
+    this.cssDir       = props.cssDir;
+    this.jsDir        = props.jsDir;
+    this.imgDir       = props.imgDir;
+
+    cb();
+  }.bind(this));
+};
+
+// Preprocessors and libraries
+Generator.prototype.askForTools = function askFor() {
+  var cb = this.async();
+
+  // Multiple choice options
+  // var cssPrep = ['s','c','n'];
+  // var jsPrep  = ['c','n'];
+
+  console.log('\nNext let\'s wire up tools and preprocessors.'.yellow + ' ☛');
+
+  var prompts = [{
     name: 'cssPrep',
     message: 'Use a css preprocessor?\n s: Sass\n c: Sass & Compass\n n: none',
     default: 'n'
@@ -110,18 +124,43 @@ Generator.prototype.askFor = function askFor() {
     name: 'requireJs',
     message: 'Use Require.js?',
     default: 'y/N'
-  },
-  // Templates
-  {
-    name: 'titleTemplates',
-    message: 'Choose template components.'.yellow + ' ☛',
-    silent: true
-  },
-  {
+  }];
+
+  this.prompt(prompts, function (err, props) {
+    if (err) {
+      return this.emit('error', err);
+    }
+
+    // Assign prompt results to Generator object
+    // Default y/N answer to boolean
+    this.requireJs     = !(/n/i).test(props.requireJs);
+
+    // Multiple choice 'none' to false
+    this.cssPrep       = (/n/i).test(props.cssPrep) ? false : props.cssPrep;
+    this.jsPrep        = (/n/i).test(props.jsPrep)  ? false : props.jsPrep;
+
+    // String properties
+    this.cssPrepDir   = props.cssPrepDir;
+    this.jsPrepDir    = props.jsPrepDir;
+
+    cb();
+  }.bind(this));
+};
+
+// Jekyll boilerplate templates
+Generator.prototype.askForTemplates = function askFor() {
+  var cb = this.async();
+
+  // Multiple choice options
+  // var templateType = ['d','h'];
+
+  console.log('\nChoose template components.'.yellow + ' ☛');
+
+  var prompts = [{
     name: 'templateType',
-    message: 'Choose a Jekyll site template\n d:  Default\n H5: HTML5 ★ Boilerplate',
+    message: 'Choose a Jekyll site template\n d:  Default\n h: HTML5 ★ Boilerplate',
     default: 'd',
-    warning: 'H5: Yo dog I heard you like boilerplates in your boilerplates...'
+    warning: 'h: Yo dog I heard you like boilerplates in your boilerplates...'
   },
   {
     name: 'h5bpCss',
@@ -147,16 +186,41 @@ Generator.prototype.askFor = function askFor() {
     name: 'h5bpAnalytics',
     message: 'Add Google Analytics in an include?',
     default: 'y/N'
-  },
-  // Configure Jekyll
-  // TODO: Auto populate with magicDefaults, make editable with an
-  // equivalent of read module's edit: true
-  {
-    name: 'titleConfig',
-    message: 'And last, let\'s configure Jekyll.'.yellow + ' ☛',
-    silent: true
-  },
-  {
+  }];
+
+  this.prompt(prompts, function (err, props) {
+    if (err) {
+      return this.emit('error', err);
+    }
+
+    // Assign prompt results to Generator object
+    // Default Y/n answer to boolean
+    this.h5bpCss       = (/y/i).test(props.h5bpCss);
+    this.h5bpJs        = (/y/i).test(props.h5bpJs);
+
+    // Default y/N answer to boolean
+    this.h5bpIco       = !(/n/i).test(props.h5bpIco);
+    this.h5bpDocs      = !(/n/i).test(props.h5bpDocs);
+    this.h5bpAnalytics = !(/n/i).test(props.h5bpAnalytics);
+
+    // String properties
+    this.templateType = props.templateType;
+
+    cb();
+  }.bind(this));
+};
+
+// Jekyll configuration
+Generator.prototype.askForJekyll = function askFor() {
+  var cb = this.async();
+
+  // Multiple choice options
+  // var jekPost = ['d','p','n'];
+  // var jekMkd  = ['m','rd','k','rc'];
+
+  console.log('\nAnd last, let\'s configure Jekyll.'.yellow + ' ☛');
+
+  var prompts = [{
     name: 'jekAuthor',
     message: 'Your Name:'
   },
@@ -165,11 +229,11 @@ Generator.prototype.askFor = function askFor() {
     name: 'humansEmail',
     message: 'Your Email:'
   },
+  // If H5BP
   {
     name: 'humansTwit',
     message: 'Your Twitter Username:'
   },
-  // End if H5BP
   {
     name: 'jekDescript',
     message: 'Site Description:'
@@ -200,47 +264,31 @@ Generator.prototype.askFor = function askFor() {
       return this.emit('error', err);
     }
 
-    // Gather and assign prompt results
-
-    // Convert 'none' multiple choice answers to false
-    // RWRW Should we also convert multiple choice 1 letter answers to full answers?
-    this.cssPrep       = (/n/i).test(props.cssPrep) ? false : props.cssPrep;
-    this.jsPrep        = (/n/i).test(props.jsPrep) ? false : props.jsPrep;
-
-    // Convert y/n answers to booleans
-    // Default yes
-    this.h5bpCss       = (/y/i).test(props.h5bpCss);
-    this.h5bpJs        = (/y/i).test(props.h5bpJs);
-    // Default no
-    this.requireJs     = !(/n/i).test(props.requireJs);
-    this.h5bpIco       = !(/n/i).test(props.h5bpIco);
-    this.h5bpDocs      = !(/n/i).test(props.h5bpDocs);
-    this.h5bpAnalytics = !(/n/i).test(props.h5bpAnalytics);
-    this.jekPyg        = !(/n/i).test(props.jekPyg);
+    // Assign prompt results to Generator object
+    // Default y/N answer to boolean
+    this.jekPyg      = !(/n/i).test(props.jekPyg);
 
     // String properties
-    this.cssDir       = props.cssDir;
-    this.jsDir        = props.jsDir;
-    this.imgDir       = props.imgDir;
-    this.cssPrepDir   = props.cssPrepDir;
-    this.jsPrepDir    = props.jsPrepDir;
-    this.templateType = props.templateType;
-    this.jekAuthor    = props.jekAuthor;
-    this.humansEmail  = props.humansEmail;
-    this.humansTwit   = props.humansTwit;
-    this.jekDescript  = props.jekDescript;
-    this.jekPost      = props.jekPost;
-    this.jekMkd       = props.jekMkd;
-    this.jekPage      = props.jekPage;
+    this.jekMkd      = props.jekMkd;
+    this.jekPost     = props.jekPost;
+
+    // String properties without defaults to string or boolean
+    this.jekAuthor   = props.jekAuthor   !== '' ? props.jekAuthor   : false;
+    this.humansEmail = props.humansEmail !== '' ? props.humansEmail : false;
+    this.humansTwit  = props.humansTwit  !== '' ? props.humansTwit  : false;
+    this.jekDescript = props.jekDescript !== '' ? props.jekDescript : false;
+    this.jekPage     = props.jekPage     !== '' ? props.jekPage     : false;
 
     cb();
   }.bind(this));
 };
 
-
-
+///////////////////////////////////////////////
+// Scaffolding
 
 Generator.prototype.app = function app() {
+
+  console.log(this);
 
   // create app folder for jek
   this.mkdir('app');
@@ -317,7 +365,7 @@ Generator.prototype.app = function app() {
 
   // if sass or if compass
       // make folder, add style.scss? it will overwrite style.css
-      // add and process configrb
+      // add and process config.rb
         // main if h5bp?
       // ?? All css stays css, not sass.
       // GRUNTFILE
