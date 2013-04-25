@@ -8,9 +8,9 @@ var yeoman = require('yeoman-generator');
 var Generator = module.exports = function Generator() {
   yeoman.generators.Base.apply(this, arguments);
 
-  // Specify an appname from the command line
-  // this.argument('appname', { type: String, required: false });
-  // this.appname = this.appname || path.basename(process.cwd());
+  // Specify an appname from the command line, or use dir name
+  this.argument('appname', { type: String, required: false });
+  this.appname = this.appname || path.basename(process.cwd());
 
   // Set permanant opts here
   // var someVar = 'gar';
@@ -21,6 +21,11 @@ var Generator = module.exports = function Generator() {
   //   console.log('\n\nI\'m all done. Running ' + 'npm install & bower install'.bold.yellow + ' to install the required dependencies. If this fails, try running the command yourself.\n\n');
   //   spawn('npm', ['install'], { stdio: 'inherit' });
   //   spawn('bower', ['install'], { stdio: 'inherit' });
+  // });
+
+  // Bower install from new yo docs
+  // this.on('end', function () {
+  //   this.installDependencies({ skipInstall: options['skip-install'] });
   // });
 
   // RWRW
