@@ -1,4 +1,5 @@
 {
-    "directory": "app/components"
-    "json": "component.json"
+  "directory": "app/components"
+  // Plan for 1.0: specify the new bower.json file
+  "json": "bower.json"
 }

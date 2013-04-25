@@ -1,0 +1,14 @@
+{
+  "name": "jekyll-site", //RWRW add var
+  "version": "0.0.1",
+  "description": "Yeoman workflow for Jekyll",
+  "dependencies": {
+    // "yeoman-generator": "~0.10.3",
+  },
+  "devDependencies": {
+    // "mocha": "~1.9.0"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  }
+}

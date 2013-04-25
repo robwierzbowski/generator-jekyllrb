@@ -1,13 +1,11 @@
 ---
 layout: default
-title: Yo Jekyll! HTML5  ★ Boilerplate
+title: Your New Jekyll Site
 ---
 
-<div id="home">
+<section class="home posts">
   <h1>Blog Posts</h1>
-  <ul class="posts">
-    {% for post in site.posts %}
-      <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a></li>
-    {% endfor %}
-  </ul>
-</div>
+  {% for post in site.posts %}
+    <article><time>{{ post.date | date_to_string }}</time> &raquo; <a href="{{ post.url }}">{{ post.title }}</a></article>
+  {% endfor %}
+</section>
