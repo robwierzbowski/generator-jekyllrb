@@ -1,5 +1,5 @@
 {
   "directory": "app/components"
-  // Plan for 1.0: specify the new bower.json file
+  // Use the new bower.json file in prep for 1.0
   "json": "bower.json"
 }

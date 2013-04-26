@@ -12,9 +12,15 @@ var Generator = module.exports = function Generator() {
   this.argument('appname', { type: String, required: false });
   this.appname = this.appname || path.basename(process.cwd());
 
+  var args = ['main'];
+
+  // subgenerator
+  // this.hookFor('jekyll:subGen', {
+  //   args: args
+  // });
+
   // Set permanant opts here
   // var someVar = 'gar';
-
 
   // RWRW This should work now, as long as package and bower are there.
   // this.on('end', function () {
@@ -51,7 +57,7 @@ Generator.prototype.askFor = function askFor() {
   console.log(
     'This generator will scaffold and wire a Jekyll site. Yo, Jekyll!'.yellow.bold +
     '\n ' +
-    '\nFirst let\'s set up some directories.'.yellow + ' ☛'
+    '\nLet\'s set up some directories.'.yellow + ' ☛'
   );
 
   var prompts = [{
@@ -96,7 +102,7 @@ Generator.prototype.askForTools = function askFor() {
   // var cssPrep = ['s','c','n'];
   // var jsPrep  = ['c','n'];
 
-  console.log('\nNext let\'s wire up tools and preprocessors.'.yellow + ' ☛');
+  console.log('\nWire up tools and preprocessors.'.yellow + ' ☛');
 
   var prompts = [{
     name: 'cssPrep',
@@ -106,7 +112,7 @@ Generator.prototype.askForTools = function askFor() {
   {
     name: 'cssPrepDir',
     message: 'If so, choose a css preprocessor file directory:',
-    default: 'scss/'
+    default: '_scss/'
     // if above, Required, edit
   },
   {
@@ -117,7 +123,7 @@ Generator.prototype.askForTools = function askFor() {
   {
     name: 'jsPrepDir',
     message: 'If so, choose a javascript preprocessor file directory:',
-    default: 'coffee/'
+    default: '_coffee/'
     // if above, Required, edit
   },
   {
@@ -154,7 +160,7 @@ Generator.prototype.askForTemplates = function askFor() {
   // Multiple choice options
   // var templateType = ['d','h'];
 
-  console.log('\nChoose template components.'.yellow + ' ☛');
+  console.log('\nChoose a template.'.yellow + ' ☛');
 
   var prompts = [{
     name: 'templateType',
@@ -218,21 +224,23 @@ Generator.prototype.askForJekyll = function askFor() {
   // var jekPost = ['d','p','n'];
   // var jekMkd  = ['m','rd','k','rc'];
 
-  console.log('\nAnd last, let\'s configure Jekyll.'.yellow + ' ☛');
+  console.log('\nAnd configure Jekyll.'.yellow + ' ☛');
 
   var prompts = [{
     name: 'jekAuthor',
     message: 'Your Name:'
   },
-  // If H5BP
   {
-    name: 'humansEmail',
+    name: 'jekEmail',
     message: 'Your Email:'
   },
-  // If H5BP
   {
-    name: 'humansTwit',
-    message: 'Your Twitter Username:'
+    name: 'jekTwit',
+    message: 'Your @Twitter Username:'
+  },
+  {
+    name: 'jekGHub',
+    message: 'Your GitHub Username:'
   },
   {
     name: 'jekDescript',
@@ -274,8 +282,8 @@ Generator.prototype.askForJekyll = function askFor() {
 
     // String properties without defaults to string or boolean
     this.jekAuthor   = props.jekAuthor   !== '' ? props.jekAuthor   : false;
-    this.humansEmail = props.humansEmail !== '' ? props.humansEmail : false;
-    this.humansTwit  = props.humansTwit  !== '' ? props.humansTwit  : false;
+    this.jekEmail = props.jekEmail !== '' ? props.jekEmail : false;
+    this.jekTwit  = props.jekTwit  !== '' ? props.jekTwit  : false;
     this.jekDescript = props.jekDescript !== '' ? props.jekDescript : false;
     this.jekPage     = props.jekPage     !== '' ? props.jekPage     : false;
 
@@ -290,17 +298,17 @@ Generator.prototype.app = function app() {
 
   console.log(this);
 
-  // create app folder for jek
-  this.mkdir('app');
+  // Create blank Jekyll site in app
+  exec('jekyll new app', function (err) {
+    if (err) {
+      return this.emit('error', err);
+    }
+    console.log('Default Jekyll scaffold created');
+  });
 
-  // Scaffold non-essential but nice jekyll dirs
+  // Scaffold non-essential but useful jekyll dirs
   this.mkdir('app/_includes');
   this.mkdir('app/_plugins');
-
-  // Creates blank Jekyll site
-  exec('jekyll new app', function (error, stdout) {
-    console.log(stdout);
-  });
 
   //?? Add responses? consol.log('sass in dirx will be compiled to dir y')?
 
@@ -367,10 +375,12 @@ Generator.prototype.app = function app() {
       // make folder, add style.scss? it will overwrite style.css
       // add and process config.rb
         // main if h5bp?
-      // ?? All css stays css, not sass.
+      // rename css to scss, add as partials.
+        // scss/default dir?
       // GRUNTFILE
       // package.json grunt-contrib-
       // default.html
+      // if pygments, copy/ move, add as partial delete syntax.css
   // if cofeescript
       // make folder, add scripts.coffee? it will overwrite scripts.js
       // GRUNTFILE
@@ -382,6 +392,9 @@ Generator.prototype.app = function app() {
       // default.html
 
   // if !pygments, delete syntax.css
+
+  // Jek markdown choice, make sure that corect gems are installed
+      // BUNDLER?
 
   // Create Jekyll directories
   this.mkdir('app/' + this.cssDir);
@@ -406,14 +419,24 @@ Generator.prototype.app = function app() {
 
 
 
-//?? What do the different methods of Generator.prototype mean? run by grunt?
+//RWRW ?? What do the different methods of Generator.prototype mean? run by grunt?
 
 // Generator.prototype.projectfiles = function projectfiles() {
 //   // this.copy('editorconfig', '.editorconfig');
 //   // this.copy('jshintrc', '.jshintrc');
 // };
 
+Generator.prototype.docs = function docs() {
+  // pull all info in, create readme, humans, 2nd post
+};
 
+
+
+//Generator.prototype.lone = function lone() {
+  //console.log('lone string');
+  // this.copy('editorconfig', '.editorconfig');
+  // this.copy('jshintrc', '.jshintrc');
+//};
 
 // RWRW install packages with bower
 // Generator.prototype.bootstrapFiles = function bootstrapFiles() {
@@ -432,4 +455,9 @@ Generator.prototype.app = function app() {
 /////////////////
 // RWRW NOTES
 
+// End with a list of commands and description
+  // all components managed with Bower
+
 // Alternatively they can install with this.bowerInstall(['jquery', 'underscore'], { save: true });
+
+// SUBGENERATOR FOR CATEGORIES!!!!
