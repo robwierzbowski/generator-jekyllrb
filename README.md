@@ -11,9 +11,4 @@
 - Run: `yo jekyll`
 
 ## License
-[MIT License](http://en.wikipedia.org/wiki/MIT_License)
-nerator-jekyll`
-- Run: `yo jekyll`
-
-## License
-[MIT License](http://en.wikipedia.org/wiki/MIT_License)
+[BSD-new License](http://en.wikipedia.org/wiki/BSD_License)
