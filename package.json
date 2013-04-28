@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "description": "Comprehensive Yeoman generator for Jekyll projects. Yo, Jekyll!",
   "keywords": [
-    // RWRW Edit when complete
     "yeoman-generator",
     "jekyll",
     "static-site",
@@ -28,24 +27,13 @@
      "test": "mocha"
   },
   "dependencies": {
-    // RWRW To launch/ generate
-    "yeoman-generator": "~0.10.3",
-    // RWRW JQ for node
-    //"cheerio": "~0.10.6",
-    // RWRW From old yeo-jek generator
-    //"request": "~2.11.4",
-    //"underscore": "~1.4.2"
+    "yeoman-generator": "~0.10.3"
   },
   "devDependencies": {
     "mocha": "~1.9.0"
   },
-
   "engines": {
     "node": ">=0.8.0"
   },
-  "licenses": [
-    {
-      "type": "BSD-new"
-    }
-  ]
+  "license": "BSD-new"
 }

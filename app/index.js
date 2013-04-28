@@ -1,4 +1,5 @@
 'use strict';
+var fs = require('fs');
 var util = require('util');
 var path = require('path');
 var exec = require('child_process').exec;
@@ -12,7 +13,16 @@ var Generator = module.exports = function Generator() {
   this.argument('appname', { type: String, required: false });
   this.appname = this.appname || path.basename(process.cwd());
 
-  var args = ['main'];
+  // RWRW Attempt to get user's gitconfig name. Doesn't work.
+  // var nameDefault = exec('git config user.name', function (err, stdout) {
+  //   if (err) {
+  //     return 'breb smath';
+  //   }
+  //   return stdout;
+  // });
+
+
+  // var args = ['main'];
 
   // subgenerator
   // this.hookFor('jekyll:subGen', {
@@ -30,18 +40,24 @@ var Generator = module.exports = function Generator() {
   // });
 
   // Bower install from new yo docs
+
+  // "Alternatively they can install with" this.bowerInstall(['jquery', 'underscore'], { save: true });
+
+  // Or...
   // this.on('end', function () {
   //   this.installDependencies({ skipInstall: options['skip-install'] });
   // });
 
   // RWRW
   // this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
+
+
+  this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
 };
 
-util.inherits(Generator, yeoman.generators.Base);
+util.inherits(Generator, yeoman.generators.NamedBase);
 
-///////////////////////////////////////////////
-// Gather user input
+////////////////////////// User input ////////////////////////////
 
 // TODO: When new prompt library lands in Yeoman 1.0:
 //   Rewrite for conditional prompts
@@ -102,7 +118,7 @@ Generator.prototype.askForTools = function askFor() {
   // var cssPrep = ['s','c','n'];
   // var jsPrep  = ['c','n'];
 
-  console.log('\nWire up tools and preprocessors.'.yellow + ' ☛');
+  console.log('\nWire tools and preprocessors.'.yellow + ' ☛');
 
   var prompts = [{
     name: 'cssPrep',
@@ -111,7 +127,7 @@ Generator.prototype.askForTools = function askFor() {
   },
   {
     name: 'cssPrepDir',
-    message: 'If so, choose a css preprocessor file directory:',
+    message: 'If so, choose a css preprocessor directory:',
     default: '_scss/'
     // if above, Required, edit
   },
@@ -122,15 +138,16 @@ Generator.prototype.askForTools = function askFor() {
   },
   {
     name: 'jsPrepDir',
-    message: 'If so, choose a javascript preprocessor file directory:',
+    message: 'If so, choose a javascript preprocessor directory:',
     default: '_coffee/'
     // if above, Required, edit
-  },
-  {
-    name: 'requireJs',
-    message: 'Use Require.js?',
-    default: 'y/N'
-  }];
+  }
+  // {
+  //   name: 'requireJs',
+  //   message: 'Use Require.js?',
+  //   default: 'y/N'
+  // }
+  ];
 
   this.prompt(prompts, function (err, props) {
     if (err) {
@@ -170,27 +187,27 @@ Generator.prototype.askForTemplates = function askFor() {
   },
   {
     name: 'h5bpCss',
-    message: 'Add H5BP css files?',
+    message: 'Add H5★BP css files?',
     default: 'Y/n'
   },
   {
     name: 'h5bpJs',
-    message: 'Add H5BP javascript files?',
+    message: 'Add H5★BP javascript files?',
     default: 'Y/n'
   },
   {
     name: 'h5bpIco',
-    message: 'Add H5BP favorite and touch icons?',
+    message: 'Add H5★BP favorite and touch icons?',
     default: 'y/N'
   },
   {
     name: 'h5bpDocs',
-    message: 'Add H5BP documentation?',
+    message: 'Add H5★BP documentation?',
     default: 'y/N'
   },
   {
     name: 'h5bpAnalytics',
-    message: 'Add Google Analytics in an include?',
+    message: 'Include Google Analytics?',
     default: 'y/N'
   }];
 
@@ -229,6 +246,7 @@ Generator.prototype.askForJekyll = function askFor() {
   var prompts = [{
     name: 'jekAuthor',
     message: 'Your Name:'
+   // RWRW default: nameDefault;
   },
   {
     name: 'jekEmail',
@@ -282,8 +300,9 @@ Generator.prototype.askForJekyll = function askFor() {
 
     // String properties without defaults to string or boolean
     this.jekAuthor   = props.jekAuthor   !== '' ? props.jekAuthor   : false;
-    this.jekEmail = props.jekEmail !== '' ? props.jekEmail : false;
-    this.jekTwit  = props.jekTwit  !== '' ? props.jekTwit  : false;
+    this.jekEmail    = props.jekEmail    !== '' ? props.jekEmail    : false;
+    this.jekTwit     = props.jekTwit     !== '' ? props.jekTwit     : false;
+    this.jekGHub     = props.jekGHub     !== '' ? props.jekGHub     : false;
     this.jekDescript = props.jekDescript !== '' ? props.jekDescript : false;
     this.jekPage     = props.jekPage     !== '' ? props.jekPage     : false;
 
@@ -291,173 +310,131 @@ Generator.prototype.askForJekyll = function askFor() {
   }.bind(this));
 };
 
-///////////////////////////////////////////////
-// Scaffolding
+////////////////////////// Generate App //////////////////////////
 
 Generator.prototype.app = function app() {
 
-  console.log(this);
 
-  // Create blank Jekyll site in app
-  exec('jekyll new app', function (err) {
+  // Create blank Jekyll site in app  // RWRW .tmp and then copy in?
+  exec('jekyll new app', function (err, stdout) {
     if (err) {
       return this.emit('error', err);
     }
-    console.log('Default Jekyll scaffold created');
+    if (stdout) {
+
+      // fs.renameSync('app/css', 'app/bladf');
+
+//   // Scaffold user specified Jekyll directories
+//   if (!(/^css\/?$/).test(this.cssDir)) {
+//     fs.renameSync('app/css', 'app/' + this.cssDir);
+//   }
+//   if (!(/^images\/?$/).test(this.imgDir)) {
+//     fs.renameSync('app/images', 'app/' + this.cssDir);
+//   }
+      console.log('Default Jekyll scaffold created');
+    }
   });
 
-  // Scaffold non-essential but useful jekyll dirs
+
+
+  // remove confg and default?
+
+  // Scaffold non-essential but useful Jekyll dirs
   this.mkdir('app/_includes');
   this.mkdir('app/_plugins');
 
-  //?? Add responses? consol.log('sass in dirx will be compiled to dir y')?
 
-  // move css dir
-  // create js dir
-  // move image dir
-      // gruntfile. but maybe needed at end.
-
-  // rename init dirs to something chosen dirs won't use?
-  // OR init jek in template dir, copy out if needed, and delete at end?
-      // consideration == what if jek new changes, includes more files?
-
-  // delete config yaml
-  // delete git keeps (?)
-  // delete syntax css
-
-
-  // Just copy
-  // add yo-jek post
-  // bowerrc
-  // editorconfig
-  // gitattr gitignore
-  // travis (needed?)
-
-  // Process and import:
-  // new yml
-  // readme.md
-  // bower.json       --These two are for dependecy man, one for bower
-  // package.json     --| and one for npm/ yeoman itself
-  // !!GRUNTFILE!!
-
-
-  // if h5BP
-  // delete rss img
-  // delete default screen.css
-
-  // Just copy
-  // 404
-  // crossdomain
-  // license
-  // htaccess
-  // robots
-  // includes
-  // if analytics? includes/ga
-  // if docs, docs folder
-      // docs are md, exclude from compile? config.yml setting.
-  // if favicons, favicons
-
-  // if CSS, delete css files (style), add h5 css (main).
-
-  // if js, copy js (main, plugin),
-      // add jq to bower.json
-      // add mdrnizr to bower.json? Or by hand, custom build. Should it stay in components? maybe components/vendor
-
-  // Process and import:
-  // h5 layout dflt index
-  // humans.txt
-  // app/index.html
-  // delete layouts, add h5 layouts (default, post)
-    // default.html style-> main change
-    // default.html script-> main change
-
-  // if sass or if compass
-      // make folder, add style.scss? it will overwrite style.css
-      // add and process config.rb
-        // main if h5bp?
-      // rename css to scss, add as partials.
-        // scss/default dir?
-      // GRUNTFILE
-      // package.json grunt-contrib-
-      // default.html
-      // if pygments, copy/ move, add as partial delete syntax.css
-  // if cofeescript
-      // make folder, add scripts.coffee? it will overwrite scripts.js
-      // GRUNTFILE
-      // package.json grunt-contrib-
-      // default.html
-  // if require
-      // GRUNTFILE
-      // package.json grunt-contrib-
-      // default.html
-
-  // if !pygments, delete syntax.css
-
-  // Jek markdown choice, make sure that corect gems are installed
-      // BUNDLER?
-
-  // Create Jekyll directories
-  this.mkdir('app/' + this.cssDir);
   this.mkdir('app/' + this.jsDir);
-  this.mkdir('app/' + this.imgDir);
+};
 
-  if (this.cssPrep !== false) {
-    this.mkdir('app/' + this.cssPrepDir);
-  }
-  if (this.jsPrep !== false) {
+Generator.prototype.gruntfile = function gruntfile() {
+  // RWRW Gruntfile needs to have correct object.props
+  // this.template('Gruntfile.js', 'Gruntfile.js');
+};
+
+Generator.prototype.packageJSON = function packageJSON() {
+//   this.template('_package.json', 'package.json');
+};
+
+Generator.prototype.git = function git() {
+//   this.copy('gitignore', '.gitignore');
+//   this.copy('gitattributes', '.gitattributes');
+};
+
+Generator.prototype.bower = function bower() {
+//   this.copy('bowerrc', '.bowerrc');
+//   this.copy('bower.json', 'bower.json');
+};
+
+Generator.prototype.jshint = function jshint() {
+// //  this.copy('jshintrc', '.jshintrc');
+};
+
+Generator.prototype.editor = function editor() {
+//  this.copy('editorconfig', '.editorconfig');
+};
+
+Generator.prototype.templates = function templates() {
+
+  // needs css from exec to be in place?
+
+  // css if preproc is false
+
+  // humans
+
+  // remove/ clean up image dir
+  // grunt.file.delete(filepath [, force: true])
+
+  // h5 info/docs
+
+  //this.bowerInstall
+  // if h5 add and save vendor to bower? yes.
+
+};
+
+Generator.prototype.jekFiles = function jekFiles() {
+  // 2nd post
+
+  // config.yml
+
+  // readme
+};
+
+Generator.prototype.cssPrep = function cssPrep() {
+//   if (this.cssPrep) {
+
+//     this.mkdir('app/' + this.cssPrepDir);
+
+      // needs css from exec to be in place?
+      // RWRW Needs copy css to scss if preproc on.
+//   }
+};
+
+Generator.prototype.jsPreproc = function jsPreproc() {
+  if (this.jsPrep) {
     this.mkdir('app/' + this.jsPrepDir);
   }
-
-  // Default
-
-
-
-// copy over standard items
-  // add underscore template processing to all files
-
 };
 
 
 
-//RWRW ?? What do the different methods of Generator.prototype mean? run by grunt?
+// TODO: These ↓
 
-// Generator.prototype.projectfiles = function projectfiles() {
-//   // this.copy('editorconfig', '.editorconfig');
-//   // this.copy('jshintrc', '.jshintrc');
+// Generator.prototype.requireJs = function testing() {
 // };
 
-Generator.prototype.docs = function docs() {
-  // pull all info in, create readme, humans, 2nd post
-};
-
-
-
-//Generator.prototype.lone = function lone() {
-  //console.log('lone string');
-  // this.copy('editorconfig', '.editorconfig');
-  // this.copy('jshintrc', '.jshintrc');
-//};
-
-// RWRW install packages with bower
-// Generator.prototype.bootstrapFiles = function bootstrapFiles() {
-
-//    // map format -> package name
-//    var packages = {
-//        css: 'bootstrap.css',
-//        sass: 'sass-bootstrap',
-//        less: 'bootstrap'
-//    };
-
-//    this.install(packages[this.format]);
+// Generator.prototype.testing = function testing() {
+//   this.copy('editorconfig', '.editorconfig');
 // };
+
+// TODO: Categories subgenerator
+
 
 
 /////////////////
 // RWRW NOTES
 
 // End with a list of commands and description
-  // all components managed with Bower
-
-// Alternatively they can install with this.bowerInstall(['jquery', 'underscore'], { save: true });
+// all components managed with Bower
 
 // SUBGENERATOR FOR CATEGORIES!!!!
