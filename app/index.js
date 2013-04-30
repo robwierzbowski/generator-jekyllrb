@@ -336,9 +336,9 @@ Generator.prototype.directories = function directories() {
   // Scaffold Jekyll dirs
   // Must block templates and cssPreprocessor
   this.mkdir('app/');
-  this.mkdir('app/' + this.cssDir);
-  this.mkdir('app/' + this.imgDir);
-  this.mkdir('app/' + this.jsDir);
+  this.mkdir(path.join('app', this.cssDir));
+  this.mkdir(path.join('app', this.imgDir));
+  this.mkdir(path.join('app', this.jsDir));
   this.mkdir('app/_layouts');
   this.mkdir('app/_posts');
   this.mkdir('app/_includes');
@@ -352,25 +352,53 @@ Generator.prototype.templates = function templates() {
   var date = (new Date()).toISOString().split('T')[0];
 
   // Universal template files
-  this.copy(this.defaultDirs.tmpJek + '/_posts/' + date + '-welcome-to-jekyll.markdown', 'app/_posts/' + date + '-welcome-to-jekyll.md');
-  this.template('app/_posts/0000-00-00-yo-jekyll.md', 'app/_posts/' + date + '-yo-jekyll.md');
+  this.copy(path.join(this.defaultDirs.tmpJek, '_posts', date + '-welcome-to-jekyll.markdown'), path.join('app/_posts', date + '-welcome-to-jekyll.md'));
+  this.template('app/_posts/0000-00-00-yo-jekyll.md', path.join('app/_posts', date + '-yo-jekyll.md'));
 
   // Default Jekyll templates
   if (this.templateType === 'd') {
 
     // From generator
-    this.copy('app-conditional/def-template/_layouts/default.html', 'app/_layouts/default.html');
+    // RWRW write template
+    this.template('app-conditional/def-template/_layouts/default.html', 'app/_layouts/default.html');
 
     // From default Jekyll installation
-    // TODO: Rewrite to use this.directory() or other whole directory import with filter.
-    this.copy(this.defaultDirs.tmpJek + '/index.html', 'app/index.html');
-    this.copy(this.defaultDirs.tmpJek + '/_layouts/post.html', 'app/_layouts/post.html');
-    this.copy(this.defaultDirs.tmpJek + '/css/screen.css', 'app/' + this.cssDir + '/screen.css');
-    this.copy(this.defaultDirs.tmpJek + '/images/rss.png', 'app/' + this.imgDir + '/rss.png');
+    // TODO: Rewrite to use this.directory()/any whole directory import with a exclude filter.
+    this.copy(path.join(this.defaultDirs.tmpJek, 'index.html'), 'app/index.html');
+    this.copy(path.join(this.defaultDirs.tmpJek, '_layouts/post.html'), 'app/_layouts/post.html');
+    this.copy(path.join(this.defaultDirs.tmpJek, 'css/screen.css'), path.join('app', this.cssDir, 'screen.css'));
+    this.copy(path.join(this.defaultDirs.tmpJek, 'images/rss.png'), path.join('app', this.imgDir, 'rss.png'));
   }
 
   // HTML5 Boilerplate templates
   else if (this.templateType === 'h5') {
+
+    // Universal H5BP files
+    this.copy('app-conditional/h5-template/htaccess', 'app/.htaccess');
+    this.copy('app-conditional/h5-template/404.html', 'app/404.html');
+    this.copy('app-conditional/h5-template/index.html', 'app/index.html');
+    this.copy('app-conditional/h5-template/crossdomain.xml', 'app/crossdomain.xml');
+    this.copy('app-conditional/h5-template/robots.txt', 'app/robots.txt');
+    this.template('app-conditional/h5-template/humans.txt', 'app/humans.txt');
+
+    this.copy('app-conditional/h5-template/_layouts/post.html', 'app/_layouts/post.html');
+    this.template('app-conditional/h5-template/_layouts/index.html', 'app/_layouts/index.html');
+
+    // h5bpCss: true
+  // h5bpIco: false,
+  // h5bpJs: true,
+  // h5bpAnalytics: false,
+
+
+    // Docs. Always include the lisence.
+    if (this.h5bpDocs) {
+      this.directory('app-conditional/h5-template/docs', 'app/_H5BP-docs');
+    }
+    else {
+      this.copy('app-conditional/h5-template/docs/LICENSE.md', 'app/_H5BP-docs/LICENSE.md');
+    }
+
+  // : false,
 
 
 // if h5
