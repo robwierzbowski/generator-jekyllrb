@@ -2,7 +2,7 @@
 var fs = require('fs');
 var util = require('util');
 var path = require('path');
-var exec = require('child_process').exec;
+var execSync = require('execSync');
 var spawn = require('child_process').spawn;
 var yeoman = require('yeoman-generator');
 
@@ -102,9 +102,16 @@ Generator.prototype.askFor = function askFor() {
 
     // Assign prompt results to Generator object
     // String properties
-    this.cssDir       = props.cssDir;
-    this.jsDir        = props.jsDir;
-    this.imgDir       = props.imgDir;
+    var dirs = {
+      css: props.cssDir.replace(/\/$/, ''),
+      img: props.imgDir.replace(/\/$/, '')
+    };
+
+    this.cssDirPath = dirs.css.substring(0, dirs.css.lastIndexOf('/'));
+    this.cssDir     = dirs.css.substring(dirs.css.lastIndexOf('/') + 1);
+    this.imgDirPath = dirs.img.substring(0, dirs.img.lastIndexOf('/'));
+    this.imgDir     = dirs.img.substring(dirs.img.lastIndexOf('/') + 1);
+    this.jsDir      = props.jsDir;
 
     cb();
   }.bind(this));
@@ -156,21 +163,29 @@ Generator.prototype.askForTools = function askFor() {
 
     // Assign prompt results to Generator object
     // Default y/N answer to boolean
-    this.requireJs     = !(/n/i).test(props.requireJs);
+    this.requireJs      = !(/n/i).test(props.requireJs);
 
     // Multiple choice 'none' to false
-    this.cssPrep       = (/n/i).test(props.cssPrep) ? false : props.cssPrep;
-    this.jsPrep        = (/n/i).test(props.jsPrep)  ? false : props.jsPrep;
+    this.cssPrep        = (/n/i).test(props.cssPrep) ? false : props.cssPrep;
+    this.jsPrep         = (/n/i).test(props.jsPrep)  ? false : props.jsPrep;
 
     // String properties
-    this.cssPrepDir   = props.cssPrepDir;
-    this.jsPrepDir    = props.jsPrepDir;
+    var dirs = {
+      css: props.cssPrepDir.replace(/\/$/, ''),
+      js: props.jsPrepDir.replace(/\/$/, '')
+    };
+
+    this.cssPrepDirPath = dirs.css.substring(0, dirs.css.lastIndexOf('/'));
+    this.cssPrepDir     = dirs.css.substring(dirs.css.lastIndexOf('/') + 1);
+    this.jsPrepDirPath  = dirs.js.substring(0, dirs.js.lastIndexOf('/'));
+    this.jsPrepDir      = dirs.js.substring(dirs.js.lastIndexOf('/') + 1);
 
     cb();
   }.bind(this));
 };
 
 // Jekyll boilerplate templates
+// TODO: Add blank template
 Generator.prototype.askForTemplates = function askFor() {
   var cb = this.async();
 
@@ -314,105 +329,123 @@ Generator.prototype.askForJekyll = function askFor() {
 
 Generator.prototype.app = function app() {
 
-
-  // Create blank Jekyll site in app  // RWRW .tmp and then copy in?
-  exec('jekyll new app', function (err, stdout) {
-    if (err) {
-      return this.emit('error', err);
-    }
-    if (stdout) {
-
-      // fs.renameSync('app/css', 'app/bladf');
-
-//   // Scaffold user specified Jekyll directories
-//   if (!(/^css\/?$/).test(this.cssDir)) {
-//     fs.renameSync('app/css', 'app/' + this.cssDir);
-//   }
-//   if (!(/^images\/?$/).test(this.imgDir)) {
-//     fs.renameSync('app/images', 'app/' + this.cssDir);
-//   }
-      console.log('Default Jekyll scaffold created');
-    }
-  });
-
-
-
+  // Create blank Jekyll site in app
+  // Sync: must execute before any other scaffolding
+  execSync.exec('jekyll new app');
   // remove confg and default?
 
   // Scaffold non-essential but useful Jekyll dirs
   this.mkdir('app/_includes');
   this.mkdir('app/_plugins');
 
+  // mk full drectory
+  // move contents && delete old dir
 
-  this.mkdir('app/' + this.jsDir);
+  // css
+  // js
+  // img
+  // sass
+  // coffee
+
+
+
+  // Scaffold user specified directories
+// rwrw better way ######HRERE T/OM
+  if (this.cssDirPath) {
+    execSync.exec('mkdir -p app/' + this.cssDirPath + '; mv app/css $_/' + this.cssDir);
+  }
+  else {
+    execSync.exec('mv app/css app/' + this.cssDir);
+  }
+  if (this.imgDirPath) {
+    execSync.exec('mkdir -p app/' + this.imgDirPath + '; mv app/images $_/' + this.imgDir);
+  }
+  else {
+    execSync.exec('mv app/images app/' + this.imgDir);
+  }
+  execSync.exec('mkdir -p app/' + this.jsDir);
+
+  console.log('\n RWRW dirs done'.white);
 };
 
 Generator.prototype.gruntfile = function gruntfile() {
   // RWRW Gruntfile needs to have correct object.props
-  // this.template('Gruntfile.js', 'Gruntfile.js');
+  // this.template('Gruntfile.js', 'Gruntfile.js'); //template
 };
 
 Generator.prototype.packageJSON = function packageJSON() {
-//   this.template('_package.json', 'package.json');
+//   this.template('_package.json', 'package.json'); //template
 };
 
 Generator.prototype.git = function git() {
-//   this.copy('gitignore', '.gitignore');
-//   this.copy('gitattributes', '.gitattributes');
+  this.copy('gitignore', '.gitignore');
+  this.copy('gitattributes', '.gitattributes');
 };
 
 Generator.prototype.bower = function bower() {
-//   this.copy('bowerrc', '.bowerrc');
-//   this.copy('bower.json', 'bower.json');
+  this.copy('bowerrc', '.bowerrc');
+//   this.copy('bower.json', 'bower.json'); //template
 };
 
 Generator.prototype.jshint = function jshint() {
-// //  this.copy('jshintrc', '.jshintrc');
+  this.copy('jshintrc', '.jshintrc');
 };
 
 Generator.prototype.editor = function editor() {
-//  this.copy('editorconfig', '.editorconfig');
+  this.copy('editorconfig', '.editorconfig');
 };
 
 Generator.prototype.templates = function templates() {
 
-  // needs css from exec to be in place?
+  // needs css from exec to be in place? yes
 
-  // css if preproc is false
+  // css if preproc is false // copy
 
-  // humans
+  // humans //template
 
-  // remove/ clean up image dir
+  // remove/ clean up image dir // delete
   // grunt.file.delete(filepath [, force: true])
 
-  // h5 info/docs
+
+  // h5 info/docs //copy
 
   //this.bowerInstall
   // if h5 add and save vendor to bower? yes.
-
 };
 
 Generator.prototype.jekFiles = function jekFiles() {
-  // 2nd post
+  // 2nd post //copy
+  // readme //template
 
-  // config.yml
+  // config.yml //template
 
-  // readme
+
+  // remove pyg //del should this be in a pygments meth?
+
+  // build gemfile/ bundler with markdown libs needed //template
 };
 
-Generator.prototype.cssPrep = function cssPrep() {
-//   if (this.cssPrep) {
+Generator.prototype.cssPreprocessor = function cssPreprocessor() {
+  if (this.cssPrep) {
+      // mkdir
+      // callback
+        // if h5
+        // mv h5css to scss
 
-//     this.mkdir('app/' + this.cssPrepDir);
+        // else
+        // mv dflt css to scss
 
-      // needs css from exec to be in place?
-      // RWRW Needs copy css to scss if preproc on.
-//   }
+        // if pyg
+        // move pyg to scss
+  }
 };
 
-Generator.prototype.jsPreproc = function jsPreproc() {
+Generator.prototype.jsPreprocessor = function jsPreprocessor() {
   if (this.jsPrep) {
-    this.mkdir('app/' + this.jsPrepDir);
+
+  // mkdir
+    // callback make file
+
   }
 };
 

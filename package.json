@@ -24,10 +24,11 @@
     "url": "git://github.com/robwierzbowski/generator-jekyll.git"
   },
   "scripts": {
-     "test": "mocha"
+    "test": "mocha"
   },
   "dependencies": {
-    "yeoman-generator": "~0.10.3"
+    "yeoman-generator": "~0.10.3",
+    "execSync": "0.0.4"
   },
   "devDependencies": {
     "mocha": "~1.9.0"

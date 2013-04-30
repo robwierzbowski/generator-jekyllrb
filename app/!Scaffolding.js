@@ -1,47 +1,30 @@
-//  yeoman.generators.Base.apply(this, arguments);
+var fhg  = {
+  cssDir: 'css/',
+  jsDir: 'js/',
+  imgDir: 'images/',
+  requireJs: false,
+  cssPrep: false,
+  jsPrep: false,
+  cssPrepDir: '_scss/',
+  jsPrepDir: '_coffee/',
+  h5bpCss: true,
+  h5bpJs: true,
+  h5bpIco: false,
+  h5bpDocs: false,
+  h5bpAnalytics: false,
+  templateType: 'd',
+  jekPyg: false,
+  jekMkd: 'm',
+  jekPost: 'd',
+  jekAuthor: false,
+  jekEmail: false,
+  jekTwit: false,
+  jekGHub: false,
+  jekDescript: false,
+  jekPage: false
+   }
 
-  // Specify an appname from the command line, or use dir name
-  //this.argument('appname', { type: String, required: false });
-  //this.appname = this.appname || path.basename(process.cwd());
-
-  // RWRW Attempt to get user's gitconfig name. Doesn't work.
-  // var nameDefault = exec('git config user.name', function (err, stdout) {
-  //   if (err) {
-  //     return 'breb smath';
-  //   }
-  //   return stdout;
-  // });
-
-
-  // var args = ['main'];
-
-  // subgenerator
-  // this.hookFor('jekyll:subGen', {
-  //   args: args
-  // });
-
-  // Set permanant opts here
-  // var someVar = 'gar';
-
-  // RWRW This should work now, as long as package and bower are there.
-  // this.on('end', function () {
-  //   console.log('\n\nI\'m all done. Running ' + 'npm install & bower install'.bold.yellow + ' to install the required dependencies. If this fails, try running the command yourself.\n\n');
-  //   spawn('npm', ['install'], { stdio: 'inherit' });
-  //   spawn('bower', ['install'], { stdio: 'inherit' });
-  // });
-
-  // Bower install from new yo docs
-
-  // "Alternatively they can install with" this.bowerInstall(['jquery', 'underscore'], { save: true });
-
-  // Or...
-  // this.on('end', function () {
-  //   this.installDependencies({ skipInstall: options['skip-install'] });
-  // });
-
-  // RWRW
-  // this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
-
+-------
 
 
 bowerrc
