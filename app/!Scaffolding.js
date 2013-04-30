@@ -1,3 +1,39 @@
+
+  // css
+    // default moves dir+files
+    // h5 deletes
+    // h5 copies in
+    // sass moves
+  // img
+    // default moves dir+files
+    // h5 deletes
+  // js
+    // h5 copies files in
+
+
+
+  // sass
+  // coffee
+
+  // can't rm if it's app/css/cssasst
+
+  // Scaffold user specified directories
+
+
+
+
+  if (this.cssDir !== this.defaultDirs.css) {
+    execSync.exec('mkdir -p app/' + this.cssDir);
+    execSync.exec('mv app/css/* app/' + this.cssDir + '&& rm app/css');
+  }
+  if (this.imgDir !== this.defaultDirs.img) {
+    execSync.exec('mkdir -p app/' + this.cssDir);
+    execSync.exec('mv app/css/* app/' + this.cssDir + '&& rm app/css');
+  }
+  execSync.exec('mkdir -p app/' + this.jsDir);
+
+
+
 var fhg  = {
   cssDir: 'css/',
   jsDir: 'js/',

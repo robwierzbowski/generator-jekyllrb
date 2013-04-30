@@ -21,8 +21,17 @@ var Generator = module.exports = function Generator() {
   //   return stdout;
   // });
 
-
   // var args = ['main'];
+
+  // Default asset dirs to use for scaffolding
+  // TODO: detect dirs for a dropped in Jekyll site?
+  this.defaultDirs = {
+    css: 'css',
+    js: 'js',
+    img: 'image',
+    cssPre: '_scss',
+    jsPre: '_coffee'
+  };
 
   // subgenerator
   // this.hookFor('jekyll:subGen', {
@@ -79,19 +88,19 @@ Generator.prototype.askFor = function askFor() {
   var prompts = [{
     name: 'cssDir',
     message: 'Choose a css directory:',
-    default: 'css/'
+    default: this.defaultDirs.css
     // Required, edit
   },
   {
     name: 'jsDir',
     message: 'Choose a javascript directory:',
-    default: 'js/'
+    default: this.defaultDirs.js
     // Required, edit
   },
   {
     name: 'imgDir',
     message: 'Choose an image file directory:',
-    default: 'images/'
+    default: this.defaultDirs.img
     // Required, edit
   }];
 
@@ -102,16 +111,9 @@ Generator.prototype.askFor = function askFor() {
 
     // Assign prompt results to Generator object
     // String properties
-    var dirs = {
-      css: props.cssDir.replace(/\/$/, ''),
-      img: props.imgDir.replace(/\/$/, '')
-    };
-
-    this.cssDirPath = dirs.css.substring(0, dirs.css.lastIndexOf('/'));
-    this.cssDir     = dirs.css.substring(dirs.css.lastIndexOf('/') + 1);
-    this.imgDirPath = dirs.img.substring(0, dirs.img.lastIndexOf('/'));
-    this.imgDir     = dirs.img.substring(dirs.img.lastIndexOf('/') + 1);
-    this.jsDir      = props.jsDir;
+    this.cssDir = props.cssDir;
+    this.jsDir  = props.jsDir;
+    this.imgDir = props.imgDir;
 
     cb();
   }.bind(this));
@@ -122,31 +124,31 @@ Generator.prototype.askForTools = function askFor() {
   var cb = this.async();
 
   // Multiple choice options
-  // var cssPrep = ['s','c','n'];
-  // var jsPrep  = ['c','n'];
+  // var cssPreOptions = ['s','c','n'];
+  // var jsPreOptions  = ['c','n'];
 
   console.log('\nWire tools and preprocessors.'.yellow + ' ☛');
 
   var prompts = [{
-    name: 'cssPrep',
+    name: 'cssPre',
     message: 'Use a css preprocessor?\n s: Sass\n c: Sass & Compass\n n: none',
     default: 'n'
   },
   {
-    name: 'cssPrepDir',
+    name: 'cssPreDir',
     message: 'If so, choose a css preprocessor directory:',
-    default: '_scss/'
+    default: this.defaultDirs.cssPre
     // if above, Required, edit
   },
   {
-    name: 'jsPrep',
+    name: 'jsPre',
     message: 'Use a javascript preprocessor?\n c: Coffeescript\n n: none',
     default: 'n',
   },
   {
-    name: 'jsPrepDir',
+    name: 'jsPreDir',
     message: 'If so, choose a javascript preprocessor directory:',
-    default: '_coffee/'
+    default: this.defaultDirs.jsPre
     // if above, Required, edit
   }
   // {
@@ -163,22 +165,15 @@ Generator.prototype.askForTools = function askFor() {
 
     // Assign prompt results to Generator object
     // Default y/N answer to boolean
-    this.requireJs      = !(/n/i).test(props.requireJs);
+    // this.requireJs  = !(/n/i).test(props.requireJs);
 
     // Multiple choice 'none' to false
-    this.cssPrep        = (/n/i).test(props.cssPrep) ? false : props.cssPrep;
-    this.jsPrep         = (/n/i).test(props.jsPrep)  ? false : props.jsPrep;
+    this.cssPre    = (/n/i).test(props.cssPre) ? false : props.cssPre;
+    this.jsPre     = (/n/i).test(props.jsPre)  ? false : props.jsPre;
 
     // String properties
-    var dirs = {
-      css: props.cssPrepDir.replace(/\/$/, ''),
-      js: props.jsPrepDir.replace(/\/$/, '')
-    };
-
-    this.cssPrepDirPath = dirs.css.substring(0, dirs.css.lastIndexOf('/'));
-    this.cssPrepDir     = dirs.css.substring(dirs.css.lastIndexOf('/') + 1);
-    this.jsPrepDirPath  = dirs.js.substring(0, dirs.js.lastIndexOf('/'));
-    this.jsPrepDir      = dirs.js.substring(dirs.js.lastIndexOf('/') + 1);
+    this.cssPreDir = props.cssPreDir;
+    this.jsPreDir  = props.jsPreDir;
 
     cb();
   }.bind(this));
@@ -190,15 +185,15 @@ Generator.prototype.askForTemplates = function askFor() {
   var cb = this.async();
 
   // Multiple choice options
-  // var templateType = ['d','h'];
+  // var templateType = ['d','h5'];
 
   console.log('\nChoose a template.'.yellow + ' ☛');
 
   var prompts = [{
     name: 'templateType',
-    message: 'Choose a Jekyll site template\n d:  Default\n h: HTML5 ★ Boilerplate',
+    message: 'Choose a Jekyll site template\n d:  Default\n h5: HTML5 ★ Boilerplate',
     default: 'd',
-    warning: 'h: Yo dog I heard you like boilerplates in your boilerplates...'
+    warning: 'h5: Yo dog I heard you like boilerplates in your boilerplates...'
   },
   {
     name: 'h5bpCss',
@@ -327,45 +322,65 @@ Generator.prototype.askForJekyll = function askFor() {
 
 ////////////////////////// Generate App //////////////////////////
 
-Generator.prototype.app = function app() {
+Generator.prototype.defaultJekyll = function defaultJekyll() {
+
 
   // Create blank Jekyll site in app
-  // Sync: must execute before any other scaffolding
-  execSync.exec('jekyll new app');
-  // remove confg and default?
+  // Sync: must execute before other scaffolding (template, cssPre, pygments)
+  execSync.exec('jekyll new .tmpJek');
+};
 
-  // Scaffold non-essential but useful Jekyll dirs
+Generator.prototype.directories = function directories() {
+  // Scaffold Jekyll dirs
+  // Must block templates and cssPreprocessor
+  this.mkdir('app/');
+  this.mkdir('app/' + this.cssDir);
+  this.mkdir('app/' + this.imgDir);
+  this.mkdir('app/' + this.jsDir);
+  this.mkdir('app/_layouts');
+  this.mkdir('app/_posts');
   this.mkdir('app/_includes');
   this.mkdir('app/_plugins');
 
-  // mk full drectory
-  // move contents && delete old dir
-
-  // css
-  // js
-  // img
-  // sass
-  // coffee
-
-
-
-  // Scaffold user specified directories
-// rwrw better way ######HRERE T/OM
-  if (this.cssDirPath) {
-    execSync.exec('mkdir -p app/' + this.cssDirPath + '; mv app/css $_/' + this.cssDir);
-  }
-  else {
-    execSync.exec('mv app/css app/' + this.cssDir);
-  }
-  if (this.imgDirPath) {
-    execSync.exec('mkdir -p app/' + this.imgDirPath + '; mv app/images $_/' + this.imgDir);
-  }
-  else {
-    execSync.exec('mv app/images app/' + this.imgDir);
-  }
-  execSync.exec('mkdir -p app/' + this.jsDir);
-
   console.log('\n RWRW dirs done'.white);
+};
+
+Generator.prototype.templates = function templates() {
+
+  var date = (new Date()).toISOString().split('T')[0];
+
+  // Universal template files
+  this.copy(this.env.cwd + '/.tmpJek/_posts/' + date + '-welcome-to-jekyll.markdown',
+            'app/_posts/' + date + '-welcome-to-jekyll.md');
+  this.template('app/_posts/0000-00-00-yo-jekyll.md',
+                'app/_posts/' + date + '-yo-jekyll.md');
+
+  // Default Jekyll templates
+  if (this.templateType === 'd') {
+    // copy app-conditional/default.html
+
+  }
+  // HTML5 Boilerplate templates
+  else if (this.templateType === 'h5') {
+
+
+// if h5
+  // needs css from exec to be in place? yes
+
+  // css if preproc is false // copy
+
+  // humans //template
+
+  // remove/ clean up image dir // delete
+  // grunt.file.delete(filepath [, force: true])
+
+
+  // h5 info/docs //copy
+
+  //this.bowerInstall
+  // if h5 add and save vendor to bower? yes.
+
+  }
 };
 
 Generator.prototype.gruntfile = function gruntfile() {
@@ -395,23 +410,7 @@ Generator.prototype.editor = function editor() {
   this.copy('editorconfig', '.editorconfig');
 };
 
-Generator.prototype.templates = function templates() {
 
-  // needs css from exec to be in place? yes
-
-  // css if preproc is false // copy
-
-  // humans //template
-
-  // remove/ clean up image dir // delete
-  // grunt.file.delete(filepath [, force: true])
-
-
-  // h5 info/docs //copy
-
-  //this.bowerInstall
-  // if h5 add and save vendor to bower? yes.
-};
 
 Generator.prototype.jekFiles = function jekFiles() {
   // 2nd post //copy
@@ -425,8 +424,9 @@ Generator.prototype.jekFiles = function jekFiles() {
   // build gemfile/ bundler with markdown libs needed //template
 };
 
-Generator.prototype.cssPreprocessor = function cssPreprocessor() {
-  if (this.cssPrep) {
+Generator.prototype.cssPreSass = function cssPreSass() {
+  if (['s', 'c'].indexOf(this.cssPre)) {
+
       // mkdir
       // callback
         // if h5
@@ -440,8 +440,8 @@ Generator.prototype.cssPreprocessor = function cssPreprocessor() {
   }
 };
 
-Generator.prototype.jsPreprocessor = function jsPreprocessor() {
-  if (this.jsPrep) {
+Generator.prototype.jsPreCoffee = function jsPreCoffee() {
+  if (this.jsPre === 'c') {
 
   // mkdir
     // callback make file
@@ -461,6 +461,7 @@ Generator.prototype.jsPreprocessor = function jsPreprocessor() {
 // };
 
 // TODO: Categories subgenerator
+// TODO: Post subgenerator, copies default post for that cat frontmatter
 
 
 
@@ -469,5 +470,3 @@ Generator.prototype.jsPreprocessor = function jsPreprocessor() {
 
 // End with a list of commands and description
 // all components managed with Bower
-
-// SUBGENERATOR FOR CATEGORIES!!!!
