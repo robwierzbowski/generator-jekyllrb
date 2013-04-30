@@ -13,6 +13,9 @@ var Generator = module.exports = function Generator() {
   this.argument('appname', { type: String, required: false });
   this.appname = this.appname || path.basename(process.cwd());
 
+  // TODO: Do references to the 'app' directory need to be made configurable?
+  // See generator-angular.
+
   // RWRW Attempt to get user's gitconfig name. Doesn't work.
   // var nameDefault = exec('git config user.name', function (err, stdout) {
   //   if (err) {
@@ -30,7 +33,8 @@ var Generator = module.exports = function Generator() {
     js: 'js',
     img: 'image',
     cssPre: '_scss',
-    jsPre: '_coffee'
+    jsPre: '_coffee',
+    tmpJek: this.env.cwd + '/.tmpJek'
   };
 
   // subgenerator
@@ -323,11 +327,9 @@ Generator.prototype.askForJekyll = function askFor() {
 ////////////////////////// Generate App //////////////////////////
 
 Generator.prototype.defaultJekyll = function defaultJekyll() {
-
-
   // Create blank Jekyll site in app
   // Sync: must execute before other scaffolding (template, cssPre, pygments)
-  execSync.exec('jekyll new .tmpJek');
+  execSync.exec('jekyll new ' + this.defaultDirs.tmpJek);
 };
 
 Generator.prototype.directories = function directories() {
@@ -350,16 +352,23 @@ Generator.prototype.templates = function templates() {
   var date = (new Date()).toISOString().split('T')[0];
 
   // Universal template files
-  this.copy(this.env.cwd + '/.tmpJek/_posts/' + date + '-welcome-to-jekyll.markdown',
-            'app/_posts/' + date + '-welcome-to-jekyll.md');
-  this.template('app/_posts/0000-00-00-yo-jekyll.md',
-                'app/_posts/' + date + '-yo-jekyll.md');
+  this.copy(this.defaultDirs.tmpJek + '/_posts/' + date + '-welcome-to-jekyll.markdown', 'app/_posts/' + date + '-welcome-to-jekyll.md');
+  this.template('app/_posts/0000-00-00-yo-jekyll.md', 'app/_posts/' + date + '-yo-jekyll.md');
 
   // Default Jekyll templates
   if (this.templateType === 'd') {
-    // copy app-conditional/default.html
 
+    // From generator
+    this.copy('app-conditional/def-template/_layouts/default.html', 'app/_layouts/default.html');
+
+    // From default Jekyll installation
+    // TODO: Rewrite to use this.directory() or other whole directory import with filter.
+    this.copy(this.defaultDirs.tmpJek + '/index.html', 'app/index.html');
+    this.copy(this.defaultDirs.tmpJek + '/_layouts/post.html', 'app/_layouts/post.html');
+    this.copy(this.defaultDirs.tmpJek + '/css/screen.css', 'app/' + this.cssDir + '/screen.css');
+    this.copy(this.defaultDirs.tmpJek + '/images/rss.png', 'app/' + this.imgDir + '/rss.png');
   }
+
   // HTML5 Boilerplate templates
   else if (this.templateType === 'h5') {
 
@@ -409,8 +418,6 @@ Generator.prototype.jshint = function jshint() {
 Generator.prototype.editor = function editor() {
   this.copy('editorconfig', '.editorconfig');
 };
-
-
 
 Generator.prototype.jekFiles = function jekFiles() {
   // 2nd post //copy
