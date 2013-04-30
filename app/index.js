@@ -34,7 +34,7 @@ var Generator = module.exports = function Generator() {
     img: 'image',
     cssPre: '_scss',
     jsPre: '_coffee',
-    tmpJek: this.env.cwd + '/.tmpJek'
+    tmpJek: path.join(this.env.cwd, '.tmpJek')
   };
 
   // subgenerator
@@ -54,6 +54,7 @@ var Generator = module.exports = function Generator() {
 
   // Bower install from new yo docs
 
+  // !! RWRW use underscore in bower.json and this.installDependencies in on end callback.
   // "Alternatively they can install with" this.bowerInstall(['jquery', 'underscore'], { save: true });
 
   // Or...
@@ -376,47 +377,42 @@ Generator.prototype.templates = function templates() {
     // Universal H5BP files
     this.copy('app-conditional/h5-template/htaccess', 'app/.htaccess');
     this.copy('app-conditional/h5-template/404.html', 'app/404.html');
-    this.copy('app-conditional/h5-template/index.html', 'app/index.html');
     this.copy('app-conditional/h5-template/crossdomain.xml', 'app/crossdomain.xml');
+    this.copy('app-conditional/h5-template/index.html', 'app/index.html');
     this.copy('app-conditional/h5-template/robots.txt', 'app/robots.txt');
     this.template('app-conditional/h5-template/humans.txt', 'app/humans.txt');
 
     this.copy('app-conditional/h5-template/_layouts/post.html', 'app/_layouts/post.html');
-    this.template('app-conditional/h5-template/_layouts/index.html', 'app/_layouts/index.html');
+    this.template('app-conditional/h5-template/_layouts/default.html', 'app/_layouts/default.html');
 
-    // h5bpCss: true
-  // h5bpIco: false,
-  // h5bpJs: true,
-  // h5bpAnalytics: false,
+    // Css boilerplate
+    if (this.h5bpCss) {
+      this.directory('app-conditional/h5-template/css', path.join('app', this.cssDir));
+    }
 
+    // Js boilerplate
+    if (this.h5bpJs) {
+      this.directory('app-conditional/h5-template/js', path.join('app', this.jsDir));
+      this.copy('app-conditional/h5-template/_includes/scripts.html', 'app/_includes/scripts.html');
+    }
 
-    // Docs. Always include the lisence.
+    // Touch and favicons
+    if (this.h5bpIco) {
+      this.directory('app-conditional/h5-template/icons', path.join('app'));
+    }
+
+    // Google analytincs include
+    if (this.h5bpAnalytics) {
+      this.copy('app-conditional/h5-template/_includes/googleanalytics.html', 'app/_includes/googleanalytics.html');
+    }
+
+    // Docs. Always include the license.
     if (this.h5bpDocs) {
       this.directory('app-conditional/h5-template/docs', 'app/_H5BP-docs');
     }
     else {
       this.copy('app-conditional/h5-template/docs/LICENSE.md', 'app/_H5BP-docs/LICENSE.md');
     }
-
-  // : false,
-
-
-// if h5
-  // needs css from exec to be in place? yes
-
-  // css if preproc is false // copy
-
-  // humans //template
-
-  // remove/ clean up image dir // delete
-  // grunt.file.delete(filepath [, force: true])
-
-
-  // h5 info/docs //copy
-
-  //this.bowerInstall
-  // if h5 add and save vendor to bower? yes.
-
   }
 };
 
@@ -457,6 +453,12 @@ Generator.prototype.jekFiles = function jekFiles() {
   // remove pyg //del should this be in a pygments meth?
 
   // build gemfile/ bundler with markdown libs needed //template
+
+  // RWRW jek pyg needs to be added in index.html
+  if (this.jekPyg) {
+    this.copy(path.join(this.defaultDirs.tmpJek, 'css/syntax.css'), path.join('app', this.cssDir, 'syntax.css'));
+  }
+
 };
 
 Generator.prototype.cssPreSass = function cssPreSass() {
