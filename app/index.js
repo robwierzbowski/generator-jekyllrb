@@ -52,21 +52,22 @@ var Generator = module.exports = function Generator() {
   //   spawn('bower', ['install'], { stdio: 'inherit' });
   // });
 
-  // Bower install from new yo docs
-
-  // !! RWRW use underscore in bower.json and this.installDependencies in on end callback.
-  // "Alternatively they can install with" this.bowerInstall(['jquery', 'underscore'], { save: true });
 
   // Or...
   // this.on('end', function () {
   //   this.installDependencies({ skipInstall: options['skip-install'] });
   // });
 
-  // RWRW
-  // this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
-
 
   this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
+  this.on('end', function () {
+
+    // RWRW use underscore in bower.json with this.installDependencies in on end callback for depens.
+    // this.installDependencies({ skipInstall: options['skip-install'] });
+
+    // Clean up temp files
+    spawn('rm', ['-r', '.tmpJek'], { stdio: 'inherit' });
+  });
 };
 
 util.inherits(Generator, yeoman.generators.NamedBase);
@@ -350,11 +351,12 @@ Generator.prototype.directories = function directories() {
 
 Generator.prototype.templates = function templates() {
 
-  var date = (new Date()).toISOString().split('T')[0];
+  var date = new Date();
+  var formattedDate = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
 
   // Universal template files
-  this.copy(path.join(this.defaultDirs.tmpJek, '_posts', date + '-welcome-to-jekyll.markdown'), path.join('app/_posts', date + '-welcome-to-jekyll.md'));
-  this.template('app/_posts/0000-00-00-yo-jekyll.md', path.join('app/_posts', date + '-yo-jekyll.md'));
+  this.copy(path.join(this.defaultDirs.tmpJek, '_posts', formattedDate + '-welcome-to-jekyll.markdown'), path.join('app/_posts', formattedDate + '-welcome-to-jekyll.md'));
+  this.template('app/_posts/0000-00-00-yo-jekyll.md', path.join('app/_posts', formattedDate + '-yo-jekyll.md'));
 
   // Default Jekyll templates
   if (this.templateType === 'd') {
@@ -432,7 +434,7 @@ Generator.prototype.git = function git() {
 
 Generator.prototype.bower = function bower() {
   this.copy('bowerrc', '.bowerrc');
-//   this.copy('bower.json', 'bower.json'); //template
+  this.template('_bower.json', 'bower.json');
 };
 
 Generator.prototype.jshint = function jshint() {

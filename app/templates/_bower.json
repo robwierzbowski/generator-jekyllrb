@@ -1,5 +1,8 @@
 {
-  // RWRW insert appname
-  "name": "thisguy", // name
-  "version": "0.0.1"
+  "name": "<%= _.slugify(appname) %>",
+  "version": "0.0.1",
+  "dependencies": {<% if (h5bpJs) { %>
+    "jquery": "~2.0.0",
+    "modernizr": "~2.6.2"<% } %>
+  }
 }
