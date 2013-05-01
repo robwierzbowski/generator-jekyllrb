@@ -3,17 +3,19 @@
 
 # TEAM
 
-  // RWRW include yeoman variables
-
-    <name> -- Creation Master -- <twitter>
+    <%= author %> -- Data Czar<% if (twitter) { %> --  <%= twitter %><% } %>
 
 # THANKS
 
     <name>
 
 # TECHNOLOGY COLOPHON
-
-  // RWRW include yeoman variables
-  
-    HTML5, CSS3
-    Normalize.css, jQuery, Modernizr
+    
+    Jekyll static site generator<% if (cssPre === 's') { %> 
+    Sass <% } %><% if (cssPre === 'c') { %> 
+    Sass and Compass <% } %><% if (jsPre === 'c') { %> 
+    Coffeescript <% } %><% if (templateType === 'h5') { %> 
+    HTML5 ★ Boilerplate <% } %><% if (h5bpCss) { %>
+    Normalize.css <% } %><% if (h5bpJs) { %>
+    jQuery, Modernizr <% } %>
+ 

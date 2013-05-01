@@ -1,5 +1,6 @@
-
-@import 'default/_main.css';
-@import 'default/_screen.css';
+// Get Sassy!
+// These imported files are plain old css. Sassify them as you see fit.<% if (templateType === 'h5') { %>
 @import 'default/_normalize.css';
-@import 'default/_syntax.css';
+@import 'default/_main.css';<% } %><% if (templateType === 'd') { %>
+@import 'default/_screen.css';<% } %><% if (jekPyg) { %>
+@import 'default/_syntax.css';<% } %>

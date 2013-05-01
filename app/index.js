@@ -23,8 +23,13 @@ var Generator = module.exports = function Generator() {
   //   }
   //   return stdout;
   // });
+    // this.author  = props.author   !== '' ? props.author   : 'Your Name';
+    // this.email   = props.email    !== '' ? props.email    : false;
+    // this.twitter = props.twitter  !== '' ? props.twitter  : false;
+    // this.gHub    = props.gHub     !== '' ? props.gHub     : false;
 
-  // var args = ['main'];
+
+  // RWRW Make sure user has jekyll installed? test stderr for 'not found' and quit with error message.
 
   // Default asset dirs to use for scaffolding
   // TODO: detect dirs for a dropped in Jekyll site?
@@ -81,15 +86,56 @@ util.inherits(Generator, yeoman.generators.NamedBase);
 //   Add custom validation
 //   Make defaults editable with an equivalent of read module's edit: true
 
-// Basic direcory structure
+// Author information
 Generator.prototype.askFor = function askFor() {
   var cb = this.async();
 
   console.log(
     'This generator will scaffold and wire a Jekyll site. Yo, Jekyll!'.yellow.bold +
     '\n ' +
-    '\nLet\'s set up some directories.'.yellow + ' ☛'
+    '\nTell us a little about yourself.'.yellow + ' ☛'
   );
+  var prompts = [{
+    name: 'author',
+    message: 'Your Name:'
+   // RWRW default: nameDefault;
+  },
+  {
+    name: 'email',
+    message: 'Your Email:'
+   // RWRW default: emailDefault;
+  },
+  {
+    name: 'twitter',
+    message: 'Your @Twitter Username:'
+  },
+  {
+    name: 'gHub',
+    message: 'Your GitHub Username:'
+   // RWRW default: gHubDefault;
+  }];
+
+  this.prompt(prompts, function (err, props) {
+    if (err) {
+      return this.emit('error', err);
+    }
+
+    // Assign prompt results to Generator object
+    // String properties without defaults to string or boolean
+    this.author  = props.author   !== '' ? props.author   : 'Your Name';
+    this.email   = props.email    !== '' ? props.email    : false;
+    this.twitter = props.twitter  !== '' ? props.twitter  : false;
+    this.gHub    = props.gHub     !== '' ? props.gHub     : false;
+
+    cb();
+  }.bind(this));
+};
+
+// Basic direcory structure
+Generator.prototype.askForStructure = function askForStructure() {
+  var cb = this.async();
+
+  console.log('\nLet\'s set up some directories.'.yellow + ' ☛');
 
   var prompts = [{
     name: 'cssDir',
@@ -250,6 +296,7 @@ Generator.prototype.askForTemplates = function askFor() {
 };
 
 // Jekyll configuration
+// RWRW Put name at top
 Generator.prototype.askForJekyll = function askFor() {
   var cb = this.async();
 
@@ -259,23 +306,24 @@ Generator.prototype.askForJekyll = function askFor() {
 
   console.log('\nAnd configure Jekyll.'.yellow + ' ☛');
 
-  var prompts = [{
-    name: 'jekAuthor',
-    message: 'Your Name:'
-   // RWRW default: nameDefault;
-  },
-  {
-    name: 'jekEmail',
-    message: 'Your Email:'
-  },
-  {
-    name: 'jekTwit',
-    message: 'Your @Twitter Username:'
-  },
-  {
-    name: 'jekGHub',
-    message: 'Your GitHub Username:'
-  },
+  var prompts = [
+  // {
+  //   name: 'jekAuthor',
+  //   message: 'Your Name:'
+  //  // RWRW default: nameDefault;
+  // },
+  // {
+  //   name: 'jekEmail',
+  //   message: 'Your Email:'
+  // },
+  // {
+  //   name: 'jekTwit',
+  //   message: 'Your @Twitter Username:'
+  // },
+  // {
+  //   name: 'jekGHub',
+  //   message: 'Your GitHub Username:'
+  // },
   {
     name: 'jekDescript',
     message: 'Site Description:'
@@ -315,10 +363,10 @@ Generator.prototype.askForJekyll = function askFor() {
     this.jekPost     = props.jekPost;
 
     // String properties without defaults to string or boolean
-    this.jekAuthor   = props.jekAuthor   !== '' ? props.jekAuthor   : false;
-    this.jekEmail    = props.jekEmail    !== '' ? props.jekEmail    : false;
-    this.jekTwit     = props.jekTwit     !== '' ? props.jekTwit     : false;
-    this.jekGHub     = props.jekGHub     !== '' ? props.jekGHub     : false;
+    // this.jekAuthor   = props.jekAuthor   !== '' ? props.jekAuthor   : 'Your Name';
+    // this.jekEmail    = props.jekEmail    !== '' ? props.jekEmail    : false;
+    // this.jekTwit     = props.jekTwit     !== '' ? props.jekTwit     : false;
+    // this.jekGHub     = props.jekGHub     !== '' ? props.jekGHub     : false;
     this.jekDescript = props.jekDescript !== '' ? props.jekDescript : false;
     this.jekPage     = props.jekPage     !== '' ? props.jekPage     : false;
 
@@ -328,16 +376,14 @@ Generator.prototype.askForJekyll = function askFor() {
 
 ////////////////////////// Generate App //////////////////////////
 
-Generator.prototype.defaultJekyll = function defaultJekyll() {
-  // Create blank Jekyll site in app
+Generator.prototype.initJekyll = function initJekyll() {
+  // Create a default Jekyll site in temporary folder using the Jekyll cli
   // Sync: must execute before other scaffolding (template, cssPre, pygments)
   execSync.exec('jekyll new ' + this.defaultDirs.tmpJek);
 };
 
 Generator.prototype.directories = function directories() {
   // Scaffold Jekyll dirs
-  // Must block templates and cssPreprocessor
-  this.mkdir('app/');
   this.mkdir(path.join('app', this.cssDir));
   this.mkdir(path.join('app', this.imgDir));
   this.mkdir(path.join('app', this.jsDir));
@@ -356,6 +402,7 @@ Generator.prototype.templates = function templates() {
 
   // Universal template files
   this.copy(path.join(this.defaultDirs.tmpJek, '_posts', formattedDate + '-welcome-to-jekyll.markdown'), path.join('app/_posts', formattedDate + '-welcome-to-jekyll.md'));
+  // RWRW write template
   this.template('app/_posts/0000-00-00-yo-jekyll.md', path.join('app/_posts', formattedDate + '-yo-jekyll.md'));
 
   // Default Jekyll templates
@@ -366,7 +413,7 @@ Generator.prototype.templates = function templates() {
     this.template('app-conditional/def-template/_layouts/default.html', 'app/_layouts/default.html');
 
     // From default Jekyll installation
-    // TODO: Rewrite to use this.directory()/any whole directory import with a exclude filter.
+    // TODO: Rewrite to use this.directory()/any whole directory import with an exclude filter.
     this.copy(path.join(this.defaultDirs.tmpJek, 'index.html'), 'app/index.html');
     this.copy(path.join(this.defaultDirs.tmpJek, '_layouts/post.html'), 'app/_layouts/post.html');
     this.copy(path.join(this.defaultDirs.tmpJek, 'css/screen.css'), path.join('app', this.cssDir, 'screen.css'));
@@ -382,9 +429,11 @@ Generator.prototype.templates = function templates() {
     this.copy('app-conditional/h5-template/crossdomain.xml', 'app/crossdomain.xml');
     this.copy('app-conditional/h5-template/index.html', 'app/index.html');
     this.copy('app-conditional/h5-template/robots.txt', 'app/robots.txt');
+    // RWRW write template
     this.template('app-conditional/h5-template/humans.txt', 'app/humans.txt');
 
     this.copy('app-conditional/h5-template/_layouts/post.html', 'app/_layouts/post.html');
+    // RWRW write template
     this.template('app-conditional/h5-template/_layouts/default.html', 'app/_layouts/default.html');
 
     // Css boilerplate
@@ -395,7 +444,7 @@ Generator.prototype.templates = function templates() {
     // Js boilerplate
     if (this.h5bpJs) {
       this.directory('app-conditional/h5-template/js', path.join('app', this.jsDir));
-      this.copy('app-conditional/h5-template/_includes/scripts.html', 'app/_includes/scripts.html');
+      this.template('app-conditional/h5-template/_includes/scripts.html', 'app/_includes/scripts.html');
     }
 
     // Touch and favicons
@@ -419,12 +468,13 @@ Generator.prototype.templates = function templates() {
 };
 
 Generator.prototype.gruntfile = function gruntfile() {
-  // RWRW Gruntfile needs to have correct object.props
-  // this.template('Gruntfile.js', 'Gruntfile.js'); //template
+  // RWRW write template
+  // this.template('Gruntfile.js', 'Gruntfile.js');
 };
 
 Generator.prototype.packageJSON = function packageJSON() {
-//   this.template('_package.json', 'package.json'); //template
+  // RWRW write template
+  // this.template('_package.json', 'package.json');
 };
 
 Generator.prototype.git = function git() {
@@ -446,45 +496,54 @@ Generator.prototype.editor = function editor() {
 };
 
 Generator.prototype.jekFiles = function jekFiles() {
-  // 2nd post //copy
-  // readme //template
 
-  // config.yml //template
+  // RWRW write template
+  // this.template('_config.yml');
 
-
-  // remove pyg //del should this be in a pygments meth?
-
-  // build gemfile/ bundler with markdown libs needed //template
+  // RWRW write template
+  // RWRW make file
+  // gemfile/bundler with markdown libs needed.
 
   // RWRW jek pyg needs to be added in index.html
   if (this.jekPyg) {
     this.copy(path.join(this.defaultDirs.tmpJek, 'css/syntax.css'), path.join('app', this.cssDir, 'syntax.css'));
   }
-
 };
 
 Generator.prototype.cssPreSass = function cssPreSass() {
+  if (this.cssPre) {
+    this.mkdir(path.join('app', this.cssPreDir));
+  }
+
+  // Sass and Compass
   if (['s', 'c'].indexOf(this.cssPre)) {
-
-      // mkdir
-      // callback
-        // if h5
-        // mv h5css to scss
-
-        // else
-        // mv dflt css to scss
-
-        // if pyg
-        // move pyg to scss
+    // Move all existing css files to scss partials
+    if (this.templateType === 'h5') {
+      spawn('mv', [path.join('app', this.cssDir, '/main.css'), path.join('app', this.cssPreDir, '_main.scss')]);
+      spawn('mv', [path.join('app', this.cssDir, '/normalize.css'), path.join('app', this.cssPreDir, '_normalize.scss')]);
+    }
+    if (this.templateType === 'd') {
+      spawn('mv', [path.join('app', this.cssDir, '/screen.css'), path.join('app', this.cssPreDir, '_screen.scss')]);
+    }
+    if (this.jekPyg) {
+      spawn('mv', [path.join('app', this.cssDir, '/syntax.css'), path.join('app', this.cssPreDir, '_syntax.scss')]);
+    }
+    // Create main scss file to import all partials
+    this.template('app-conditional/sass/main.scss', path.join('app', this.cssPreDir, 'main.scss'));
   }
 };
 
 Generator.prototype.jsPreCoffee = function jsPreCoffee() {
+  if (this.jsPre) {
+    this.mkdir(path.join('app', this.jsPreDir));
+  }
+
+  // Coffeescript
   if (this.jsPre === 'c') {
-
-  // mkdir
-    // callback make file
-
+    this.write(path.join('app', this.jsPreDir, 'main.coffee'),
+      '// Enjoy coffeescripting.' +
+      '\n// Make sure to transfer the contents of  "' +
+      path.join('app', this.jsDir) + '" to coffeescript files before compiling.');
   }
 };
 
