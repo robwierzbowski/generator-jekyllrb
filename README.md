@@ -1,5 +1,7 @@
 <!-- RWRW Edit it up! -->
 
+**Work in progress. Not functioning yet, pre-pre-alpha.**
+
 # generator-jekyll
 
 > A generator for Jekyll projects. yo, jekyll!
