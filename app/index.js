@@ -3,6 +3,7 @@ var fs = require('fs');
 var util = require('util');
 var path = require('path');
 var execSync = require('execSync');
+var exec = require('child_process').exec;
 var spawn = require('child_process').spawn;
 var yeoman = require('yeoman-generator');
 
@@ -23,6 +24,9 @@ var Generator = module.exports = function Generator() {
   //   }
   //   return stdout;
   // });
+
+  //var thus = exec('git config --get user.name');
+  //console.log(thus);
     // this.author  = props.author   !== '' ? props.author   : 'Your Name';
     // this.email   = props.email    !== '' ? props.email    : false;
     // this.twitter = props.twitter  !== '' ? props.twitter  : false;
@@ -429,7 +433,6 @@ Generator.prototype.templates = function templates() {
     this.copy('app-conditional/h5-template/crossdomain.xml', 'app/crossdomain.xml');
     this.copy('app-conditional/h5-template/index.html', 'app/index.html');
     this.copy('app-conditional/h5-template/robots.txt', 'app/robots.txt');
-    // RWRW write template
     this.template('app-conditional/h5-template/humans.txt', 'app/humans.txt');
 
     this.copy('app-conditional/h5-template/_layouts/post.html', 'app/_layouts/post.html');
