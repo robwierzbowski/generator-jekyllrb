@@ -3,7 +3,6 @@ var fs = require('fs');
 var util = require('util');
 var path = require('path');
 var execSync = require('execSync');
-var exec = require('child_process').exec;
 var spawn = require('child_process').spawn;
 var yeoman = require('yeoman-generator');
 
@@ -16,24 +15,15 @@ var Generator = module.exports = function Generator() {
 
   // TODO: Do references to the 'app' directory need to be made configurable?
   // See generator-angular.
-
-  // RWRW Attempt to get user's gitconfig name. Doesn't work.
-  // var nameDefault = exec('git config user.name', function (err, stdout) {
-  //   if (err) {
-  //     return 'breb smath';
-  //   }
-  //   return stdout;
-  // });
-
-  //var thus = exec('git config --get user.name');
-  //console.log(thus);
-    // this.author  = props.author   !== '' ? props.author   : 'Your Name';
-    // this.email   = props.email    !== '' ? props.email    : false;
-    // this.twitter = props.twitter  !== '' ? props.twitter  : false;
-    // this.gHub    = props.gHub     !== '' ? props.gHub     : false;
-
-
   // RWRW Make sure user has jekyll installed? test stderr for 'not found' and quit with error message.
+
+
+  // Get user info from .gitconfig if available
+  this.gitInfo = {
+    name: execSync.exec('git config user.name').stdout.replace(/\n/g, ''),
+    email: execSync.exec('git config user.email').stdout.replace(/\n/g, ''),
+    hub: execSync.exec('git config github.user').stdout.replace(/\n/g, '')
+  };
 
   // Default asset dirs to use for scaffolding
   // TODO: detect dirs for a dropped in Jekyll site?
@@ -51,31 +41,19 @@ var Generator = module.exports = function Generator() {
   //   args: args
   // });
 
-  // Set permanant opts here
-  // var someVar = 'gar';
-
-  // RWRW This should work now, as long as package and bower are there.
-  // this.on('end', function () {
-  //   console.log('\n\nI\'m all done. Running ' + 'npm install & bower install'.bold.yellow + ' to install the required dependencies. If this fails, try running the command yourself.\n\n');
-  //   spawn('npm', ['install'], { stdio: 'inherit' });
-  //   spawn('bower', ['install'], { stdio: 'inherit' });
-  // });
-
-
-  // Or...
-  // this.on('end', function () {
-  //   this.installDependencies({ skipInstall: options['skip-install'] });
-  // });
-
-
   this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
   this.on('end', function () {
 
-    // RWRW use underscore in bower.json with this.installDependencies in on end callback for depens.
+    // RWRW This should work now, as long as package and bower are there.
+    //   console.log('\n\nI\'m all done. Running ' + 'npm install & bower install'.bold.yellow + ' to install the required dependencies. If this fails, try running the command yourself.\n\n');
+    //   spawn('npm', ['install'], { stdio: 'inherit' });
+    //   spawn('bower', ['install'], { stdio: 'inherit' });
+
+    // RWRW OR easier, use underscore in bower.json with this.installDependencies in on end callback for depens.
     // this.installDependencies({ skipInstall: options['skip-install'] });
 
     // Clean up temp files
-    spawn('rm', ['-r', '.tmpJek'], { stdio: 'inherit' });
+    spawn('rm', ['-r', this.defaultDirs.tmpJek], { stdio: 'inherit' });
   });
 };
 
@@ -101,13 +79,13 @@ Generator.prototype.askFor = function askFor() {
   );
   var prompts = [{
     name: 'author',
-    message: 'Your Name:'
-   // RWRW default: nameDefault;
+    message: 'Your Name:',
+    default: this.gitInfo.name
   },
   {
     name: 'email',
-    message: 'Your Email:'
-   // RWRW default: emailDefault;
+    message: 'Your Email:',
+    default: this.gitInfo.email
   },
   {
     name: 'twitter',
@@ -115,8 +93,8 @@ Generator.prototype.askFor = function askFor() {
   },
   {
     name: 'gHub',
-    message: 'Your GitHub Username:'
-   // RWRW default: gHubDefault;
+    message: 'Your GitHub Username:',
+    default: this.gitInfo.hub
   }];
 
   this.prompt(prompts, function (err, props) {
@@ -563,8 +541,6 @@ Generator.prototype.jsPreCoffee = function jsPreCoffee() {
 
 // TODO: Categories subgenerator
 // TODO: Post subgenerator, copies default post for that cat frontmatter
-
-
 
 /////////////////
 // RWRW NOTES
