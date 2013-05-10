@@ -1,80 +1,73 @@
-# Site configuration for Yeoman Jekyll project
+# Configuration for Yeoman Jekyll project
 
-## Process RWRW app.name
-name: RWRW add var
-## Process RWRW jk
-description: RWRW blank
-# If Yo is setting up do we need this?
-# url: 'http://localhost:9000'
+name: <%= appname %>
+description: <%= jekDescript %>
 
-## Process RWRW jk
 # author :
-#   name       : RWRW populate
-#   email      : RWRW populate
-#   github     : RWRW populate username
-#   twitter    : RWRW populate username
+#   name       : <%= author %>
+#   email      : <%= email %>
+#   github     : <%= github %>
 
-## Custom paths
+# Custom paths
 source:      .
 destination: ./_site
 plugins:     ./_plugins
 
-## Grunt handles compiling and reloading Jekyll.
+# Grunt handles compiling and reloading Jekyll
 server: false
 auto: false
 
-# Exclude files from compilation. Excludes .dot and _underscore files and
-# directories by default.
+# Exclude files from compilation
+# Excludes .dot and _underscore files and directories by default
 exclude: ['bower.json', 'Gruntfile.js', 'package.json', 'config.rb', 'readme.md', 'travis.yml']
 
-# Specifically include files that would have otherwise been excluded.
+# Force inclusion of files that would otherwise be excluded
 include: ['.htaccess']
 
 # Default post path style
-## Process RWRW jk
 # date  /:categories/:year/:month/:day/:title.html
 # pretty  /:categories/:year/:month/:day/:title/
 # none  /:categories/:title.html
-permalink: RWRW var
+permalink: <%= jekPost %>
 
-## RWRW Maruku by default, so if maruku chosen do not render
-# Might need further conig (smartypants)
-## Process RWRW jk
-markdown: RWRW var
-# rdiscount
-# kramdown
-# redcarpet
-# maruku
-
-### RWRW These are the defaults
-# maruku:
-#   use_tex:    false
-#   use_divs:   false
-#   png_engine: blahtex
-#   png_dir:    images/latex
-#   png_url:    /images/latex
-# rdiscount:
-#   extensions: []
-# redcarpet:
-#   extensions: [ fenced_code_blocks, smart ]
-# kramdown:
-#   auto_ids: true
-#   footnote_nr: 1
-#   entity_output: as_char
-#   toc_levels: 1..6
-#   use_coderay: false
-#   coderay:
-#     coderay_wrap: div
-#     coderay_line_numbers: inline
-#     coderay_line_numbers_start: 1
-#     coderay_tab_width: 4
-#     coderay_bold_every: 10
-#     coderay_css: style
-
-## Process RWRW jk
-# Highlight tag with the Pygments library.
-pygments: RWRW Var bool (def false or true)
 # Publish posts with future date.
-future: RWRW [boolean]
-# Split posts over multiple subdirectories called “page2”, “page3”, … “pageN”
-paginate: RWRW [per_page]
+# The _config.build.yml file sets this to false on grunt build
+future: true
+
+# Compile posts in the _drafts directory.
+# The _config.build.yml file sets this to false on grunt build
+show_drafts: true
+
+<% if (jekPage !== 'all') { %># Split posts over multiple subdirectories called “page2”, “page3”, … “pageN”
+paginate: <%= jekPage %>
+paginate_path: 'page:num'<% } %>
+
+# Markdown library
+markdown: <%= jekMkd %>
+# Markdown library options<% if (jekMkd === 'maruku') { %>
+# maruku:
+  # use_tex:    false
+  # use_divs:   false
+  # png_engine: blahtex
+  # png_dir:    images/latex
+  # png_url:    /images/latex<% } %><% if (jekMkd === 'rdiscount') {%>
+# rdiscount:
+  # extensions: []<% } %><% if (jekMkd === 'kramdown') {%>
+# kramdown:
+  # auto_ids: true
+  # footnote_nr: 1
+  # entity_output: as_char
+  # toc_levels: 1..6
+  # use_coderay: false
+  # coderay:
+  #   coderay_wrap: div
+  #   coderay_line_numbers: inline
+  #   coderay_line_numbers_start: 1
+  #   coderay_tab_width: 4
+  #   coderay_bold_every: 10
+  #   coderay_css: style<% } %><% if (jekMkd === 'redcarpet') {%>
+# redcarpet:
+  # extensions: [ fenced_code_blocks, smart ]<% } %>
+
+# Use Pygments to highlight code blocks
+pygments: <%= jekPyg %>

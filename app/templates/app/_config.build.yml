@@ -1,0 +1,9 @@
+# Configuration for Yeoman Jekyll project
+# These settings override those in _confg.yml when the site is built for
+# production
+
+# Publish posts with future date.
+future: false
+
+# Compile posts in the _drafts directory.
+show_drafts: false

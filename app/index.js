@@ -1,9 +1,3 @@
-
-// Look at what _.vars other generators have available to them
-// Write templating for default.html layouts.
-// wire in pygments?
-
-
 'use strict';
 var fs = require('fs');
 var util = require('util');
@@ -20,12 +14,7 @@ var Generator = module.exports = function Generator() {
   this.argument('appname', { type: String, required: false });
   this.appname = this.appname || path.basename(process.cwd());
 
-  // TODO: Do references to the 'app' directory need to be made configurable?
-  // See generator-angular.
-  // RWRW Make sure user has jekyll installed? test stderr for 'not found' and quit with error message.
-
-
-  // Get user info from .gitconfig if available
+  // User info from .gitconfig if available
   this.gitInfo = {
     name: execSync.exec('git config user.name').stdout.replace(/\n/g, ''),
     email: execSync.exec('git config user.email').stdout.replace(/\n/g, ''),
@@ -33,7 +22,6 @@ var Generator = module.exports = function Generator() {
   };
 
   // Default asset dirs to use for scaffolding
-  // TODO: detect dirs for a dropped in Jekyll site?
   this.defaultDirs = {
     css: 'css',
     js: 'js',
@@ -53,14 +41,13 @@ var Generator = module.exports = function Generator() {
 
     // RWRW This should work now, as long as package and bower are there.
     //   console.log('\n\nI\'m all done. Running ' + 'npm install & bower install'.bold.yellow + ' to install the required dependencies. If this fails, try running the command yourself.\n\n');
-    //   spawn('npm', ['install'], { stdio: 'inherit' });
-    //   spawn('bower', ['install'], { stdio: 'inherit' });
 
     // RWRW OR easier, use underscore in bower.json with this.installDependencies in on end callback for depens.
     // this.installDependencies({ skipInstall: options['skip-install'] });
 
     // RWRW Remember to alert that the files in prep dir are just css, and need to
     // be preprocessed up
+    // coffee can overwrite js
 
     // Clean up temp files
     spawn('rm', ['-r', this.defaultDirs.tmpJek], { stdio: 'inherit' });
@@ -71,7 +58,7 @@ util.inherits(Generator, yeoman.generators.NamedBase);
 
 ////////////////////////// User input ////////////////////////////
 
-// TODO: When new prompt library lands in Yeoman 1.0:
+// TODO: When new prompt library lands:
 //   Rewrite for conditional prompts
 //   Auto populate with magicDefaults
 //   Make some prompts required
@@ -287,16 +274,28 @@ Generator.prototype.askForJekyll = function askFor() {
   var cb = this.async();
 
   // Multiple choice options
-  // var jekPost = ['d','p','n'];
-  // var jekMkd  = ['m','rd','k','rc'];
+  // var jekPage = ['[0-9]*','all'];
+  var jekPostOptions = {
+    d: 'date',
+    p: 'pretty',
+    n: 'none'
+  };
+  var jekMkdOptions = {
+    m:  'maruku',
+    rd: 'rdiscount',
+    k:  'kramdown',
+    rc: 'redcarpet'
+  };
 
-  console.log('\nAnd configure Jekyll.'.yellow + ' ☛');
+  console.log('\nAnd configure Jekyll.'.yellow + ' ☛' +
+              '\nYou can change all of these options in Jekyll\'s config.yml.');
 
   var prompts = [{
     name: 'jekDescript',
     message: 'Site Description:'
   },
   {
+    // TODO: Add handling for custom formats
     name: 'jekPost',
     message: 'Choose a post permalink style\n d: date\n p: pretty\n n: none\n',
     default: 'd'
@@ -314,7 +313,7 @@ Generator.prototype.askForJekyll = function askFor() {
   {
     name: 'jekPage',
     message: 'How many posts should be shown on the home page?',
-    warning: 'You can change all of these options in Jekyll\'s config.yml.'
+    default: '# of posts/All'
   }];
 
   this.prompt(prompts, function (err, props) {
@@ -327,12 +326,12 @@ Generator.prototype.askForJekyll = function askFor() {
     this.jekPyg      = !(/n/i).test(props.jekPyg);
 
     // String properties
-    this.jekMkd      = props.jekMkd;
-    this.jekPost     = props.jekPost;
+    this.jekMkd      = jekMkdOptions[props.jekMkd];
+    this.jekPost     = jekPostOptions[props.jekPost];
 
     // String properties without defaults to string or boolean
     this.jekDescript = props.jekDescript !== '' ? props.jekDescript : false;
-    this.jekPage     = props.jekPage     !== '' ? props.jekPage     : false;
+    this.jekPage     = props.jekPage     !== '# of posts/All' ? 'all' : props.jekPage.toLowerCase;
 
     cb();
   }.bind(this));
@@ -344,14 +343,6 @@ Generator.prototype.initJekyll = function initJekyll() {
   // Create a default Jekyll site in temporary folder using the Jekyll cli
   // Sync: must execute before other scaffolding (template, cssPre, pygments)
   execSync.exec('jekyll new ' + this.defaultDirs.tmpJek);
-
-  // console.log('yeoman');
-  // console.log(yeoman);
-  // console.log('yeoman.app');
-  // console.log(yeoman.app);
-  // console.log('app');
-  // console.log(this.app);
-
 };
 
 Generator.prototype.directories = function directories() {
@@ -380,8 +371,7 @@ Generator.prototype.templates = function templates() {
   // Default Jekyll templates
   if (this.templateType === 'd') {
 
-    // Copy from cli generated jekyll site
-    // TODO: Rewrite to use directory globbing with exclude.
+    // From cli generated jekyll site
     this.copy(path.join(this.defaultDirs.tmpJek, 'index.html'), 'app/index.html');
     this.copy(path.join(this.defaultDirs.tmpJek, '_layouts/post.html'), 'app/_layouts/post.html');
     this.copy(path.join(this.defaultDirs.tmpJek, 'css/screen.css'), path.join('app', this.cssDir, 'screen.css'));
@@ -402,8 +392,8 @@ Generator.prototype.templates = function templates() {
     this.copy('conditional/template-H5BP/robots.txt', 'app/robots.txt');
     this.copy('conditional/template-H5BP/_layouts/post.html', 'app/_layouts/post.html');
 
-    // RWRW write template
     this.template('conditional/template-H5BP/humans.txt', 'app/humans.txt');
+    // RWRW write template
     this.template('conditional/template-H5BP/_layouts/default.html', 'app/_layouts/default.html');
 
     // Css boilerplate
@@ -456,7 +446,6 @@ Generator.prototype.git = function git() {
 
 Generator.prototype.bower = function bower() {
   this.copy('bowerrc', '.bowerrc');
-  // RWRW write template
   this.template('_bower.json', 'bower.json');
 };
 
@@ -470,8 +459,10 @@ Generator.prototype.editor = function editor() {
 
 Generator.prototype.jekFiles = function jekFiles() {
 
-  // RWRW write template
-  // this.template('_config.yml');
+  // Files that control Jekyll coniguration and configuration option dependencies RWRW
+
+  this.copy(path.join('app', '_config.build.yml'), path.join('app', '_config.build.yml'));
+  this.template(path.join('app', '_config.yml'));
 
   // RWRW write template
   // TODO: gemfile/bundler with markdown libs
@@ -491,7 +482,7 @@ Generator.prototype.cssPreSass = function cssPreSass() {
   if (['s', 'c'].indexOf(this.cssPre)) {
 
     this.template('conditional/sass/readme.md', path.join('app', this.cssPreDir, 'readme.md'));
-    this.template('conditional/sass/config.rb', path.join('app/config.rb'));
+    this.template('conditional/sass/config.rb', 'config.rb');
 
     // Convert css files to scss files
     var files = globule.find('**/*.css', {srcBase: path.join('app', this.cssDir)});
@@ -515,12 +506,11 @@ Generator.prototype.jsPreCoffee = function jsPreCoffee() {
   // Coffeescript
   if (this.jsPre === 'c') {
     this.template('conditional/coffee/readme.md', path.join('app', this.jsPreDir, 'readme.md'));
-    // RWRW: Should we move all js files here like in css preprocessor?
   }
 };
 
 
-
+//////////////////////////////////////////////////////////
 // TODO: These ↓
 
 // Generator.prototype.requireJs = function testing() {
@@ -533,8 +523,15 @@ Generator.prototype.jsPreCoffee = function jsPreCoffee() {
 // TODO: Categories subgenerator
 // TODO: yo arg for json file with all config in it.j
 
+// TODO: Do references to the 'app' directory need to be made configurable?
+// See generator-angular.
+// RWRW Make sure user has jekyll installed? test stderr for 'not found' and quit with error message.
+// On complete remind user to add g analytincs code.
+
 /////////////////
 // RWRW NOTES
 
 // End with a list of commands and description
 // all components managed with Bower
+
+
