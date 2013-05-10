@@ -3,7 +3,7 @@
 
 # TEAM
 
-    <%= author %> -- Data Czar<% if (twitter) { %> --  <%= twitter %><% } %>
+    <%= author %> -- Site Maker<% if (github) { %> --  http://github.com/<%= github %><% } %>
 
 # THANKS
 

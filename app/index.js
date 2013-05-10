@@ -1,7 +1,14 @@
+
+// Look at what _.vars other generators have available to them
+// Write templating for default.html layouts.
+// wire in pygments?
+
+
 'use strict';
 var fs = require('fs');
 var util = require('util');
 var path = require('path');
+var globule = require('globule');
 var execSync = require('execSync');
 var spawn = require('child_process').spawn;
 var yeoman = require('yeoman-generator');
@@ -22,7 +29,7 @@ var Generator = module.exports = function Generator() {
   this.gitInfo = {
     name: execSync.exec('git config user.name').stdout.replace(/\n/g, ''),
     email: execSync.exec('git config user.email').stdout.replace(/\n/g, ''),
-    hub: execSync.exec('git config github.user').stdout.replace(/\n/g, '')
+    github: execSync.exec('git config github.user').stdout.replace(/\n/g, '')
   };
 
   // Default asset dirs to use for scaffolding
@@ -51,6 +58,9 @@ var Generator = module.exports = function Generator() {
 
     // RWRW OR easier, use underscore in bower.json with this.installDependencies in on end callback for depens.
     // this.installDependencies({ skipInstall: options['skip-install'] });
+
+    // RWRW Remember to alert that the files in prep dir are just css, and need to
+    // be preprocessed up
 
     // Clean up temp files
     spawn('rm', ['-r', this.defaultDirs.tmpJek], { stdio: 'inherit' });
@@ -88,13 +98,9 @@ Generator.prototype.askFor = function askFor() {
     default: this.gitInfo.email
   },
   {
-    name: 'twitter',
-    message: 'Your @Twitter Username:'
-  },
-  {
-    name: 'gHub',
+    name: 'github',
     message: 'Your GitHub Username:',
-    default: this.gitInfo.hub
+    default: this.gitInfo.github
   }];
 
   this.prompt(prompts, function (err, props) {
@@ -106,8 +112,7 @@ Generator.prototype.askFor = function askFor() {
     // String properties without defaults to string or boolean
     this.author  = props.author   !== '' ? props.author   : 'Your Name';
     this.email   = props.email    !== '' ? props.email    : false;
-    this.twitter = props.twitter  !== '' ? props.twitter  : false;
-    this.gHub    = props.gHub     !== '' ? props.gHub     : false;
+    this.github    = props.github     !== '' ? props.github     : false;
 
     cb();
   }.bind(this));
@@ -278,7 +283,6 @@ Generator.prototype.askForTemplates = function askFor() {
 };
 
 // Jekyll configuration
-// RWRW Put name at top
 Generator.prototype.askForJekyll = function askFor() {
   var cb = this.async();
 
@@ -288,25 +292,7 @@ Generator.prototype.askForJekyll = function askFor() {
 
   console.log('\nAnd configure Jekyll.'.yellow + ' ☛');
 
-  var prompts = [
-  // {
-  //   name: 'jekAuthor',
-  //   message: 'Your Name:'
-  //  // RWRW default: nameDefault;
-  // },
-  // {
-  //   name: 'jekEmail',
-  //   message: 'Your Email:'
-  // },
-  // {
-  //   name: 'jekTwit',
-  //   message: 'Your @Twitter Username:'
-  // },
-  // {
-  //   name: 'jekGHub',
-  //   message: 'Your GitHub Username:'
-  // },
-  {
+  var prompts = [{
     name: 'jekDescript',
     message: 'Site Description:'
   },
@@ -345,10 +331,6 @@ Generator.prototype.askForJekyll = function askFor() {
     this.jekPost     = props.jekPost;
 
     // String properties without defaults to string or boolean
-    // this.jekAuthor   = props.jekAuthor   !== '' ? props.jekAuthor   : 'Your Name';
-    // this.jekEmail    = props.jekEmail    !== '' ? props.jekEmail    : false;
-    // this.jekTwit     = props.jekTwit     !== '' ? props.jekTwit     : false;
-    // this.jekGHub     = props.jekGHub     !== '' ? props.jekGHub     : false;
     this.jekDescript = props.jekDescript !== '' ? props.jekDescript : false;
     this.jekPage     = props.jekPage     !== '' ? props.jekPage     : false;
 
@@ -362,6 +344,14 @@ Generator.prototype.initJekyll = function initJekyll() {
   // Create a default Jekyll site in temporary folder using the Jekyll cli
   // Sync: must execute before other scaffolding (template, cssPre, pygments)
   execSync.exec('jekyll new ' + this.defaultDirs.tmpJek);
+
+  // console.log('yeoman');
+  // console.log(yeoman);
+  // console.log('yeoman.app');
+  // console.log(yeoman.app);
+  // console.log('app');
+  // console.log(this.app);
+
 };
 
 Generator.prototype.directories = function directories() {
@@ -373,84 +363,85 @@ Generator.prototype.directories = function directories() {
   this.mkdir('app/_posts');
   this.mkdir('app/_includes');
   this.mkdir('app/_plugins');
-
-  console.log('\n RWRW dirs done'.white);
 };
 
 Generator.prototype.templates = function templates() {
 
+  // Build formatted date for posts
   var date = new Date();
   var formattedDate = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
 
   // Universal template files
   this.copy(path.join(this.defaultDirs.tmpJek, '_posts', formattedDate + '-welcome-to-jekyll.markdown'), path.join('app/_posts', formattedDate + '-welcome-to-jekyll.md'));
+
   // RWRW write template
   this.template('app/_posts/0000-00-00-yo-jekyll.md', path.join('app/_posts', formattedDate + '-yo-jekyll.md'));
 
   // Default Jekyll templates
   if (this.templateType === 'd') {
 
-    // From generator
-    // RWRW write template
-    this.template('app-conditional/def-template/_layouts/default.html', 'app/_layouts/default.html');
-
-    // From default Jekyll installation
-    // TODO: Rewrite to use this.directory()/any whole directory import with an exclude filter.
+    // Copy from cli generated jekyll site
+    // TODO: Rewrite to use directory globbing with exclude.
     this.copy(path.join(this.defaultDirs.tmpJek, 'index.html'), 'app/index.html');
     this.copy(path.join(this.defaultDirs.tmpJek, '_layouts/post.html'), 'app/_layouts/post.html');
     this.copy(path.join(this.defaultDirs.tmpJek, 'css/screen.css'), path.join('app', this.cssDir, 'screen.css'));
     this.copy(path.join(this.defaultDirs.tmpJek, 'images/rss.png'), path.join('app', this.imgDir, 'rss.png'));
+
+    // RWRW write template
+    this.template('conditional/template-default/_layouts/default.html', 'app/_layouts/default.html');
   }
 
   // HTML5 Boilerplate templates
   else if (this.templateType === 'h5') {
 
     // Universal H5BP files
-    this.copy('app-conditional/h5-template/htaccess', 'app/.htaccess');
-    this.copy('app-conditional/h5-template/404.html', 'app/404.html');
-    this.copy('app-conditional/h5-template/crossdomain.xml', 'app/crossdomain.xml');
-    this.copy('app-conditional/h5-template/index.html', 'app/index.html');
-    this.copy('app-conditional/h5-template/robots.txt', 'app/robots.txt');
-    this.template('app-conditional/h5-template/humans.txt', 'app/humans.txt');
+    this.copy('conditional/template-H5BP/htaccess', 'app/.htaccess');
+    this.copy('conditional/template-H5BP/404.html', 'app/404.html');
+    this.copy('conditional/template-H5BP/crossdomain.xml', 'app/crossdomain.xml');
+    this.copy('conditional/template-H5BP/index.html', 'app/index.html');
+    this.copy('conditional/template-H5BP/robots.txt', 'app/robots.txt');
+    this.copy('conditional/template-H5BP/_layouts/post.html', 'app/_layouts/post.html');
 
-    this.copy('app-conditional/h5-template/_layouts/post.html', 'app/_layouts/post.html');
     // RWRW write template
-    this.template('app-conditional/h5-template/_layouts/default.html', 'app/_layouts/default.html');
+    this.template('conditional/template-H5BP/humans.txt', 'app/humans.txt');
+    this.template('conditional/template-H5BP/_layouts/default.html', 'app/_layouts/default.html');
 
     // Css boilerplate
     if (this.h5bpCss) {
-      this.directory('app-conditional/h5-template/css', path.join('app', this.cssDir));
+      this.directory('conditional/template-H5BP/css', path.join('app', this.cssDir));
     }
 
     // Js boilerplate
     if (this.h5bpJs) {
-      this.directory('app-conditional/h5-template/js', path.join('app', this.jsDir));
-      this.template('app-conditional/h5-template/_includes/scripts.html', 'app/_includes/scripts.html');
+      this.directory('conditional/template-H5BP/js', path.join('app', this.jsDir));
+      // RWRW write template
+      this.template('conditional/template-H5BP/_includes/scripts.html', 'app/_includes/scripts.html');
+      // Add dependencies to an array, then install with --save?
     }
 
     // Touch and favicons
     if (this.h5bpIco) {
-      this.directory('app-conditional/h5-template/icons', path.join('app'));
+      this.directory('conditional/template-H5BP/icons', path.join('app'));
     }
 
     // Google analytincs include
     if (this.h5bpAnalytics) {
-      this.copy('app-conditional/h5-template/_includes/googleanalytics.html', 'app/_includes/googleanalytics.html');
+      this.copy('conditional/template-H5BP/_includes/googleanalytics.html', 'app/_includes/googleanalytics.html');
     }
 
     // Docs. Always include the license.
     if (this.h5bpDocs) {
-      this.directory('app-conditional/h5-template/docs', 'app/_H5BP-docs');
+      this.directory('conditional/template-H5BP/docs', 'app/_H5BP-docs');
     }
     else {
-      this.copy('app-conditional/h5-template/docs/LICENSE.md', 'app/_H5BP-docs/LICENSE.md');
+      this.copy('conditional/template-H5BP/docs/LICENSE.md', 'app/_H5BP-docs/LICENSE.md');
     }
   }
 };
 
 Generator.prototype.gruntfile = function gruntfile() {
   // RWRW write template
-  // this.template('Gruntfile.js', 'Gruntfile.js');
+  // this.template('Gruntfile.js');
 };
 
 Generator.prototype.packageJSON = function packageJSON() {
@@ -465,6 +456,7 @@ Generator.prototype.git = function git() {
 
 Generator.prototype.bower = function bower() {
   this.copy('bowerrc', '.bowerrc');
+  // RWRW write template
   this.template('_bower.json', 'bower.json');
 };
 
@@ -482,10 +474,9 @@ Generator.prototype.jekFiles = function jekFiles() {
   // this.template('_config.yml');
 
   // RWRW write template
-  // RWRW make file
-  // gemfile/bundler with markdown libs needed.
+  // TODO: gemfile/bundler with markdown libs
 
-  // RWRW jek pyg needs to be added in index.html
+  // RWRW jek pyg needs to be added in index.html. With Write?
   if (this.jekPyg) {
     this.copy(path.join(this.defaultDirs.tmpJek, 'css/syntax.css'), path.join('app', this.cssDir, 'syntax.css'));
   }
@@ -498,19 +489,21 @@ Generator.prototype.cssPreSass = function cssPreSass() {
 
   // Sass and Compass
   if (['s', 'c'].indexOf(this.cssPre)) {
-    // Move all existing css files to scss partials
-    if (this.templateType === 'h5') {
-      spawn('mv', [path.join('app', this.cssDir, '/main.css'), path.join('app', this.cssPreDir, '_main.scss')]);
-      spawn('mv', [path.join('app', this.cssDir, '/normalize.css'), path.join('app', this.cssPreDir, '_normalize.scss')]);
+
+    this.template('conditional/sass/readme.md', path.join('app', this.cssPreDir, 'readme.md'));
+    this.template('conditional/sass/config.rb', path.join('app/config.rb'));
+
+    // Convert css files to scss files
+    var files = globule.find('**/*.css', {srcBase: path.join('app', this.cssDir)});
+
+    for (var i in files) {
+      // Copy css files from the app css directory
+      this.copy(path.join('../../../../app', this.cssDir, files[i]),
+                path.join('app', this.cssPreDir, files[i].replace(/\.css$/, '.scss')));
+
+      // Cleanup css files to prevent confusion
+      spawn('rm', ['-f', path.join('app', this.cssDir, files[i])], { stdio: 'inherit' });
     }
-    if (this.templateType === 'd') {
-      spawn('mv', [path.join('app', this.cssDir, '/screen.css'), path.join('app', this.cssPreDir, '_screen.scss')]);
-    }
-    if (this.jekPyg) {
-      spawn('mv', [path.join('app', this.cssDir, '/syntax.css'), path.join('app', this.cssPreDir, '_syntax.scss')]);
-    }
-    // Create main scss file to import all partials
-    this.template('app-conditional/sass/main.scss', path.join('app', this.cssPreDir, 'main.scss'));
   }
 };
 
@@ -521,10 +514,8 @@ Generator.prototype.jsPreCoffee = function jsPreCoffee() {
 
   // Coffeescript
   if (this.jsPre === 'c') {
-    this.write(path.join('app', this.jsPreDir, 'main.coffee'),
-      '// Enjoy coffeescripting.' +
-      '\n// Make sure to transfer the contents of  "' +
-      path.join('app', this.jsDir) + '" to coffeescript files before compiling.');
+    this.template('conditional/coffee/readme.md', path.join('app', this.jsPreDir, 'readme.md'));
+    // RWRW: Should we move all js files here like in css preprocessor?
   }
 };
 
@@ -540,7 +531,7 @@ Generator.prototype.jsPreCoffee = function jsPreCoffee() {
 // };
 
 // TODO: Categories subgenerator
-// TODO: Post subgenerator, copies default post for that cat frontmatter
+// TODO: yo arg for json file with all config in it.j
 
 /////////////////
 // RWRW NOTES

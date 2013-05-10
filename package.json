@@ -28,7 +28,8 @@
   },
   "dependencies": {
     "yeoman-generator": "~0.10.3",
-    "execSync": "0.0.4"
+    "execSync": "0.0.4",
+    "globule": "~0.1.0"
   },
   "devDependencies": {
     "mocha": "~1.9.0"
