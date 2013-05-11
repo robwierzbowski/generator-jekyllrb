@@ -12,13 +12,16 @@
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-    <!-- RWRW add yo handling w/css-->
-    <link rel="stylesheet" href="<!-- RWRW -->css/normalize.css">
-    <link rel="stylesheet" href="<!-- RWRW -->css/main.css">
-    <link rel="stylesheet" href="<!-- RWRW -->css/syntax.css">
+    <!-- build:css <%= cssDir %>/main.css --><% if (h5bpCss) { %>
+    <link rel="stylesheet" href="/<%= cssDir %>/normalize.css"><% } %><% if (jekPyg) { %>
+    <link rel="stylesheet" href="/<%= cssDir %>/syntax.css"><% } %>
+    <link rel="stylesheet" href="/<%= cssDir %>/main.css">
+    <!-- endbuild --><% if (h5bpJs) { %>
 
-    <!-- RWRW add yo if js handling. -->
-    <script src="components/modernizr/modernizr.js"></script>
+    <!-- build:js <%= jsDir %>/head-scripts.js -->
+    <!-- Replace with a custom modernizer build -->
+    <script src="components/modernizr/modernizr.js"></script><% } %>
+    <!-- endbuild -->
 
   </head>
   <body>
@@ -28,10 +31,8 @@
 
     {{ content }}
 
-    <!-- RWRW add yo handling -->
-    {% include forkme.html %}
-    {% include scripts.html %}<!-- RWRW -->
-    {% include googleanalytics.html %}<!-- RWRW -->
+    {% include scripts.html %}<% if (h5bpAnalytics) { %>
+    {% include googleanalytics.html %}<% } %>
 
   </body>
 </html>

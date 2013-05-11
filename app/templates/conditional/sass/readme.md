@@ -1,5 +1,5 @@
 # Get Sassy!
 
-- All files will be compiled to css in 'app/<%= cssDir %>'. 
-- Grunt takes its settings from the config.rb in the project's root folder.
-- The files in this directory are copied from plain css. Sassify as you see fit.
+- Sass files in this directory  will be compiled to css in `app/<%= cssDir %>`.
+- You can configure compiler settings in `config.rb` in the project's root directory.
+- The files in this directory are plain css boilerplate. Sassify as you see fit.

@@ -3,11 +3,6 @@
 name: <%= appname %>
 description: <%= jekDescript %>
 
-# author :
-#   name       : <%= author %>
-#   email      : <%= email %>
-#   github     : <%= github %>
-
 # Custom paths
 source:      .
 destination: ./_site
@@ -18,10 +13,10 @@ server: false
 auto: false
 
 # Exclude files from compilation
-# Excludes .dot and _underscore files and directories by default
+# Automatically excludes .dot and _underscore files and directories
 exclude: ['bower.json', 'Gruntfile.js', 'package.json', 'config.rb', 'readme.md', 'travis.yml']
 
-# Force inclusion of files that would otherwise be excluded
+# Force the inclusion of specific files
 include: ['.htaccess']
 
 # Default post path style
@@ -31,14 +26,14 @@ include: ['.htaccess']
 permalink: <%= jekPost %>
 
 # Publish posts with future date.
-# The _config.build.yml file sets this to false on grunt build
+# _config.build.yml sets this to false on grunt build
 future: true
 
 # Compile posts in the _drafts directory.
-# The _config.build.yml file sets this to false on grunt build
-show_drafts: true
+# _config.build.yml sets this to false on grunt build
+show_drafts: true<% if (jekPage !== 'all') { %>
 
-<% if (jekPage !== 'all') { %># Split posts over multiple subdirectories called “page2”, “page3”, … “pageN”
+# Split posts over multiple subdirectories called “page2”, “page3”, … “pageN”
 paginate: <%= jekPage %>
 paginate_path: 'page:num'<% } %>
 

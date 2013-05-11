@@ -1,3 +1,5 @@
+
+
 'use strict';
 var fs = require('fs');
 var util = require('util');
@@ -88,6 +90,11 @@ Generator.prototype.askFor = function askFor() {
     name: 'github',
     message: 'Your GitHub Username:',
     default: this.gitInfo.github
+  },
+  {
+    name: 'twitter',
+    message: 'Your Twitter Username:',
+    default: '@' + this.gitInfo.github
   }];
 
   this.prompt(prompts, function (err, props) {
@@ -96,10 +103,11 @@ Generator.prototype.askFor = function askFor() {
     }
 
     // Assign prompt results to Generator object
-    // String properties without defaults to string or boolean
-    this.author  = props.author   !== '' ? props.author   : 'Your Name';
-    this.email   = props.email    !== '' ? props.email    : false;
-    this.github    = props.github     !== '' ? props.github     : false;
+    // String properties
+    this.author  = props.author;
+    this.email   = props.email;
+    this.github  = props.github;
+    this.twitter = props.twitter[0] === '@' ? props.twitter.substr(1) : props.twitter;
 
     cb();
   }.bind(this));
@@ -137,9 +145,10 @@ Generator.prototype.askForStructure = function askForStructure() {
 
     // Assign prompt results to Generator object
     // String properties
-    this.cssDir = props.cssDir;
-    this.jsDir  = props.jsDir;
-    this.imgDir = props.imgDir;
+    // Trim leading and trailing /'s for use in underscore templates
+    this.cssDir = props.cssDir.replace(/^\/*|\/*$/g, '');
+    this.jsDir  = props.jsDir.replace(/^\/*|\/*$/g, '');
+    this.imgDir = props.imgDir.replace(/^\/*|\/*$/g, '');
 
     cb();
   }.bind(this));
@@ -198,8 +207,9 @@ Generator.prototype.askForTools = function askFor() {
     this.jsPre     = (/n/i).test(props.jsPre)  ? false : props.jsPre;
 
     // String properties
-    this.cssPreDir = props.cssPreDir;
-    this.jsPreDir  = props.jsPreDir;
+    // Trim leading and trailing /'s for use in underscore templates
+    this.cssPreDir = props.cssPreDir.replace(/^\/*|\/*$/g, '');
+    this.jsPreDir  = props.jsPreDir.replace(/^\/*|\/*$/g, '');
 
     cb();
   }.bind(this));
@@ -371,11 +381,10 @@ Generator.prototype.templates = function templates() {
   // Default Jekyll templates
   if (this.templateType === 'd') {
 
-    // From cli generated jekyll site
+    // From cli generated Jekyll site
     this.copy(path.join(this.defaultDirs.tmpJek, 'index.html'), 'app/index.html');
     this.copy(path.join(this.defaultDirs.tmpJek, '_layouts/post.html'), 'app/_layouts/post.html');
-    this.copy(path.join(this.defaultDirs.tmpJek, 'css/screen.css'), path.join('app', this.cssDir, 'screen.css'));
-    this.copy(path.join(this.defaultDirs.tmpJek, 'images/rss.png'), path.join('app', this.imgDir, 'rss.png'));
+    this.copy(path.join(this.defaultDirs.tmpJek, 'css/main.css'), path.join('app', this.cssDir, 'main.css'));
 
     // RWRW write template
     this.template('conditional/template-default/_layouts/default.html', 'app/_layouts/default.html');
@@ -393,20 +402,23 @@ Generator.prototype.templates = function templates() {
     this.copy('conditional/template-H5BP/_layouts/post.html', 'app/_layouts/post.html');
 
     this.template('conditional/template-H5BP/humans.txt', 'app/humans.txt');
-    // RWRW write template
+    this.template('conditional/template-H5BP/_includes/scripts.html', 'app/_includes/scripts.html');
     this.template('conditional/template-H5BP/_layouts/default.html', 'app/_layouts/default.html');
 
     // Css boilerplate
     if (this.h5bpCss) {
       this.directory('conditional/template-H5BP/css', path.join('app', this.cssDir));
     }
+    else {
+      this.write(path.join('app', this.cssDir, 'main.css'), '');
+    }
 
     // Js boilerplate
     if (this.h5bpJs) {
       this.directory('conditional/template-H5BP/js', path.join('app', this.jsDir));
-      // RWRW write template
-      this.template('conditional/template-H5BP/_includes/scripts.html', 'app/_includes/scripts.html');
-      // Add dependencies to an array, then install with --save?
+    }
+    else {
+      this.write(path.join('app', this.jsDir, 'main.js'), '');
     }
 
     // Touch and favicons
@@ -419,11 +431,12 @@ Generator.prototype.templates = function templates() {
       this.copy('conditional/template-H5BP/_includes/googleanalytics.html', 'app/_includes/googleanalytics.html');
     }
 
-    // Docs. Always include the license.
+    // Docs
     if (this.h5bpDocs) {
       this.directory('conditional/template-H5BP/docs', 'app/_H5BP-docs');
     }
     else {
+      // Always include the license.
       this.copy('conditional/template-H5BP/docs/LICENSE.md', 'app/_H5BP-docs/LICENSE.md');
     }
   }
@@ -459,15 +472,15 @@ Generator.prototype.editor = function editor() {
 
 Generator.prototype.jekFiles = function jekFiles() {
 
-  // Files that control Jekyll coniguration and configuration option dependencies RWRW
-
+  // Jekyll config files
   this.copy(path.join('app', '_config.build.yml'), path.join('app', '_config.build.yml'));
   this.template(path.join('app', '_config.yml'));
 
+  // Ruby dependencies
   // RWRW write template
   // TODO: gemfile/bundler with markdown libs
 
-  // RWRW jek pyg needs to be added in index.html. With Write?
+  // Pygments styles
   if (this.jekPyg) {
     this.copy(path.join(this.defaultDirs.tmpJek, 'css/syntax.css'), path.join('app', this.cssDir, 'syntax.css'));
   }
@@ -527,6 +540,8 @@ Generator.prototype.jsPreCoffee = function jsPreCoffee() {
 // See generator-angular.
 // RWRW Make sure user has jekyll installed? test stderr for 'not found' and quit with error message.
 // On complete remind user to add g analytincs code.
+
+// Make sure jek 1.0+ is installed
 
 /////////////////
 // RWRW NOTES

@@ -7,7 +7,6 @@ environment = :development
 output_style = :expanded
 asset_cache_buster :none
 
-
 # RWRW Should these dirs point to the .tmp or should they point to the jekyll app? How does contrib-compass work?
 # Contrib Compass usually runs from gruntfile location.
 # RWRW Question is shouldyo be able to pull jekyll site out of yeo and have it work with no alterations, or should the yeo site be clean?
