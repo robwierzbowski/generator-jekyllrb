@@ -8,15 +8,16 @@ source:      .
 destination: ./_site
 plugins:     ./_plugins
 
-# Grunt handles compiling and reloading Jekyll
+# Let Grunt handle compiling and reloading Jekyll
 server: false
 auto: false
 
-# Exclude files from compilation
-# Automatically excludes .dot and _underscore files and directories
+# Exclude directories and/or files from the conversion
+# Automatically excludes .dot and _underscore directories/files
 exclude: ['bower.json', 'Gruntfile.js', 'package.json', 'config.rb', 'readme.md', 'travis.yml']
 
-# Force the inclusion of specific files
+# Force inclusion of directories and/or files in the conversion.
+# .htaccess is a good example since dotfiles are excluded by default.
 include: ['.htaccess']
 
 # Default post path style
