@@ -2,26 +2,29 @@
 var fs = require('fs');
 var util = require('util');
 var path = require('path');
+var spawn = require('child_process').spawn;
 var globule = require('globule');
 var shelljs = require('shelljs');
-var spawn = require('child_process').spawn;
 var yeoman = require('yeoman-generator');
 
 var Generator = module.exports = function Generator() {
   yeoman.generators.Base.apply(this, arguments);
 
-  console.log('Let\'s see if Ruby dependencies are installed.');
-  // console.log(execSync.exec('which ruby'));
-  // console.log(execSync.exec('gem which bundler'));
-  // console.log(execSync.exec('gem which jekyll'));
-
-  // console.log(execSync.exec('which rubay'));
-
-  // bundle install
-
   // Specify an appname from the command line, or use dir name
   this.argument('appname', { type: String, required: false });
   this.appname = this.appname || path.basename(process.cwd());
+
+  // Make sure Ruby dependencies are installed
+  var dependenciesInstalled = ['bundle', 'ruby'].every(function (depend) {
+    return shelljs.which(depend);
+  });
+
+  if (!dependenciesInstalled) {
+    console.log('Looks like you\'re missing some dependencies.' +
+      '\nMake sure ' + 'Ruby'.white + ' and the ' + 'Bundler gem'.white +
+      ' are installed, then run again.');
+    shelljs.exit(1);
+  }
 
   // User info from .gitconfig if available
   this.gitInfo = {
@@ -48,9 +51,12 @@ var Generator = module.exports = function Generator() {
   this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
   this.on('end', function () {
 
+    // Clean up temp files
+    spawn('rm', ['-r', this.defaultDirs.jekTmp], { stdio: 'inherit' });
+
+    // Install Grunt and Bower dependencies
     // RWRW This should work now, as long as package and bower are there.
     //   console.log('\n\nI\'m all done. Running ' + 'npm install & bower install'.bold.yellow + ' to install the required dependencies. If this fails, try running the command yourself.\n\n');
-
     // RWRW OR easier, use underscore in bower.json with this.installDependencies in on end callback for depens.
     // this.installDependencies({ skipInstall: options['skip-install'] });
 
@@ -58,8 +64,6 @@ var Generator = module.exports = function Generator() {
     // be preprocessed up
     // coffee can overwrite js
 
-    // Clean up temp files
-    spawn('rm', ['-r', this.defaultDirs.jekTmp], { stdio: 'inherit' });
   });
 };
 
@@ -355,14 +359,25 @@ Generator.prototype.askForJekyll = function askFor() {
 };
 
 ////////////////////////// Generate App //////////////////////////
+Generator.prototype.gemfile = function gemfile() {
+
+  // This needs to complete entirely before bundle install runs
+  // TODO: Make less fragile. Right now if these are in the same Generator
+  // prototype method they'll fail due to race condition.
+  this.template('Gemfile');
+}
 
 Generator.prototype.initJekyll = function initJekyll() {
-  // Create a default Jekyll site in a temporary folder using the Jekyll cli
-  // Sync: must execute before other scaffolding (template, cssPre, pygments)
-  shelljs.exec('jekyll new ' + this.defaultDirs.jekTmp);
+
+  // Install dependencies
+  shelljs.exec('bundle install');
+
+  // Create a default Jekyll site in a temporary folder
+  shelljs.exec('bundle exec jekyll new ' + this.defaultDirs.jekTmp);
 };
 
 Generator.prototype.directories = function directories() {
+
   // Scaffold Jekyll dirs
   this.mkdir(path.join('app', this.cssDir));
   this.mkdir(path.join('app', this.imgDir));
@@ -401,15 +416,14 @@ Generator.prototype.templates = function templates() {
 
     // Pull in the latest stable of H5BP
     var cb = this.async();
-    // RWRW var self = this; vs bind(this)?
 
     this.remote('h5bp', 'html5-boilerplate', 'v4.2.0', function (err, remote) {
       if (err) {
         return cb(err);
       }
 
-      // TODO: If we can easily get the cache location we can use globbule to
-      // select and copy files less fragily
+      // TODO: Get the remote cache location and use globbule to select and
+      // copy files less fragily.
 
       // From H5BP git repo
       // Universal
@@ -459,7 +473,7 @@ Generator.prototype.templates = function templates() {
       cb();
     }.bind(this));
 
-    // From generator. Altered for Jekyll templating and Yeoman tasks.
+    // From generator. Files altered for Jekyll templating and Yeoman tasks.
     // Universal
     this.copy('conditional/template-H5BP/index.html', 'app/index.html');
     this.copy('conditional/template-H5BP/_layouts/post.html', 'app/_layouts/post.html');
@@ -474,16 +488,6 @@ Generator.prototype.templates = function templates() {
   }
 };
 
-Generator.prototype.gruntfile = function gruntfile() {
-  // RWRW write template
-  // this.template('Gruntfile.js');
-};
-
-Generator.prototype.packageJSON = function packageJSON() {
-  // RWRW write template
-  // this.template('_package.json', 'package.json');
-};
-
 Generator.prototype.git = function git() {
   this.copy('gitignore', '.gitignore');
   this.copy('gitattributes', '.gitattributes');
@@ -492,6 +496,16 @@ Generator.prototype.git = function git() {
 Generator.prototype.bower = function bower() {
   this.copy('bowerrc', '.bowerrc');
   this.template('_bower.json', 'bower.json');
+};
+
+Generator.prototype.gruntfile = function gruntfile() {
+  // RWRW write template
+  // this.template('Gruntfile.js');
+};
+
+Generator.prototype.packageJSON = function packageJSON() {
+  // RWRW write template
+  // this.template('_package.json', 'package.json');
 };
 
 Generator.prototype.jshint = function jshint() {
@@ -508,9 +522,6 @@ Generator.prototype.jekFiles = function jekFiles() {
   this.copy('app/_config.build.yml', 'app/_config.build.yml');
   this.template('app/_config.yml');
 
-  // Ruby dependencies
-  this.template('Gemfile');
-
   // Pygments styles
   if (this.jekPyg) {
     this.copy(path.join(this.defaultDirs.jekTmp, 'css/syntax.css'), path.join('app', this.cssDir, 'syntax.css'));
@@ -526,9 +537,10 @@ Generator.prototype.cssPreSass = function cssPreSass() {
   if (['s', 'c'].indexOf(this.cssPre)) {
 
     this.template('conditional/sass/readme.md', path.join('app', this.cssPreDir, 'readme.md'));
+    // RWRW edit template for being in the proj root dir.
     this.template('conditional/sass/config.rb', 'config.rb');
 
-    // Convert css files to scss files
+    // Move css files to scss files
     var files = globule.find('**/*.css', {srcBase: path.join('app', this.cssDir)});
 
     files.forEach(function (file) {
@@ -556,27 +568,21 @@ Generator.prototype.jsPreCoffee = function jsPreCoffee() {
 //////////////////////////////////////////////////////////
 // TODO: These ↓
 
-// Generator.prototype.requireJs = function testing() {
+// Generator.prototype.requireJs = function requireJs() {
 // };
 
 // Generator.prototype.testing = function testing() {
-//   this.copy('editorconfig', '.editorconfig');
 // };
 
-// TODO: Categories subgenerator
-// TODO: yo arg for json file with all config in it.j
+// TODO: Categories subgenerator (?)
+// TODO: yo arg for json file with all config in it.
+// TODO: Configural downloads to the _plugins dir.
 
 // TODO: Do references to the 'app' directory need to be made configurable?
 // See generator-angular.
-// RWRW Make sure user has jekyll installed? test stderr for 'not found' and quit with error message.
-// On complete remind user to add g analytincs code.
-
-// Make sure jek 1.0+ is installed
 
 /////////////////
 // RWRW NOTES
 
 // End with a list of commands and description
 // all components managed with Bower
-
-
