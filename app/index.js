@@ -3,7 +3,7 @@ var fs = require('fs');
 var util = require('util');
 var path = require('path');
 var globule = require('globule');
-var execSync = require('execSync');
+var shelljs = require('shelljs');
 var spawn = require('child_process').spawn;
 var yeoman = require('yeoman-generator');
 
@@ -11,11 +11,11 @@ var Generator = module.exports = function Generator() {
   yeoman.generators.Base.apply(this, arguments);
 
   console.log('Let\'s see if Ruby dependencies are installed.');
-  console.log(execSync.exec('which ruby'));
-  console.log(execSync.exec('gem which bundler'));
-  console.log(execSync.exec('gem which jekyll'));
+  // console.log(execSync.exec('which ruby'));
+  // console.log(execSync.exec('gem which bundler'));
+  // console.log(execSync.exec('gem which jekyll'));
 
-  console.log(execSync.exec('which rubay'));
+  // console.log(execSync.exec('which rubay'));
 
   // bundle install
 
@@ -25,9 +25,9 @@ var Generator = module.exports = function Generator() {
 
   // User info from .gitconfig if available
   this.gitInfo = {
-    name: execSync.exec('git config user.name').stdout.replace(/\n/g, ''),
-    email: execSync.exec('git config user.email').stdout.replace(/\n/g, ''),
-    github: execSync.exec('git config github.user').stdout.replace(/\n/g, '')
+    name: shelljs.exec('git config user.name', {silent: true}).output.replace(/\n/g, ''),
+    email: shelljs.exec('git config user.email', {silent: true}).output.replace(/\n/g, ''),
+    github: shelljs.exec('git config github.user', {silent: true}).output.replace(/\n/g, ''),
   };
 
   // Default asset dirs to use for scaffolding
@@ -359,7 +359,7 @@ Generator.prototype.askForJekyll = function askFor() {
 Generator.prototype.initJekyll = function initJekyll() {
   // Create a default Jekyll site in a temporary folder using the Jekyll cli
   // Sync: must execute before other scaffolding (template, cssPre, pygments)
-  execSync.exec('jekyll new ' + this.defaultDirs.jekTmp);
+  shelljs.exec('jekyll new ' + this.defaultDirs.jekTmp);
 };
 
 Generator.prototype.directories = function directories() {
@@ -509,7 +509,7 @@ Generator.prototype.jekFiles = function jekFiles() {
   this.template('app/_config.yml');
 
   // Ruby dependencies
-  this.template('app/Gemfile');
+  this.template('Gemfile');
 
   // Pygments styles
   if (this.jekPyg) {
