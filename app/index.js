@@ -72,11 +72,11 @@ util.inherits(Generator, yeoman.generators.NamedBase);
 ////////////////////////// User input ////////////////////////////
 
 // TODO: When new prompt library lands:
-//   Rewrite for conditional prompts
+//   Rewrite for cleaner conditional prompts
 //   Auto populate with magicDefaults
-//   Make some prompts required
+//   Use select and boolean prompt types
 //   Add custom validation
-//   Make defaults editable with an equivalent of read module's edit: true
+//   Make some defaults editable with an equivalent of read module's `edit`
 
 // Author information
 Generator.prototype.askFor = function askFor() {
@@ -114,7 +114,6 @@ Generator.prototype.askFor = function askFor() {
     }
 
     // Assign prompt results to Generator object
-    // String properties
     this.author  = props.author;
     this.email   = props.email;
     this.github  = props.github;
@@ -155,7 +154,6 @@ Generator.prototype.askForStructure = function askForStructure() {
     }
 
     // Assign prompt results to Generator object
-    // String properties
     // Trim leading and trailing /'s for use in underscore templates
     this.cssDir = props.cssDir.replace(/^\/*|\/*$/g, '');
     this.jsDir  = props.jsDir.replace(/^\/*|\/*$/g, '');
@@ -169,9 +167,9 @@ Generator.prototype.askForStructure = function askForStructure() {
 Generator.prototype.askForTools = function askFor() {
   var cb = this.async();
 
-  // Multiple choice options
-  // var cssPreOptions = ['s','c','n'];
-  // var jsPreOptions  = ['c','n'];
+  // Options for validation
+  // cssPreOptions = ['s','c','n'];
+  // jsPreOptions  = ['c','n'];
 
   console.log('\nWire tools and preprocessors.'.yellow + ' ☛');
 
@@ -181,21 +179,9 @@ Generator.prototype.askForTools = function askFor() {
     default: 'n'
   },
   {
-    name: 'cssPreDir',
-    message: 'If so, choose a css preprocessor directory:',
-    default: this.defaultDirs.cssPre
-    // if above, Required, edit
-  },
-  {
     name: 'jsPre',
     message: 'Use a javascript preprocessor?\n c: Coffeescript\n n: none',
     default: 'n',
-  },
-  {
-    name: 'jsPreDir',
-    message: 'If so, choose a javascript preprocessor directory:',
-    default: this.defaultDirs.jsPre
-    // if above, Required, edit
   }
   // {
   //   name: 'requireJs',
@@ -210,62 +196,86 @@ Generator.prototype.askForTools = function askFor() {
     }
 
     // Assign prompt results to Generator object
-    // Default y/N answer to boolean
     // this.requireJs  = !(/n/i).test(props.requireJs);
 
     // Multiple choice 'none' to false
     this.cssPre    = (/n/i).test(props.cssPre) ? false : props.cssPre;
     this.jsPre     = (/n/i).test(props.jsPre)  ? false : props.jsPre;
 
-    // String properties
-    // Trim leading and trailing /'s for use in underscore templates
-    this.cssPreDir = props.cssPreDir.replace(/^\/*|\/*$/g, '');
-    this.jsPreDir  = props.jsPreDir.replace(/^\/*|\/*$/g, '');
-
     cb();
   }.bind(this));
 };
+
+// Css Preprocessor conditional prompts
+Generator.prototype.askForCssPre = function askFor() {
+  if (this.cssPre) {
+    var cb = this.async();
+
+    var prompts = [{
+      name: 'cssPreDir',
+      message: 'Choose a css preprocessor directory:',
+      default: this.defaultDirs.cssPre
+    }];
+
+    this.prompt(prompts, function (err, props) {
+      if (err) {
+        return this.emit('error', err);
+      }
+
+      // Assign prompt results to Generator object
+      // Trim leading and trailing /'s for use in underscore templates
+      this.cssPreDir = props.cssPreDir.replace(/^\/*|\/*$/g, '');
+
+      cb();
+    }.bind(this));
+  }
+  else {
+    this.cssPreDir       = false;
+  }
+}
+
+// Javascript Preprocessor conditional prompts
+Generator.prototype.askForJsPre = function askFor() {
+  if (this.jsPre) {
+    var cb = this.async();
+
+    var prompts = [{
+      name: 'jsPreDir',
+      message: 'Choose a javascript preprocessor directory:',
+      default: this.defaultDirs.jsPre
+    }];
+
+    this.prompt(prompts, function (err, props) {
+      if (err) {
+        return this.emit('error', err);
+      }
+
+      // Assign prompt results to Generator object
+      // Trim leading and trailing /'s for use in underscore templates
+      this.jsPreDir  = props.jsPreDir.replace(/^\/*|\/*$/g, '');
+
+      cb();
+    }.bind(this));
+  }
+  else {
+    this.jsPreDir       = false;
+  }
+}
 
 // Jekyll boilerplate templates
 // TODO: Make template choices extensible
 Generator.prototype.askForTemplates = function askFor() {
   var cb = this.async();
 
-  // Multiple choice options
-  // var templateType = ['d','h5'];
+  // Options for validation
+  // templateType = ['d','h5'];
 
   console.log('\nChoose a template.'.yellow + ' ☛');
 
   var prompts = [{
     name: 'templateType',
     message: 'Choose a Jekyll site template\n d:  Default\n h5: HTML5 ★ Boilerplate',
-    default: 'd',
-    warning: 'h5: Yo dog I heard you like boilerplates in your boilerplates...'
-  },
-  {
-    name: 'h5bpCss',
-    message: 'Add H5★BP css files?',
-    default: 'Y/n'
-  },
-  {
-    name: 'h5bpJs',
-    message: 'Add H5★BP javascript files?',
-    default: 'Y/n'
-  },
-  {
-    name: 'h5bpIco',
-    message: 'Add H5★BP favorite and touch icons?',
-    default: 'y/N'
-  },
-  {
-    name: 'h5bpDocs',
-    message: 'Add H5★BP documentation?',
-    default: 'y/N'
-  },
-  {
-    name: 'h5bpAnalytics',
-    message: 'Include Google Analytics?',
-    default: 'y/N'
+    default: 'd'
   }];
 
   this.prompt(prompts, function (err, props) {
@@ -274,28 +284,73 @@ Generator.prototype.askForTemplates = function askFor() {
     }
 
     // Assign prompt results to Generator object
-    // Default Y/n answer to boolean
-    this.h5bpCss       = (/y/i).test(props.h5bpCss);
-    this.h5bpJs        = (/y/i).test(props.h5bpJs);
-
-    // Default y/N answer to boolean
-    this.h5bpIco       = !(/n/i).test(props.h5bpIco);
-    this.h5bpDocs      = !(/n/i).test(props.h5bpDocs);
-    this.h5bpAnalytics = !(/n/i).test(props.h5bpAnalytics);
-
-    // String properties
     this.templateType = props.templateType;
 
     cb();
   }.bind(this));
 };
 
+// H5BP conditional prompts
+Generator.prototype.askForH5BP = function askFor() {
+  if (this.templateType === 'h5') {
+    var cb = this.async();
+
+    var prompts = [{
+      name: 'h5bpCss',
+      message: 'Add H5★BP css files?',
+      default: 'Y/n'
+    },
+    {
+      name: 'h5bpJs',
+      message: 'Add H5★BP javascript files?',
+      default: 'Y/n'
+    },
+    {
+      name: 'h5bpIco',
+      message: 'Add H5★BP favorite and touch icons?',
+      default: 'y/N'
+    },
+    {
+      name: 'h5bpDocs',
+      message: 'Add H5★BP documentation?',
+      default: 'y/N'
+    },
+    {
+      name: 'h5bpAnalytics',
+      message: 'Include Google Analytics?',
+      default: 'y/N'
+    }];
+
+    this.prompt(prompts, function (err, props) {
+      if (err) {
+        return this.emit('error', err);
+      }
+
+      // Assign prompt results to Generator object
+      this.h5bpCss       = (/y/i).test(props.h5bpCss);
+      this.h5bpJs        = (/y/i).test(props.h5bpJs);
+      this.h5bpIco       = !(/n/i).test(props.h5bpIco);
+      this.h5bpDocs      = !(/n/i).test(props.h5bpDocs);
+      this.h5bpAnalytics = !(/n/i).test(props.h5bpAnalytics);
+
+      cb();
+    }.bind(this));
+  }
+  else {
+    this.h5bpCss       = false;
+    this.h5bpJs        = false;
+    this.h5bpIco       = false;
+    this.h5bpDocs      = false;
+    this.h5bpAnalytics = false;
+  }
+};
+
 // Jekyll configuration
 Generator.prototype.askForJekyll = function askFor() {
   var cb = this.async();
 
-  // Multiple choice options
-  // var jekPage = ['[0-9]*','all'];
+  // Options for validation
+  // jekPage = ['[0-9]*','all'];
   var jekPostOptions = {
     d: 'date',
     p: 'pretty',
@@ -343,10 +398,8 @@ Generator.prototype.askForJekyll = function askFor() {
     }
 
     // Assign prompt results to Generator object
-    // Default y/N answer to boolean
     this.jekPyg      = !(/n/i).test(props.jekPyg);
 
-    // String properties
     this.jekMkd      = jekMkdOptions[props.jekMkd];
     this.jekPost     = jekPostOptions[props.jekPost];
 
@@ -359,13 +412,14 @@ Generator.prototype.askForJekyll = function askFor() {
 };
 
 ////////////////////////// Generate App //////////////////////////
+
 Generator.prototype.gemfile = function gemfile() {
 
   // This needs to complete entirely before bundle install runs
   // TODO: Make less fragile. Right now if these are in the same Generator
   // prototype method they'll fail due to race condition.
   this.template('Gemfile');
-}
+};
 
 Generator.prototype.initJekyll = function initJekyll() {
 
