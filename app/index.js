@@ -89,22 +89,22 @@ Generator.prototype.askFor = function askFor() {
   );
   var prompts = [{
     name: 'author',
-    message: 'Your Name:',
+    message: 'Name:',
     default: this.gitInfo.name
   },
   {
     name: 'email',
-    message: 'Your Email:',
+    message: 'Email:',
     default: this.gitInfo.email
   },
   {
     name: 'github',
-    message: 'Your GitHub Username:',
+    message: 'GitHub Username:',
     default: this.gitInfo.github
   },
   {
     name: 'twitter',
-    message: 'Your Twitter Username:',
+    message: 'Twitter Username:',
     default: '@' + this.gitInfo.github
   }];
 
@@ -127,7 +127,7 @@ Generator.prototype.askFor = function askFor() {
 Generator.prototype.askForStructure = function askForStructure() {
   var cb = this.async();
 
-  console.log('\nLet\'s set up some directories.'.yellow + ' ☛');
+  console.log('\nSet up some directories.'.yellow + ' ☛');
 
   var prompts = [{
     name: 'cssDir',
@@ -418,6 +418,7 @@ Generator.prototype.gemfile = function gemfile() {
   // This needs to complete entirely before bundle install runs
   // TODO: Make less fragile. Right now if these are in the same Generator
   // prototype method they'll fail due to race condition.
+  // TODO: Offline option?
   this.template('Gemfile');
 };
 
@@ -588,7 +589,7 @@ Generator.prototype.cssPreSass = function cssPreSass() {
   }
 
   // Sass and Compass
-  if (['s', 'c'].indexOf(this.cssPre)) {
+  if (['s', 'c'].indexOf(this.cssPre) !== -1) {
 
     this.template('conditional/sass/readme.md', path.join('app', this.cssPreDir, 'readme.md'));
     // RWRW edit template for being in the proj root dir.
