@@ -43,6 +43,8 @@ var Generator = module.exports = function Generator() {
     jekTmp: path.join(this.env.cwd, '.jekTmp')
   };
 
+  this.jekTmpDir = this.defaultDirs.jekTmp;
+
   // subgenerator
   // this.hookFor('jekyll:subGen', {
   //   args: args
@@ -52,7 +54,7 @@ var Generator = module.exports = function Generator() {
   this.on('end', function () {
 
     // Clean up temp files
-    spawn('rm', ['-r', this.defaultDirs.jekTmp], { stdio: 'inherit' });
+    spawn('rm', ['-r', this.jekTmpDir], { stdio: 'inherit' });
 
     // Install Grunt and Bower dependencies
     // RWRW This should work now, as long as package and bower are there.
@@ -63,6 +65,8 @@ var Generator = module.exports = function Generator() {
     // RWRW Remember to alert that the files in prep dir are just css, and need to
     // be preprocessed up
     // coffee can overwrite js
+    // Display BP version (4.2.0)
+    // Alert which port your preview server is on :9000
 
   });
 };
@@ -164,6 +168,7 @@ Generator.prototype.askForStructure = function askForStructure() {
 };
 
 // Preprocessors and libraries
+// TODO: Add Stylus
 Generator.prototype.askForTools = function askFor() {
   var cb = this.async();
 
@@ -413,22 +418,20 @@ Generator.prototype.askForJekyll = function askFor() {
 
 ////////////////////////// Generate App //////////////////////////
 
-Generator.prototype.gemfile = function gemfile() {
-
-  // This needs to complete entirely before bundle install runs
-  // TODO: Make less fragile. Right now if these are in the same Generator
-  // prototype method they'll fail due to race condition.
-  // TODO: Offline option?
+Generator.prototype.installRubyDependencies = function installRubyDependencies() {
   this.template('Gemfile');
+  this.conflicter.resolve(function (err) {
+    if (err) {
+      return this.emit('error', err);
+    }
+    shelljs.exec('bundle install');
+  });
 };
 
 Generator.prototype.initJekyll = function initJekyll() {
 
-  // Install dependencies
-  shelljs.exec('bundle install');
-
   // Create a default Jekyll site in a temporary folder
-  shelljs.exec('bundle exec jekyll new ' + this.defaultDirs.jekTmp);
+  shelljs.exec('bundle exec jekyll new ' + this.jekTmpDir);
 };
 
 Generator.prototype.directories = function directories() {
@@ -450,7 +453,7 @@ Generator.prototype.templates = function templates() {
   var formattedDate = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
 
   // Universal template files
-  this.copy(path.join(this.defaultDirs.jekTmp, '_posts', formattedDate + '-welcome-to-jekyll.markdown'), path.join('app/_posts', formattedDate + '-welcome-to-jekyll.md'));
+  this.copy(path.join(this.jekTmpDir, '_posts', formattedDate + '-welcome-to-jekyll.markdown'), path.join('app/_posts', formattedDate + '-welcome-to-jekyll.md'));
   // RWRW write template
   this.template('app/_posts/0000-00-00-yo-jekyll.md', 'app/_posts/' + formattedDate + '-yo-jekyll.md');
 
@@ -458,9 +461,9 @@ Generator.prototype.templates = function templates() {
   if (this.templateType === 'd') {
 
     // From cli generated Jekyll site
-    this.copy(path.join(this.defaultDirs.jekTmp, 'index.html'), 'app/index.html');
-    this.copy(path.join(this.defaultDirs.jekTmp, '_layouts/post.html'), 'app/_layouts/post.html');
-    this.copy(path.join(this.defaultDirs.jekTmp, 'css/main.css'), path.join('app', this.cssDir, 'main.css'));
+    this.copy(path.join(this.jekTmpDir, 'index.html'), 'app/index.html');
+    this.copy(path.join(this.jekTmpDir, '_layouts/post.html'), 'app/_layouts/post.html');
+    this.copy(path.join(this.jekTmpDir, 'css/main.css'), path.join('app', this.cssDir, 'main.css'));
 
     // From generator. Altered for Jekyll templating and Yeoman tasks.
     this.template('conditional/template-default/_layouts/default.html', 'app/_layouts/default.html');
@@ -544,7 +547,7 @@ Generator.prototype.templates = function templates() {
 };
 
 Generator.prototype.git = function git() {
-  this.copy('gitignore', '.gitignore');
+  this.template('gitignore', '.gitignore');
   this.copy('gitattributes', '.gitattributes');
 };
 
@@ -579,7 +582,7 @@ Generator.prototype.jekFiles = function jekFiles() {
 
   // Pygments styles
   if (this.jekPyg) {
-    this.copy(path.join(this.defaultDirs.jekTmp, 'css/syntax.css'), path.join('app', this.cssDir, 'syntax.css'));
+    this.copy(path.join(this.jekTmpDir, 'css/syntax.css'), path.join('app', this.cssDir, 'syntax.css'));
   }
 };
 

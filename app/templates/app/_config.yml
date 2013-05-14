@@ -1,20 +1,22 @@
-# Configuration for Yeoman Jekyll project
+# Development configuration for Yeoman Jekyll project
 
 name: <%= appname %>
 description: <%= jekDescript %>
 
-# Custom paths
-source:      .
-destination: ./_site
-plugins:     ./_plugins
+# Paths
+# Grunt handles Source and destination paths
+# plugins: _plugins
 
-# Let Grunt handle compiling and reloading Jekyll
+# Grunt handles compiling and reloading Jekyll
 server: false
 auto: false
 
 # Exclude directories and/or files from the conversion
 # Automatically excludes .dot and _underscore directories/files
-exclude: ['bower.json', 'Gruntfile.js', 'package.json', 'config.rb', 'readme.md', 'travis.yml']
+exclude: [<% if (cssPreDir[0] !== '_' || cssPreDir[0] !== '.') { %>'<%= cssPreDir %>'<% }
+        %><% if ((cssPreDir[0] !== '_' || cssPreDir[0] !== '.') &&
+                (jsPreDir[0] !== '_' || jsPreDir[0] !== '.')) { %>,<% }
+        %><% if (jsPreDir[0] !== '_' || jsPreDir[0] !== '.') { %>'<%= jsPreDir %>'<% } %>]
 
 # Force inclusion of directories and/or files in the conversion.
 # .htaccess is a good example since dotfiles are excluded by default.

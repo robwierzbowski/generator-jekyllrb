@@ -34,7 +34,10 @@ Thumbs.db
 
 # Ignore for Yeoman-Jekyll projects #
 app/components
-app/_site
+app/_site<% if (cssPre) { %>
+app/<%= cssDir %><% } %><% if (jsPre) { %>
+# If you are mixing javascript and coffeescript files, remove the next line
+app/<%= jsDir %><% } %>
 dist
 node_modules
 temp

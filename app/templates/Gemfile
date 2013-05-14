@@ -1,4 +1,6 @@
 source "http://rubygems.org"
 
-gem "jekyll", '~>1.0'
-gem "<%= jekMkd %>"
+gem 'jekyll', '~>1.0'
+gem '<%= jekMkd %>'<% if (cssPre === 's' || cssPre === 'c') { %>
+gem 'sass', '>=3.2.8'<% } %><% if (cssPre === 'c') { %>
+gem 'compass', '>=0.12.2'<% } %>
