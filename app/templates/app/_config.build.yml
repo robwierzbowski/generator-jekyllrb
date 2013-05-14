@@ -3,7 +3,7 @@
 # production
 
 # Paths
-# Grunt handles Source and destination paths
+# Grunt handles source and destination paths
 
 # Publish posts with future date.
 future: false

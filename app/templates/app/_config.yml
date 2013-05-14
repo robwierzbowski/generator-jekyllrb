@@ -4,7 +4,7 @@ name: <%= appname %>
 description: <%= jekDescript %>
 
 # Paths
-# Grunt handles Source and destination paths
+# Grunt handles source and destination paths
 # plugins: _plugins
 
 # Grunt handles compiling and reloading Jekyll
