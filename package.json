@@ -29,7 +29,8 @@
   "dependencies": {
     "yeoman-generator": "~0.10.3",
     "globule": "~0.1.0",
-    "shelljs": "~0.1.4"
+    "shelljs": "~0.1.4",
+    "grunt": "~0.4.1"
   },
   "devDependencies": {
     "mocha": "~1.9.0"
