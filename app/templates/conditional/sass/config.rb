@@ -1,29 +1,20 @@
-# If you're using global Compass extensions require them here
-# example require 'extension'
+# Compass configuration for a Yeoman Jekyll project
 
-# All preprocessors output expanded code
-# Grunt handles minification and asset cache busting on build
-environment = :development
-output_style = :expanded
+# Note: Grunt handles most Compass configuration. If you set something here and
+# it doesn't work, check if it has been set in the Gruntfile.
+
+# Bust cache with a query string or custom path.
+# Grunt and Jekyll need this to be ':none'
 asset_cache_buster :none
 
-# Directory settings, relative to config.rb
-http_path = "/" # Set to the root of your project when deployed
-# These directories are required for Grunt integration
-sass_dir = 'app/<%= cssPreDir %>'
-css_dir = '.tmp/<%= cssDir %>'
-javascripts_dir = 'app/<%= jsDir %>'
-images_dir = 'app/<%= imgDir %>'
-http_images_path = '/<%= imgDir %>'
-# You can edit the sprite path
-generated_images_dir = '.tmp/<%= imgDir %>/sprites'
-http_generated_images_path = '/<%= imgDir %>/sprites'
+# Globally installed extensions
+# require 'extension'
 
-# Load ad-hoc compass extensions from the Bower components directory
+# Ad-hoc extensions
 extensions_dir = "app/components"
 
-# Disable relative paths for Compass asset helpers
-relative_assets = false
+# Development output style
+output_style = :expanded
 
 # Pass fancy options to Sass
 # Debug directly with Chrome Web Inspector. May not play nicely with some

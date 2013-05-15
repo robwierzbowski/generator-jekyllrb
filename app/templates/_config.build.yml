@@ -1,0 +1,11 @@
+# Build Jekyll configuration for a Yeoman Jekyll project
+# These settings override _config.yml on grunt build
+
+# Note: Grunt handles some Jekyll configuration. If you set something here and
+# it doesn't work, check if it has been set in the Gruntfile.
+
+# Publish posts with future date.
+future: false
+
+# Compile posts in the _drafts directory.
+show_drafts: false

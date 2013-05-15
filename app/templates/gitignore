@@ -34,19 +34,6 @@ Thumbs.db
 
 # Ignore for Yeoman-Jekyll projects #
 app/components
-app/_site<% if (cssPre) { %>
-app/<%= cssDir %><% } %><% if (jsPre) { %>
-# If you are mixing javascript and coffeescript files, remove the next line
-app/<%= jsDir %><% } %>
 dist
 node_modules
-temp
-
-## RWRW Based on generator:
-## RWRW Very opinionated, maybe even ask in build
-
-# if css preprocessor
-app/css
-
-# if js preprocessor
-app/js
+.tmp

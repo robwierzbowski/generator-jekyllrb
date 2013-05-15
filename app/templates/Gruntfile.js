@@ -27,21 +27,25 @@ module.exports = function (grunt) {
   // Configurable paths
   var yeomanConfig = {
     app: 'app',
-    dist: 'dist'
+    dist: 'dist',
+    css: '<%= cssDir %>',
+    cssPre: '<%= cssPreDir %>',
+    js: '<%= jsDir %>',
+    jsPre: '<%= jsPreDir %>',
+    img: '<%= imgDir %>'
   };
 
   grunt.initConfig({
     yeoman: yeomanConfig,
     pkg: grunt.file.readJSON('package.json'),
-    jek: grunt.file.readYAML('app/_config.yml'),
-
+    jek: grunt.file.readYAML('_config.yml'),
 
     watch: {
       options: {
         nospawn: true
       },
       // coffee: {
-      //   files: ['<%%= yeoman.app %>/<%= jsPreDir %>/**/*.coffee'],
+      //   files: ['<%%= yeoman.app %>/<%%= yeoman.jsPre %>/**/*.coffee'],
       //   tasks: ['coffee:dist']
       // },
       // What is this?
@@ -50,19 +54,19 @@ module.exports = function (grunt) {
       //   tasks: ['coffee:test']
       // },
       sass: {
-        files: ['<%%= yeoman.app %>/<%= cssPreDir %>/**/*.{scss,sass}'],
+        files: ['<%%= yeoman.app %>/<%%= yeoman.cssPre %>/**/*.{scss,sass}'],
         tasks: ['sass:server']
       },
       compass: {
-        files: ['<%%= yeoman.app %>/<%= cssPreDir %>/**/*.{scss,sass}'],
+        files: ['<%%= yeoman.app %>/<%%= yeoman.cssPre %>/**/*.{scss,sass}'],
         tasks: ['compass:server']
       },
       coffee: {
-        files: ['<%%= yeoman.app %>/<%= jsPreDir %>/**/*.coffee'],
+        files: ['<%%= yeoman.app %>/<%%= yeoman.jsPre %>/**/*.coffee'],
         tasks: ['coffee:server']
       },
       jekyll: {
-        files: ['<%%= yeoman.app %>/**/*.{html,yml}'],
+        files: ['<%%= yeoman.app %>/**/*.{html,yml,md,mkd,markdown}'],
         tasks: ['jekyll:server']
       },
       livereload: {
@@ -71,9 +75,9 @@ module.exports = function (grunt) {
         },
         files: [
           '{.tmp,<%%= yeoman.app %>}/**/*.html',
-          '{.tmp,<%%= yeoman.app %>}/<%= cssDir %>/**/*.css',
-          '{.tmp,<%%= yeoman.app %>}/<%= jsDir %>/**/*.js',
-          '<%%= yeoman.app %>/<%= imgDir %>/**/*.{png,jpg,jpeg,gif,webp,svg}'
+          '{.tmp,<%%= yeoman.app %>}/<%%= yeoman.css %>/**/*.css',
+          '{.tmp,<%%= yeoman.app %>}/<%%= js %>/**/*.js',
+          '<%%= yeoman.app %>/<%%= yeoman.img %>/**/*.{png,jpg,jpeg,gif,webp,svg}'
         ]
       }
     },
@@ -134,31 +138,42 @@ module.exports = function (grunt) {
       server: '.tmp'
     },
 
+
     // Sass
     sass: {
       options: {
         bundleExec: true,
+        style: 'expanded',
         debugInfo: true,
+        lineNumbers: true,
         loadPath: 'app/components',
-        style: 'expanded'
+      },
+      files: {
+        '.tmp/<%%= yeoman.css %>': '<%%= yeoman.app %>/<%%= yeoman.cssPre %>'
       },
       dist: {
-        files: {
-          '.tmp/<%= cssDir %>': '<%%= yeoman.app %>/<%= cssPreDir %>'
-        },
-        debugInfo: false
+        options: {
+          debugInfo: false,
+          lineNumbers: false
+        }
       },
-      server: {
-        files: {
-          '.tmp/<%= cssDir %>': '<%%= yeoman.app %>/<%= cssPreDir %>'
-        },
-      }
+      server: {}
     },
 
     // Compass
     compass: {
       options: {
-        config: 'config.rb'
+        bundleExec: true,
+        config: 'config.rb',
+        sassDir: '<%%= yeoman.app %>/<%%= yeoman.cssPre %>',
+        cssDir: '.tmp/<%%= yeoman.css %>',
+        imagesDir: '<%%= yeoman.app %>/<%%= yeoman.img %>',
+        generatedImagesDir: '.tmp/<%%= yeoman.img %>/generated',
+        httpImagesPath: '/<%%= yeoman.img %>',
+        httpGeneratedImagesPath: '/<%%= yeoman.img %>/generated',
+        fontsDir: '<%%= yeoman.app %>/webfonts',
+        javascriptsDir: '<%%= yeoman.app %>/<%%= js %>',
+        relativeAssets: false
       },
       dist: {
         options: {
@@ -166,30 +181,42 @@ module.exports = function (grunt) {
         }
       },
       server: {}
-      // clean: {
-      //   options: {
-      //   clean: true
-      //   }
-      // }
     },
 
-    // Coffee
+    // Jekyll
+    jekyll: {
+      options: {
+        src : '<%%= yeoman.app %>',
+        dest: '.tmp',
+        server : false,
+        auto : false,
+        config: '_config.yml'
+      },
+      server : {},
+      dist: {
+        options: {
+          config: '_config.yml,_config.build.yml'
+          // Not seeing good documentation on what the correct format is here
+          // config: '_config.yml _config.build.yml'
+        }
+      }
+    },
 
 
 
+
+// Read jade tssk for insight
 
 // RWRW Set up basic coffee task,
-// set up jekyll tasks
 // Usemin. Post question -- usemin cascade or what? use case
 // Test gruntfile.
 
 
 
-    // Jekyll
 
 
-// Read jade tssk for insight
-// Move config to project root like conf.rb?
+    // Coffee
+    // add node js-> coffee, convert like sass.
 
 
     // Usemin
@@ -253,27 +280,6 @@ module.exports = function (grunt) {
     },
 
 
-    compass: {
-      options: {
-        sassDir: '<%%= yeoman.app %>/styles',
-        cssDir: '.tmp/styles',
-        generatedImagesDir: '.tmp/images/generated',
-
-        imagesDir: '<%%= yeoman.app %>/images',
-        javascriptsDir: '<%%= yeoman.app %>/scripts',
-        fontsDir: '<%%= yeoman.app %>/styles/fonts',
-        importPath: '<%%= yeoman.app %>/bower_components',
-        httpImagesPath: '/images',
-        httpGeneratedImagesPath: '/images/generated',
-        relativeAssets: false
-      },
-      dist: {},
-      server: {
-        options: {
-          debugInfo: true
-        }
-      }
-    },
     // not used since Uglify task does concat,
     // but still available if needed
     /*concat: {

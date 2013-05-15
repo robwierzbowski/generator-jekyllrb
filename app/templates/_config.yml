@@ -1,24 +1,17 @@
-# Development configuration for Yeoman Jekyll project
+# Base Jekyll configuration for a Yeoman Jekyll project
+
+# Note: Grunt handles some Jekyll configuration. If you set something here and
+# it doesn't work, check if it has been set in the Gruntfile. There is also a
+# _config.build.yml to set custom overrides for grunt build.
 
 name: <%= appname %>
 description: <%= jekDescript %>
 
-# Paths
-# Grunt handles source and destination paths
-source: .
-destination: ../.tmp
-plugins: _plugins
-
-# Grunt handles compiling and reloading Jekyll
-server: false
-auto: false
-
-# Exclude directories and/or files from the conversion
-# Automatically excludes .dot and _underscore directories/files
-# Grunt handles moving all asset directories
-exclude: ['components', '<%= imgDir%>', '<%= cssDir%>', '<%= jsDir%>'<%
-          if (cssPreDir[0] !== '_' || cssPreDir[0] !== '.') { %>, '<%= cssPreDir %>'<% } %><%
-          if (jsPreDir[0] !== '_' || jsPreDir[0] !== '.') { %>, '<%= jsPreDir %>'<% } %>]
+# Exclude directories and/or files from the conversion.
+# Grunt moves favicon, touch icons, and all asset directories.
+exclude: ['*.png', '*.ico', 'components', '<%= imgDir %>', '<%= cssDir %>', '<%= jsDir %>'<%
+  if (cssPreDir) { %>, '<%= cssPreDir %>'<% } %><%
+  if (jsPreDir) { %>, '<%= jsPreDir %>'<% } %>]
 
 # Force inclusion of directories and/or files in the conversion.
 # .htaccess is a good example since dotfiles are excluded by default.

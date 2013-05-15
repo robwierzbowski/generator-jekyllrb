@@ -577,8 +577,8 @@ Generator.prototype.editor = function editor() {
 Generator.prototype.jekFiles = function jekFiles() {
 
   // Jekyll config files
-  this.copy('app/_config.build.yml', 'app/_config.build.yml');
-  this.template('app/_config.yml');
+  this.copy('_config.build.yml', '_config.build.yml');
+  this.template('_config.yml');
 
   // Pygments styles
   if (this.jekPyg) {
