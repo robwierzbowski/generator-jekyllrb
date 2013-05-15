@@ -2,19 +2,30 @@
 # example require 'extension'
 
 # All preprocessors output expanded code
-# Grunt handles minification and revs assets on build
+# Grunt handles minification and asset cache busting on build
 environment = :development
 output_style = :expanded
 asset_cache_buster :none
 
 # Directory settings, relative to config.rb
-# Grunt handles sass, css, js, and image source and destination paths
 http_path = "/" # Set to the root of your project when deployed
-extensions_dir = "components"
+# These directories are required for Grunt integration
+sass_dir = 'app/<%= cssPreDir %>'
+css_dir = '.tmp/<%= cssDir %>'
+javascripts_dir = 'app/<%= jsDir %>'
+images_dir = 'app/<%= imgDir %>'
+http_images_path = '/<%= imgDir %>'
+# You can edit the sprite path
+generated_images_dir = '.tmp/<%= imgDir %>/sprites'
+http_generated_images_path = '/<%= imgDir %>/sprites'
 
-# Enable relative paths for Compass asset helpers
-relative_assets = true
+# Load ad-hoc compass extensions from the Bower components directory
+extensions_dir = "app/components"
 
-## RWRW Check for newest rec.
-# To debug directly with FireSass or Chrome Web Inspector, pass options to Sass.
-sass_options = (environment == :development && debug == true) ? {:debug_info => true} : {}
+# Disable relative paths for Compass asset helpers
+relative_assets = false
+
+# Pass fancy options to Sass
+# Debug directly with Chrome Web Inspector. May not play nicely with some
+# Compass extensions. TODO: Replace with :sourcemap when available in Compass
+sass_options = {:debug_info => true}

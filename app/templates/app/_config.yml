@@ -5,7 +5,9 @@ description: <%= jekDescript %>
 
 # Paths
 # Grunt handles source and destination paths
-# plugins: _plugins
+source: .
+destination: ../.tmp
+plugins: _plugins
 
 # Grunt handles compiling and reloading Jekyll
 server: false
@@ -13,10 +15,10 @@ auto: false
 
 # Exclude directories and/or files from the conversion
 # Automatically excludes .dot and _underscore directories/files
-exclude: [<% if (cssPreDir[0] !== '_' || cssPreDir[0] !== '.') { %>'<%= cssPreDir %>'<% }
-        %><% if ((cssPreDir[0] !== '_' || cssPreDir[0] !== '.') &&
-                (jsPreDir[0] !== '_' || jsPreDir[0] !== '.')) { %>,<% }
-        %><% if (jsPreDir[0] !== '_' || jsPreDir[0] !== '.') { %>'<%= jsPreDir %>'<% } %>]
+# Grunt handles moving all asset directories
+exclude: ['components', '<%= imgDir%>', '<%= cssDir%>', '<%= jsDir%>'<%
+          if (cssPreDir[0] !== '_' || cssPreDir[0] !== '.') { %>, '<%= cssPreDir %>'<% } %><%
+          if (jsPreDir[0] !== '_' || jsPreDir[0] !== '.') { %>, '<%= jsPreDir %>'<% } %>]
 
 # Force inclusion of directories and/or files in the conversion.
 # .htaccess is a good example since dotfiles are excluded by default.
