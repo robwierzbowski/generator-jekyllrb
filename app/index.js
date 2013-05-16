@@ -10,15 +10,11 @@ var yeoman = require('yeoman-generator');
 var Generator = module.exports = function Generator() {
   yeoman.generators.Base.apply(this, arguments);
 
-  // Specify an appname from the command line, or use the parent directory name
-  this.argument('appname', { type: String, required: false });
-  this.appname = this.appname || path.basename(process.cwd());
-
-  // Make sure Ruby dependencies are installed
   var dependenciesInstalled = ['bundle', 'ruby'].every(function (depend) {
     return shelljs.which(depend);
   });
 
+  // Make sure Ruby dependencies are installed, or exit
   if (!dependenciesInstalled) {
     console.log('Looks like you\'re missing some dependencies.' +
       '\nMake sure ' + 'Ruby'.white + ' and the ' + 'Bundler gem'.white +
@@ -26,12 +22,9 @@ var Generator = module.exports = function Generator() {
     shelljs.exit(1);
   }
 
-  // Get user info from .gitconfig if available
-  this.gitInfo = {
-    name: shelljs.exec('git config user.name', {silent: true}).output.replace(/\n/g, ''),
-    email: shelljs.exec('git config user.email', {silent: true}).output.replace(/\n/g, ''),
-    github: shelljs.exec('git config github.user', {silent: true}).output.replace(/\n/g, ''),
-  };
+  // Specify an appname from the command line, or use the parent directory name
+  this.argument('appname', { type: String, required: false });
+  this.appname = this.appname || path.basename(process.cwd());
 
   // Default asset dirs to use for scaffolding
   this.defaultDirs = {
@@ -43,15 +36,22 @@ var Generator = module.exports = function Generator() {
     jsPre: '_coffee',
     jekTmp: path.join(this.env.cwd, '.jekTmp')
   };
-
   this.jekTmpDir = this.defaultDirs.jekTmp;
+
+  // Get user info from .gitconfig if available
+  this.gitInfo = {
+    name: shelljs.exec('git config user.name', {silent: true}).output.replace(/\n/g, ''),
+    email: shelljs.exec('git config user.email', {silent: true}).output.replace(/\n/g, ''),
+    github: shelljs.exec('git config github.user', {silent: true}).output.replace(/\n/g, ''),
+  };
+
+  // Get package.json for templating
+  this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
 
   // subgenerator
   // this.hookFor('jekyll:subGen', {
   //   args: args
   // });
-
-  this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
 
   this.on('end', function () {
 
@@ -88,11 +88,9 @@ util.inherits(Generator, yeoman.generators.NamedBase);
 Generator.prototype.askFor = function askFor() {
   var cb = this.async();
 
-  console.log(
-    'This generator will scaffold and wire a Jekyll site. Yo, Jekyll!'.yellow.bold +
-    '\n ' +
-    '\nTell us a little about yourself.'.yellow + ' ☛'
-  );
+  console.log('This generator will scaffold and wire a Jekyll site. Yo, Jekyll!'.yellow.bold +
+    '\n\nTell us a little about yourself.'.yellow + ' ☛');
+
   var prompts = [{
     name: 'author',
     message: 'Name:',
@@ -437,7 +435,7 @@ Generator.prototype.askForJekyll = function askFor() {
 
 ////////////////////////// Generate App //////////////////////////
 
-Generator.prototype.installRubyDependencies = function installRubyDependencies() {
+Generator.prototype.rubyDependencies = function rubyDependencies() {
   this.template('Gemfile');
   this.conflicter.resolve(function (err) {
     if (err) {
@@ -606,7 +604,7 @@ Generator.prototype.jekFiles = function jekFiles() {
   }
 };
 
-Generator.prototype.cssPreSass = function cssPreSass() {
+Generator.prototype.cssPreprocessor = function cssPreprocessor() {
   if (this.cssPre) {
     this.mkdir(path.join('app', this.cssPreDir));
   }
@@ -623,7 +621,7 @@ Generator.prototype.cssPreSass = function cssPreSass() {
       this.copy(path.join('../../../../app', this.cssDir, file),
                 path.join('app', this.cssPreDir, file.replace(/\.css$/, '.scss')));
 
-      // Cleanup css files to prevent confusion
+      // Cleanup old css files
       spawn('rm', ['-f', path.join('app', this.cssDir, file)], { stdio: 'inherit' });
     }, this);
   }
@@ -632,7 +630,7 @@ Generator.prototype.cssPreSass = function cssPreSass() {
   }
 };
 
-Generator.prototype.jsPreCoffee = function jsPreCoffee() {
+Generator.prototype.jsPreprocessor = function jsPreprocessor() {
   if (this.jsPre) {
     this.mkdir(path.join('app', this.jsPreDir));
   }
