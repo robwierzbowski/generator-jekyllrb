@@ -215,17 +215,15 @@ module.exports = function (grunt) {
       }
     },
 
-    // TODO: RequireJs
-
-    // Not used since Uglify task does concat, but still available if needed
+    // Cssmin and Uglify take care of concat, but still available if needed
     /*concat: {
       dist: {}
     },*/
 
     rev: {
       options: {
-        length: 4;
-      }
+        length: 4
+      },
       dist: {
         files: {
           src: [
@@ -237,29 +235,75 @@ module.exports = function (grunt) {
       }
     },
 
-    // TODO add usemin
-
-    // Usemin Time!
+    // useminPrepare builds a list of files to concat/uglify/minify from a
+    // reference block on one html page. Point to the compiled Jekyll
+    // index.html, or a custom built usemin block manifest page (hackery!).
+    // ** and initializes for you the corresponding Grunt config for the concat
+    // / uglify tasks when
     useminPrepare: {
-      html: '<%= yeoman.app %>/index.html',
+      html: '.tmp/index.html',
       options: {
-        dest: '<%= yeoman.dist %>'
+        dest: '<%%= yeoman.dist %>'
       }
     },
+    // RWRW looks through these files and replaces references to other files
+    // with their compressed versions
+    // Dist to dist, act just on the compiled site
     usemin: {
-      html: ['<%= yeoman.dist %>/{,*/}*.html'],
-      // css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
+      html: ['<%%= yeoman.dist %>/**/*.html'],
+      css: ['<%%= yeoman.dist %>/<%%= yeoman.css %>/**/*.css'],
       options: {
         dirs: ['<%= yeoman.dist %>']
       }
     },
-    imagemin: {
+
+    htmlmin: {
       dist: {
+        options: {
+          collapseWhitespace: true,
+          collapseBooleanAttributes: true,
+          removeAttributeQuotes: true,
+          removeRedundantAttributes: true,
+          removeOptionalTags: true
+        },
         files: [{
           expand: true,
-          cwd: '<%= yeoman.app %>/images',
+          cwd: '<%= yeoman.dist %>',
+          src: '**/*.html',
+          dest: '<%= yeoman.dist %>'
+        }]
+      }
+    },
+
+    // Called by useminPrepare
+    cssmin: {
+      dist: {
+        options: {
+          banner: '/* See the sass code that generated this file at github.com/<%= github %>/xxxxxx */',
+          // report: 'gzip'
+          report: 'min'
+        }
+        // Usemin is gathering the files. This shouldn't matter
+        // files: {
+        //   // '<%= yeoman.dist %>/<%%= yeoman.css %>/main.css': [
+        //   //   '.tmp/<%%= yeoman.css %>/{,*/}*.css',
+        //   //   '<%= yeoman.app %>/<%%= yeoman.css %>/{,*/}*.css']
+        // }
+      }
+    },
+    // Called by useminPrepare
+    uglify {},
+
+    imagemin: {
+      dist: {
+        options: {
+          progressive: true
+        },
+        files: [{
+          expand: true,
+          cwd: '<%= yeoman.app %>/<%%= yeoman.img %>',
           src: '{,*/}*.{png,jpg,jpeg}',
-          dest: '<%= yeoman.dist %>/images'
+          dest: '<%= yeoman.dist %>/<%%= yeoman.img %>'
         }]
       }
     },
@@ -267,43 +311,12 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '<%= yeoman.app %>/images',
+          cwd: '<%= yeoman.app %>/<%%= yeoman.img %>',
           src: '{,*/}*.svg',
-          dest: '<%= yeoman.dist %>/images'
+          dest: '<%= yeoman.dist %>/<%%= yeoman.img %>'
         }]
       }
     },
-    cssmin: {
-      dist: {
-        files: {
-          '<%= yeoman.dist %>/styles/main.css': [
-            '.tmp/styles/{,*/}*.css',
-            '<%= yeoman.app %>/styles/{,*/}*.css']
-        }
-      }
-    },
-    htmlmin: {
-      dist: {
-        options: {
-          /*removeCommentsFromCDATA: true,
-                    // https://github.com/yeoman/grunt-usemin/issues/44
-                    //collapseWhitespace: true,
-                    collapseBooleanAttributes: true,
-                    removeAttributeQuotes: true,
-                    removeRedundantAttributes: true,
-                    useShortDoctype: true,
-                    removeEmptyAttributes: true,
-                    removeOptionalTags: true*/
-        },
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.app %>',
-          src: '*.html',
-          dest: '<%= yeoman.dist %>'
-        }]
-      }
-    },
-
 
 // Test gruntfile.
 

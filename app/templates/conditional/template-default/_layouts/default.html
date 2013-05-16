@@ -6,7 +6,7 @@
         <title>{{ page.title }}</title>
         <meta name="viewport" content="width=device-width">
 
-        <!-- build:css <%= cssDir %>/main.css --><% if (jekPyg) { %>
+        <!-- build:css(.tmp) <%= cssDir %>/main.css --><% if (jekPyg) { %>
         <!-- Syntax highlighting CSS -->
         <link rel="stylesheet" href="/<%= cssDir %>/syntax.css %>">
 <% } %>
@@ -44,7 +44,7 @@
           </div>
         </div> <!-- /container -->
 
-    <!-- build:js <%= jsDir %>/scripts.js -->
+    <!-- build:js(.tmp) <%= jsDir %>/scripts.js -->
     <!-- endbuild -->
     </body>
 </html>
