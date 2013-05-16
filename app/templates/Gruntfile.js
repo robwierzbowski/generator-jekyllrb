@@ -1,5 +1,4 @@
-// Generated on <%= (new Date).toISOString().split('T')[0] %> using <%= pkg.name %> <%= pkg.version %>
-// Based on new generator-webapp
+// Generated on <%= (new Date).toISOString().split('T')[0] %> using <%= pkg.name %> <%= pkg.version %>. Yo Jekyll!
 'use strict';
 
 var LIVERELOAD_PORT = 35729;
@@ -24,7 +23,7 @@ module.exports = function (grunt) {
     js: '<%= jsDir %>',
     jsPre: '<%= jsPreDir %>',
     img: '<%= imgDir %>',
-    font: '<%= fontDir %>'
+    fonts: '<%= fontsDir %>'
   };
 
   grunt.initConfig({
@@ -162,7 +161,7 @@ module.exports = function (grunt) {
         generatedImagesDir: '.tmp/<%%= yeoman.img %>/generated',
         httpImagesPath: '/<%%= yeoman.img %>',
         httpGeneratedImagesPath: '/<%%= yeoman.img %>/generated',
-        fontsDir: '<%%= yeoman.app %>/<%%= yeoman.font %>',
+        fontsDir: '<%%= yeoman.app %>/<%%= yeoman.fonts %>',
         javascriptsDir: '<%%= yeoman.app %>/<%%= js %>',
         relativeAssets: false
       },
@@ -175,13 +174,27 @@ module.exports = function (grunt) {
     },
 
     // Coffeescript. Needs to be tested by someone who actually uses it.
+    // TODO:
+    // add node js-> coffee, convert like sass.
+    // npm install js2coffee
+    // js2coffee file.js > file.coffee
+
     coffee: {
+      server: {
+        files: [{
+          expand: true,
+          cwd: '<%%= yeoman.app %>/<%%= yeoman.jsPre %>',
+          src: '**/*.coffee',
+          dest: '.tmp/<%%= yeoman.js %>',
+          ext: '.js'
+        }]
+      },
       dist: {
         files: [{
           expand: true,
           cwd: '<%%= yeoman.app %>/<%%= yeoman.jsPre %>',
           src: '**/*.coffee',
-          dest: '.tmp/<%%= yeoman.jsPre %>',
+          dest: '<%%= yeoman.dist %>/<%%= yeoman.js %>',
           ext: '.js'
         }]
       },
@@ -219,21 +232,6 @@ module.exports = function (grunt) {
     /*concat: {
       dist: {}
     },*/
-
-    rev: {
-      options: {
-        length: 4
-      },
-      dist: {
-        files: {
-          src: [
-            '<%%= yeoman.dist %>/<%%= yeoman.js %>/**/*.js',
-            '<%%= yeoman.dist %>/<%%= yeoman.cs %>/**/*.css',
-            '<%%= yeoman.dist %>/<%%= yeoman.img %>/**/*.{png,jpg,jpeg,gif,webp,svg}',
-            '<%%= yeoman.dist %>/<%%= yeoman.font %>/**.{eot*,woff,ttf,svg}']
-        }
-      }
-    },
 
     // useminPrepare builds a list of files to concat/uglify/minify from a
     // reference block on one html page. Point to the compiled Jekyll
@@ -318,222 +316,69 @@ module.exports = function (grunt) {
       }
     },
 
-// Test gruntfile.
-
-
-
-    // Coffee
-
-    // add node js-> coffee, convert like sass.
-    // npm install js2coffee
-    // js2coffee file.js > file.coffee
-
-    // Usemin
-
-
-
-
-
-// WEBAPP ///////////////////////////////////////////////////////////
-
-
-
-    // jshint: {
-    //   options: {
-    //     jshintrc: '.jshintrc'
-    //   },
-    //   all: [
-    //     'Gruntfile.js',
-    //     '<%%= yeoman.app %>/scripts/{,*/}*.js',
-    //     '!<%%= yeoman.app %>/scripts/vendor/*',
-    //     'test/spec/{,*/}*.js']
-    // },
-    // <%
-    // if (testFramework === 'mocha') { %> mocha: {
-    //     all: {
-    //       options: {
-    //         run: true,
-    //         urls: ['http://localhost:<%%= connect.options.port %>/index.html']
-    //       }
-    //     }
-    //   },
-    //   <%
-    // } else if (testFramework === 'jasmine') { %> jasmine: {
-    //     all: {
-    //       options: {
-    //         specs: 'test/spec/{,*/}*.js'
-    //       }
-    //     }
-    //   },
-    //   <%
-    // } %>
-    coffee: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '<%%= yeoman.app %>/scripts',
-          src: '{,*/}*.coffee',
-          dest: '.tmp/scripts',
-          ext: '.js'
-        }]
-      },
-      test: {
-        files: [{
-          expand: true,
-          cwd: 'test/spec',
-          src: '{,*/}*.coffee',
-          dest: '.tmp/spec',
-          ext: '.js'
-        }]
-      }
-    },
-
-
-    // not used since Uglify task does concat,
-    // but still available if needed
-    /*concat: {
-            dist: {}
-        },*/
-    <%
-    if (includeRequireJS) { %> requirejs: {
-        dist: {
-          // Options: https://github.com/jrburke/r.js/blob/master/build/example.build.js
-          options: {
-            // `name` and `out` is set by grunt-usemin
-            baseUrl: yeomanConfig.app + '/scripts',
-            optimize: 'none',
-            // TODO: Figure out how to make sourcemaps work with grunt-usemin
-            // https://github.com/yeoman/grunt-usemin/issues/30
-            //generateSourceMaps: true,
-            // required to support SourceMaps
-            // http://requirejs.org/docs/errors.html#sourcemapcomments
-            preserveLicenseComments: false,
-            useStrict: true,
-            wrap: true
-            //uglify2: {} // https://github.com/mishoo/UglifyJS2
-          }
-        }
-      },
-      <%
-    } else { %>
-      // not enabled since usemin task does concat and uglify
-      // check index.html to edit your build targets
-      // enable this task if you prefer defining your build targets here
-      /*uglify: {
-            dist: {}
-        },*/
-      <%
-    } %>
-    useminPrepare: {
-      options: {
-        dest: '<%%= yeoman.dist %>'
-      },
-      html: '<%%= yeoman.app %>/index.html'
-    },
-    usemin: {
-      options: {
-        dirs: ['<%%= yeoman.dist %>']
-      },
-      html: ['<%%= yeoman.dist %>/**/*.html'],
-      css: ['<%%= yeoman.dist %>/styles/**/*.css']
-    },
-    imagemin: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '<%%= yeoman.app %>/images',
-          src: '{,*/}*.{png,jpg,jpeg}',
-          dest: '<%%= yeoman.dist %>/images'
-        }]
-      }
-    },
-    svgmin: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '<%%= yeoman.app %>/images',
-          src: '{,*/}*.svg',
-          dest: '<%%= yeoman.dist %>/images'
-        }]
-      }
-    },
-    cssmin: {
-      dist: {
-        files: {
-          '<%%= yeoman.dist %>/styles/main.css': [
-            '.tmp/styles/{,*/}*.css',
-            '<%%= yeoman.app %>/styles/{,*/}*.css']
-        }
-      }
-    },
-    htmlmin: {
-      dist: {
-        options: {
-          /*removeCommentsFromCDATA: true,
-                    // https://github.com/yeoman/grunt-usemin/issues/44
-                    //collapseWhitespace: true,
-                    collapseBooleanAttributes: true,
-                    removeAttributeQuotes: true,
-                    removeRedundantAttributes: true,
-                    useShortDoctype: true,
-                    removeEmptyAttributes: true,
-                    removeOptionalTags: true*/
-        },
-        files: [{
-          expand: true,
-          cwd: '<%%= yeoman.app %>',
-          src: '*.html',
-          dest: '<%%= yeoman.dist %>'
-        }]
-      }
-    },
-    // Put files not handled in other tasks here
+    // Moves files not handled by other tasks
     copy: {
       dist: {
         files: [{
           expand: true,
           dot: true,
-          cwd: '<%%= yeoman.app %>',
-          dest: '<%%= yeoman.dist %>',
+          cwd: '<%= yeoman.app %>',
+          dest: '<%= yeoman.dist %>',
           src: [
-            '*.{ico,txt}',
-            '.htaccess',
-            'images/{,*/}*.{webp,gif}',
-            'styles/fonts/*']
-        }, {
-          expand: true,
-          cwd: '.tmp/images',
-          dest: '<%%= yeoman.dist %>/images',
-          src: [
-            'generated/*']
+            // Jekyll transports all text files
+            // Copy transports asset drectories and binary files
+            '**/*.{png,jpg,jpeg,gif,webp,svg}',
+            '<%= imgDir %>',
+            '<%= cssDir %>',
+            '<%= jsDir %>',
+            '<%= fontsDir %>']
         }]
       }
     },
+
+    // Rev all assets
+    rev: {
+      options: {
+        length: 4
+      },
+      dist: {
+        files: {
+          src: [
+            '<%%= yeoman.dist %>/<%%= yeoman.js %>/**/*.js',
+            '<%%= yeoman.dist %>/<%%= yeoman.cs %>/**/*.css',
+            '<%%= yeoman.dist %>/<%%= yeoman.img %>/**/*.{png,jpg,jpeg,gif,webp,svg}',
+            '<%%= yeoman.dist %>/<%%= yeoman.fonts %>/**/*.{eot*,woff,ttf,svg}']
+        }
+      }
+    },
+
     concurrent: {
       server: [
-        'coffee:dist',
-        'compass:server'],
-      test: [
-        'coffee',
-        'compass'],
+        'coffee:server',
+        'sass:server',
+        'compass:server',
+        'jekyll:server',
+        ],
+      // RWRW test needs work
+      // test: [
+      //   'coffee',
+      //   'compass'],
       dist: [
-        'coffee',
+        'coffee:dist',
+        'sass:dist',
         'compass:dist',
+        'jekyll:dist',
         'imagemin',
-        'svgmin',
-        'htmlmin']
-    } <%
-    if (includeRequireJS) { %> ,
-      bower: {
-        options: {
-          exclude: ['modernizr']
-        },
-        all: {
-          rjsConfig: '<%%= yeoman.app %>/scripts/main.js'
-        }
-      } <%
-    } %>
-  });
+        'svgmin']
+    });
+
+
+    // TODO: Tests and Reports
+
+    // add csslint https://github.com/gruntjs/grunt-contrib-csslint
+    // add jslint webapp config
+    // add csscss
+    // Custom tests for failed sass compile?
 
 
   ///////////////////////////////////////////////////////////
@@ -542,21 +387,11 @@ module.exports = function (grunt) {
   // Load all grunt task plugins
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
-  // grunt.registerTask('jekyll', 'Compile jekyll with default config (in _config.yml)', task({
-  //   command: 'bundle exec jekyll'
-  // }));
-
-  // grunt.registerTask('jekyll-compile', 'Runs jekyll in no-server mode, compiling to _site', task({
-  //   command: 'bundle exec jekyll --no-server --no-auto'
-  // }));
-  // grunt.registerTask('jekyll-help', 'Outputs Jekyll help output', task({
-  //   command: 'bundle exec jekyll --help'
-  // }));
-
-
   ///////////////////////////////////////////////////////////
   // Task lists
 
+
+  // RWRW TODO: clean, task lists, package depens
 
 // WEBAPP ///////////////////////////////////////////////////////////
 
