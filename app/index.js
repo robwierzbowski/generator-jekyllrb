@@ -38,6 +38,7 @@ var Generator = module.exports = function Generator() {
     css: 'css',
     js: 'js',
     img: 'image',
+    font: 'webfont',
     cssPre: '_scss',
     jsPre: '_coffee',
     jekTmp: path.join(this.env.cwd, '.jekTmp')
@@ -131,7 +132,8 @@ Generator.prototype.askFor = function askFor() {
 Generator.prototype.askForStructure = function askForStructure() {
   var cb = this.async();
 
-  console.log('\nSet up some directories.'.yellow + ' ☛');
+  console.log('\nSet up some directories.'.yellow + ' ☛' +
+    '\nNested directories are fine.');
 
   var prompts = [{
     name: 'cssDir',
@@ -150,6 +152,12 @@ Generator.prototype.askForStructure = function askForStructure() {
     message: 'Choose an image file directory:',
     default: this.defaultDirs.img
     // Required, edit
+  },
+  {
+    name: 'fontDir',
+    message: 'Choose a webfont directory:',
+    default: this.defaultDirs.font
+    // Required, edit
   }];
 
   this.prompt(prompts, function (err, props) {
@@ -162,6 +170,7 @@ Generator.prototype.askForStructure = function askForStructure() {
     this.cssDir = props.cssDir.replace(/^\/*|\/*$/g, '');
     this.jsDir  = props.jsDir.replace(/^\/*|\/*$/g, '');
     this.imgDir = props.imgDir.replace(/^\/*|\/*$/g, '');
+    this.fontDir = props.fontDir.replace(/^\/*|\/*$/g, '');
 
     cb();
   }.bind(this));
@@ -438,8 +447,9 @@ Generator.prototype.directories = function directories() {
 
   // Scaffold Jekyll dirs
   this.mkdir(path.join('app', this.cssDir));
-  this.mkdir(path.join('app', this.imgDir));
   this.mkdir(path.join('app', this.jsDir));
+  this.mkdir(path.join('app', this.imgDir));
+  this.mkdir(path.join('app', this.fontDir));
   this.mkdir('app/_layouts');
   this.mkdir('app/_posts');
   this.mkdir('app/_includes');
@@ -619,6 +629,8 @@ Generator.prototype.jsPreCoffee = function jsPreCoffee() {
   // Coffeescript
   if (this.jsPre === 'c') {
     this.template('conditional/coffee/readme.md', path.join('app', this.jsPreDir, 'readme.md'));
+
+  // TODO: Translate and move js files to coffee files using js2coffee
   }
 };
 
