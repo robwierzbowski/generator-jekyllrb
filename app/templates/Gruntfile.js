@@ -1,6 +1,3 @@
-// Big questions: what's up with .tmp + middleware
-// where to compile site to: site or tmp? Follow pattern of other preprocessors?
-
 // Generated on <%= (new Date).toISOString().split('T')[0] %> using <%= pkg.name %> <%= pkg.version %>
 // Based on new generator-webapp
 'use strict';
@@ -10,14 +7,8 @@ var LIVERELOAD_PORT = 35729;
 var lrSnippet = require('connect-livereload')({port: LIVERELOAD_PORT});
 // RWRW Used in connect task
 var mountFolder = function (connect, dir) {
-    return connect.static(require('path').resolve(dir));
+  return connect.static(require('path').resolve(dir));
 };
-
-// # Globbing
-// for performance reasons we're only matching one level down:
-// 'test/spec/{,*/}*.js'
-// use this if you want to match all subfolders:
-// 'test/spec/**/*.js'
 
 module.exports = function (grunt) {
 
@@ -32,7 +23,8 @@ module.exports = function (grunt) {
     cssPre: '<%= cssPreDir %>',
     js: '<%= jsDir %>',
     jsPre: '<%= jsPreDir %>',
-    img: '<%= imgDir %>'
+    img: '<%= imgDir %>',
+    font: '<%= fontDir %>'
   };
 
   grunt.initConfig({
@@ -41,18 +33,14 @@ module.exports = function (grunt) {
     jek: grunt.file.readYAML('_config.yml'),
 
     watch: {
-      options: {
-        nospawn: true
-      },
       // coffee: {
       //   files: ['<%%= yeoman.app %>/<%%= yeoman.jsPre %>/**/*.coffee'],
       //   tasks: ['coffee:dist']
       // },
-      // What is this?
-      // coffeeTest: {
-      //   files: ['test/spec/**/*.coffee'],
-      //   tasks: ['coffee:test']
-      // },
+
+      options: {
+        nospawn: true
+      },
       sass: {
         files: ['<%%= yeoman.app %>/<%%= yeoman.cssPre %>/**/*.{scss,sass}'],
         tasks: ['sass:server']
@@ -64,6 +52,10 @@ module.exports = function (grunt) {
       coffee: {
         files: ['<%%= yeoman.app %>/<%%= yeoman.jsPre %>/**/*.coffee'],
         tasks: ['coffee:server']
+      },
+      coffeeTest: {
+        files: ['test/spec/**/*.coffee'],
+        tasks: ['coffee:test']
       },
       jekyll: {
         files: ['<%%= yeoman.app %>/**/*.{html,yml,md,mkd,markdown}'],
@@ -138,7 +130,6 @@ module.exports = function (grunt) {
       server: '.tmp'
     },
 
-
     // Sass
     sass: {
       options: {
@@ -171,7 +162,7 @@ module.exports = function (grunt) {
         generatedImagesDir: '.tmp/<%%= yeoman.img %>/generated',
         httpImagesPath: '/<%%= yeoman.img %>',
         httpGeneratedImagesPath: '/<%%= yeoman.img %>/generated',
-        fontsDir: '<%%= yeoman.app %>/webfonts',
+        fontsDir: '<%%= yeoman.app %>/<%%= yeoman.font %>',
         javascriptsDir: '<%%= yeoman.app %>/<%%= js %>',
         relativeAssets: false
       },
@@ -181,6 +172,28 @@ module.exports = function (grunt) {
         }
       },
       server: {}
+    },
+
+    // Coffeescript. Needs to be tested by someone who actually uses it.
+    coffee: {
+      dist: {
+        files: [{
+          expand: true,
+          cwd: '<%%= yeoman.app %>/<%%= yeoman.jsPre %>',
+          src: '**/*.coffee',
+          dest: '.tmp/<%%= yeoman.jsPre %>',
+          ext: '.js'
+        }]
+      },
+      test: {
+        files: [{
+          expand: true,
+          cwd: 'test/spec',
+          src: '**/*.coffee',
+          dest: '.tmp/spec',
+          ext: '.js'
+        }]
+      }
     },
 
     // Jekyll
@@ -202,22 +215,105 @@ module.exports = function (grunt) {
       }
     },
 
+    // TODO: RequireJs
+
+    // Not used since Uglify task does concat, but still available if needed
+    /*concat: {
+      dist: {}
+    },*/
+
+    rev: {
+      options: {
+        length: 4;
+      }
+      dist: {
+        files: {
+          src: [
+            '<%%= yeoman.dist %>/<%%= yeoman.js %>/**/*.js',
+            '<%%= yeoman.dist %>/<%%= yeoman.cs %>/**/*.css',
+            '<%%= yeoman.dist %>/<%%= yeoman.img %>/**/*.{png,jpg,jpeg,gif,webp,svg}',
+            '<%%= yeoman.dist %>/<%%= yeoman.font %>/**.{eot*,woff,ttf,svg}']
+        }
+      }
+    },
+
+    // TODO add usemin
+
+    // Usemin Time!
+    useminPrepare: {
+      html: '<%= yeoman.app %>/index.html',
+      options: {
+        dest: '<%= yeoman.dist %>'
+      }
+    },
+    usemin: {
+      html: ['<%= yeoman.dist %>/{,*/}*.html'],
+      // css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
+      options: {
+        dirs: ['<%= yeoman.dist %>']
+      }
+    },
+    imagemin: {
+      dist: {
+        files: [{
+          expand: true,
+          cwd: '<%= yeoman.app %>/images',
+          src: '{,*/}*.{png,jpg,jpeg}',
+          dest: '<%= yeoman.dist %>/images'
+        }]
+      }
+    },
+    svgmin: {
+      dist: {
+        files: [{
+          expand: true,
+          cwd: '<%= yeoman.app %>/images',
+          src: '{,*/}*.svg',
+          dest: '<%= yeoman.dist %>/images'
+        }]
+      }
+    },
+    cssmin: {
+      dist: {
+        files: {
+          '<%= yeoman.dist %>/styles/main.css': [
+            '.tmp/styles/{,*/}*.css',
+            '<%= yeoman.app %>/styles/{,*/}*.css']
+        }
+      }
+    },
+    htmlmin: {
+      dist: {
+        options: {
+          /*removeCommentsFromCDATA: true,
+                    // https://github.com/yeoman/grunt-usemin/issues/44
+                    //collapseWhitespace: true,
+                    collapseBooleanAttributes: true,
+                    removeAttributeQuotes: true,
+                    removeRedundantAttributes: true,
+                    useShortDoctype: true,
+                    removeEmptyAttributes: true,
+                    removeOptionalTags: true*/
+        },
+        files: [{
+          expand: true,
+          cwd: '<%= yeoman.app %>',
+          src: '*.html',
+          dest: '<%= yeoman.dist %>'
+        }]
+      }
+    },
 
 
-
-// Read jade tssk for insight
-
-// RWRW Set up basic coffee task,
-// Usemin. Post question -- usemin cascade or what? use case
 // Test gruntfile.
 
 
 
-
-
     // Coffee
-    // add node js-> coffee, convert like sass.
 
+    // add node js-> coffee, convert like sass.
+    // npm install js2coffee
+    // js2coffee file.js > file.coffee
 
     // Usemin
 
@@ -314,17 +410,7 @@ module.exports = function (grunt) {
             dist: {}
         },*/
       <%
-    } %> rev: {
-      dist: {
-        files: {
-          src: [
-            '<%%= yeoman.dist %>/scripts/{,*/}*.js',
-            '<%%= yeoman.dist %>/styles/{,*/}*.css',
-            '<%%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp}',
-            '<%%= yeoman.dist %>/styles/fonts/*']
-        }
-      }
-    },
+    } %>
     useminPrepare: {
       options: {
         dest: '<%%= yeoman.dist %>'
