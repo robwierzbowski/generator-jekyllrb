@@ -10,7 +10,7 @@ var yeoman = require('yeoman-generator');
 var Generator = module.exports = function Generator() {
   yeoman.generators.Base.apply(this, arguments);
 
-  // Specify an appname from the command line, or use dir name
+  // Specify an appname from the command line, or use the parent directory name
   this.argument('appname', { type: String, required: false });
   this.appname = this.appname || path.basename(process.cwd());
 
@@ -26,7 +26,7 @@ var Generator = module.exports = function Generator() {
     shelljs.exit(1);
   }
 
-  // User info from .gitconfig if available
+  // Get user info from .gitconfig if available
   this.gitInfo = {
     name: shelljs.exec('git config user.name', {silent: true}).output.replace(/\n/g, ''),
     email: shelljs.exec('git config user.email', {silent: true}).output.replace(/\n/g, ''),
@@ -52,6 +52,7 @@ var Generator = module.exports = function Generator() {
   // });
 
   this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
+
   this.on('end', function () {
 
     // Clean up temp files
@@ -181,9 +182,16 @@ Generator.prototype.askForStructure = function askForStructure() {
 Generator.prototype.askForTools = function askFor() {
   var cb = this.async();
 
-  // Options for validation
-  // cssPreOptions = ['s','c','n'];
-  // jsPreOptions  = ['c','n'];
+  // Multiple select options
+  var cssPreOptions = {
+    s: 'sass',
+    c: 'compass',
+    n: 'none'
+  };
+  var jsPreOptions  = {
+    c: 'coffeescript',
+    n: 'none'
+  };
 
   console.log('\nWire tools and preprocessors.'.yellow + ' ☛');
 
@@ -213,8 +221,8 @@ Generator.prototype.askForTools = function askFor() {
     // this.requireJs  = !(/n/i).test(props.requireJs);
 
     // Multiple choice 'none' to false
-    this.cssPre    = (/n/i).test(props.cssPre) ? false : props.cssPre;
-    this.jsPre     = (/n/i).test(props.jsPre)  ? false : props.jsPre;
+    this.cssPre    = (/n/i).test(props.cssPre) ? false : cssPreOptions[props.cssPre];
+    this.jsPre     = (/n/i).test(props.jsPre)  ? false : jsPreOptions[props.jsPre];
 
     cb();
   }.bind(this));
@@ -281,8 +289,11 @@ Generator.prototype.askForJsPre = function askFor() {
 Generator.prototype.askForTemplates = function askFor() {
   var cb = this.async();
 
-  // Options for validation
-  // templateType = ['d','h5'];
+  // Multiple select options
+  var templateTypeOptions = {
+    d: 'default',
+    h5: 'h5bp'
+  };
 
   console.log('\nChoose a template.'.yellow + ' ☛');
 
@@ -298,15 +309,15 @@ Generator.prototype.askForTemplates = function askFor() {
     }
 
     // Assign prompt results to Generator object
-    this.templateType = props.templateType;
+    this.templateType = templateTypeOptions[props.templateType];
 
     cb();
   }.bind(this));
 };
 
-// H5BP conditional prompts
-Generator.prototype.askForH5BP = function askFor() {
-  if (this.templateType === 'h5') {
+// h5bp conditional prompts
+Generator.prototype.askForh5bp = function askFor() {
+  if (this.templateType === 'h5bp') {
     var cb = this.async();
 
     var prompts = [{
@@ -363,8 +374,7 @@ Generator.prototype.askForH5BP = function askFor() {
 Generator.prototype.askForJekyll = function askFor() {
   var cb = this.async();
 
-  // Options for validation
-  // jekPage = ['[0-9]*','all'];
+  // Multiple select options
   var jekPostOptions = {
     d: 'date',
     p: 'pretty',
@@ -468,7 +478,7 @@ Generator.prototype.templates = function templates() {
   this.template('app/_posts/0000-00-00-yo-jekyll.md', 'app/_posts/' + formattedDate + '-yo-jekyll.md');
 
   // Default Jekyll templates
-  if (this.templateType === 'd') {
+  if (this.templateType === 'default') {
 
     // From cli generated Jekyll site
     this.copy(path.join(this.jekTmpDir, 'index.html'), 'app/index.html');
@@ -480,9 +490,9 @@ Generator.prototype.templates = function templates() {
   }
 
   // HTML5 Boilerplate templates
-  else if (this.templateType === 'h5') {
+  else if (this.templateType === 'h5bp') {
 
-    // Pull in the latest stable of H5BP
+    // Pull in the latest stable of h5bp
     var cb = this.async();
 
     this.remote('h5bp', 'html5-boilerplate', 'v4.2.0', function (err, remote) {
@@ -493,12 +503,12 @@ Generator.prototype.templates = function templates() {
       // TODO: Get the remote cache location and use globbule to select and
       // copy files less fragily.
 
-      // From H5BP git repo
+      // From h5bp git repo
       // Universal
       remote.copy('.htaccess', 'app/.htaccess');
       remote.copy('404.html', 'app/404.html');
       remote.copy('crossdomain.xml', 'app/crossdomain.xml');
-      remote.copy('LICENSE.md', 'app/_H5BP-docs/LICENSE.md');
+      remote.copy('LICENSE.md', 'app/_h5bp-docs/LICENSE.md');
       remote.copy('robots.txt', 'app/robots.txt');
 
       // Css boilerplate
@@ -532,10 +542,10 @@ Generator.prototype.templates = function templates() {
 
       // Docs
       if (this.h5bpDocs) {
-        remote.directory('doc', 'app/_H5BP-docs/code-docs');
-        remote.copy('CHANGELOG.md', 'app/_H5BP-docs/CHANGELOG.md');
-        remote.copy('CONTRIBUTING.md', 'app/_H5BP-docs/CONTRIBUTING.md');
-        remote.copy('README.md', 'app/_H5BP-docs/README.md');
+        remote.directory('doc', 'app/_h5bp-docs/code-docs');
+        remote.copy('CHANGELOG.md', 'app/_h5bp-docs/CHANGELOG.md');
+        remote.copy('CONTRIBUTING.md', 'app/_h5bp-docs/CONTRIBUTING.md');
+        remote.copy('README.md', 'app/_h5bp-docs/README.md');
       }
 
       cb();
@@ -543,15 +553,15 @@ Generator.prototype.templates = function templates() {
 
     // From generator. Files altered for Jekyll templating and Yeoman tasks.
     // Universal
-    this.copy('conditional/template-H5BP/index.html', 'app/index.html');
-    this.copy('conditional/template-H5BP/_layouts/post.html', 'app/_layouts/post.html');
-    this.template('conditional/template-H5BP/humans.txt', 'app/humans.txt');
-    this.template('conditional/template-H5BP/_includes/scripts.html', 'app/_includes/scripts.html');
-    this.template('conditional/template-H5BP/_layouts/default.html', 'app/_layouts/default.html');
+    this.copy('conditional/template-h5bp/index.html', 'app/index.html');
+    this.copy('conditional/template-h5bp/_layouts/post.html', 'app/_layouts/post.html');
+    this.template('conditional/template-h5bp/humans.txt', 'app/humans.txt');
+    this.template('conditional/template-h5bp/_includes/scripts.html', 'app/_includes/scripts.html');
+    this.template('conditional/template-h5bp/_layouts/default.html', 'app/_layouts/default.html');
 
     // Google analytincs include
     if (this.h5bpAnalytics) {
-      this.copy('conditional/template-H5BP/_includes/googleanalytics.html', 'app/_includes/googleanalytics.html');
+      this.copy('conditional/template-h5bp/_includes/googleanalytics.html', 'app/_includes/googleanalytics.html');
     }
   }
 };
@@ -602,11 +612,9 @@ Generator.prototype.cssPreSass = function cssPreSass() {
   }
 
   // Sass and Compass
-  if (['s', 'c'].indexOf(this.cssPre) !== -1) {
+  if (['sass', 'compass'].indexOf(this.cssPre) !== -1) {
 
     this.template('conditional/sass/readme.md', path.join('app', this.cssPreDir, 'readme.md'));
-    // RWRW edit template for being in the proj root dir.
-    this.template('conditional/sass/config.rb', 'config.rb');
 
     // Move css files to scss files
     var files = globule.find('**/*.css', {srcBase: path.join('app', this.cssDir)});
@@ -619,6 +627,9 @@ Generator.prototype.cssPreSass = function cssPreSass() {
       spawn('rm', ['-f', path.join('app', this.cssDir, file)], { stdio: 'inherit' });
     }, this);
   }
+  if (this.cssPre === 'compass') {
+    this.template('conditional/compass/config.rb', 'config.rb');
+  }
 };
 
 Generator.prototype.jsPreCoffee = function jsPreCoffee() {
@@ -627,7 +638,7 @@ Generator.prototype.jsPreCoffee = function jsPreCoffee() {
   }
 
   // Coffeescript
-  if (this.jsPre === 'c') {
+  if (this.jsPre === 'coffeescript') {
     this.template('conditional/coffee/readme.md', path.join('app', this.jsPreDir, 'readme.md'));
 
   // TODO: Translate and move js files to coffee files using js2coffee
