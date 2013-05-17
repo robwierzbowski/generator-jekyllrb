@@ -9,7 +9,7 @@ description: <%= jekDescript %>
 
 # Exclude directories and/or files from the conversion.
 # Grunt moves image files and asset directories.
-exclude: ['**/*.{png,jpg,jpeg,gif,webp,svg}', 'components', '<%= imgDir %>', '<%= cssDir %>', '<%= jsDir %>', '<%= fontsDir %>'<%
+exclude: ['**/*.{png,jpg,jpeg,gif,webp,svg}', 'bower_components', '<%= imgDir %>', '<%= cssDir %>', '<%= jsDir %>', '<%= fontsDir %>'<%
   if (cssPre) { %>, '<%= cssPreDir %>'<% } %><%
   if (jsPre) { %>, '<%= jsPreDir %>'<% } %>]
 

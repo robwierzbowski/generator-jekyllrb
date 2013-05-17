@@ -11,7 +11,7 @@ asset_cache_buster :none
 # require 'extension'
 
 # Ad-hoc extensions
-extensions_dir = "app/components"
+extensions_dir = "app/bower_components"
 
 # Development output style
 output_style = :expanded

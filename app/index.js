@@ -56,10 +56,11 @@ var Generator = module.exports = function Generator() {
   this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
 
   this.on('end', function () {
+
     // Clean up temp files
     spawn('rm', ['-r', '.tmp'], { stdio: 'inherit' });
     // Install Grunt and Bower dependencies
-    // this.installDependencies({ skipInstall: options['skip-install'] });
+    this.installDependencies({ skipInstall: options['skip-install'] });
   });
 };
 
@@ -426,13 +427,11 @@ Generator.prototype.bower = function bower() {
 };
 
 Generator.prototype.gruntfile = function gruntfile() {
-  // RWRW write template
-  // this.template('Gruntfile.js');
+  this.template('Gruntfile.js');
 };
 
 Generator.prototype.packageJSON = function packageJSON() {
-  // RWRW write template
-  // this.template('_package.json', 'package.json');
+  this.template('_package.json', 'package.json');
 };
 
 Generator.prototype.jshint = function jshint() {
