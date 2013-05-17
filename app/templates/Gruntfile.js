@@ -1,42 +1,36 @@
 // Generated on <%= (new Date).toISOString().split('T')[0] %> using <%= pkg.name %> <%= pkg.version %>. Yo Jekyll!
 'use strict';
-
 var LIVERELOAD_PORT = 35729;
-// Insert livereload snippet with middleware
 var lrSnippet = require('connect-livereload')({port: LIVERELOAD_PORT});
-// RWRW Used in connect task
 var mountFolder = function (connect, dir) {
   return connect.static(require('path').resolve(dir));
 };
+var yeomanConfig = {
+  app: 'app',
+  dist: 'dist',
+  css: '<%= cssDir %>',
+  cssPre: '<%= cssPreDir %>',
+  js: '<%= jsDir %>',
+  jsPre: '<%= jsPreDir %>',
+  img: '<%= imgDir %>',
+  fonts: '<%= fontsDir %>'
+};
+
+// TODO:
+// Add tests (js/csslint, csscss)
+// Add stylus and require
+// Add task to bump versions
+// Add grunt-bower-install?
+// Have coffeescript tested by someone that actually uses it
 
 module.exports = function (grunt) {
 
-  ///////////////////////////////////////////////////////////
   // Configuration
-
-  // Configurable paths
-  var yeomanConfig = {
-    app: 'app',
-    dist: 'dist',
-    css: '<%= cssDir %>',
-    cssPre: '<%= cssPreDir %>',
-    js: '<%= jsDir %>',
-    jsPre: '<%= jsPreDir %>',
-    img: '<%= imgDir %>',
-    fonts: '<%= fontsDir %>'
-  };
-
   grunt.initConfig({
     yeoman: yeomanConfig,
     pkg: grunt.file.readJSON('package.json'),
-    jek: grunt.file.readYAML('_config.yml'),
 
     watch: {
-      // coffee: {
-      //   files: ['<%%= yeoman.app %>/<%%= yeoman.jsPre %>/**/*.coffee'],
-      //   tasks: ['coffee:dist']
-      // },
-
       options: {
         nospawn: true
       },
@@ -72,15 +66,12 @@ module.exports = function (grunt) {
         ]
       }
     },
-
     connect: {
       options: {
         port: 9000,
         // Change this to '*' to access the server from outside.
         hostname: 'localhost'
       },
-      // RWRW Three optons to create server, but what happens if you just run connect?
-      // Makes sense one for each, maybe you can only run connect:x
       livereload: {
         options: {
           middleware: function (connect) {
@@ -109,13 +100,11 @@ module.exports = function (grunt) {
         }
       }
     },
-
     open: {
       server: {
         path: 'http://localhost:<%%= connect.options.port %>'
       }
     },
-
     clean: {
       dist: {
         files: [{
@@ -128,15 +117,13 @@ module.exports = function (grunt) {
       },
       server: '.tmp'
     },
-
-    // Sass
     sass: {
       options: {
         bundleExec: true,
         style: 'expanded',
         debugInfo: true,
         lineNumbers: true,
-        loadPath: 'app/components',
+        loadPath: 'app/components'
       },
       files: {
         '.tmp/<%%= yeoman.css %>': '<%%= yeoman.app %>/<%%= yeoman.cssPre %>'
@@ -145,12 +132,13 @@ module.exports = function (grunt) {
         options: {
           debugInfo: false,
           lineNumbers: false
+        },
+        files: {
+         '<%%= yeoman.dist %><%%= yeoman.css %>': '<%%= yeoman.app %>/<%%= yeoman.cssPre %>'
         }
       },
       server: {}
     },
-
-    // Compass
     compass: {
       options: {
         bundleExec: true,
@@ -167,25 +155,20 @@ module.exports = function (grunt) {
       },
       dist: {
         options: {
-          debugInfo: false
+          debugInfo: false,
+          cssDir: '<%%= yeoman.dist %>/<%%= yeoman.css %>',
+          generatedImagesDir: '.<%%= yeoman.dist %>/<%%= yeoman.img %>/generated'
         }
       },
       server: {}
     },
-
-    // Coffeescript. Needs to be tested by someone who actually uses it.
-    // TODO:
-    // add node js-> coffee, convert like sass.
-    // npm install js2coffee
-    // js2coffee file.js > file.coffee
-
     coffee: {
-      server: {
+      test: {
         files: [{
           expand: true,
-          cwd: '<%%= yeoman.app %>/<%%= yeoman.jsPre %>',
+          cwd: 'test/spec',
           src: '**/*.coffee',
-          dest: '.tmp/<%%= yeoman.js %>',
+          dest: '.tmp/spec',
           ext: '.js'
         }]
       },
@@ -198,18 +181,16 @@ module.exports = function (grunt) {
           ext: '.js'
         }]
       },
-      test: {
+      server: {
         files: [{
           expand: true,
-          cwd: 'test/spec',
+          cwd: '<%%= yeoman.app %>/<%%= yeoman.jsPre %>',
           src: '**/*.coffee',
-          dest: '.tmp/spec',
+          dest: '.tmp/<%%= yeoman.js %>',
           ext: '.js'
         }]
-      }
+      },
     },
-
-    // Jekyll
     jekyll: {
       options: {
         src : '<%%= yeoman.app %>',
@@ -218,35 +199,26 @@ module.exports = function (grunt) {
         auto : false,
         config: '_config.yml'
       },
-      server : {},
       dist: {
         options: {
           config: '_config.yml,_config.build.yml'
-          // Not seeing good documentation on what the correct format is here
-          // config: '_config.yml _config.build.yml'
         }
-      }
+      },
+      server : {}
     },
-
-    // Cssmin and Uglify take care of concat, but still available if needed
+    // Cssmin and Uglify concatinate, but concat is still available if needed
     /*concat: {
       dist: {}
     },*/
-
-    // useminPrepare builds a list of files to concat/uglify/minify from a
-    // reference block on one html page. Point to the compiled Jekyll
-    // index.html, or a custom built usemin block manifest page (hackery!).
-    // ** and initializes for you the corresponding Grunt config for the concat
-    // / uglify tasks when
+    // Note that useminPrepare will only scan one page for usemin blocks. If
+    // you have usemin blocks that aren't used in index.html, create a usemin
+    // manifest page (hackery!) and point the task there.
     useminPrepare: {
-      html: '.tmp/index.html',
+      html: '<%%= yeoman.dist %>/index.html',
       options: {
         dest: '<%%= yeoman.dist %>'
       }
     },
-    // RWRW looks through these files and replaces references to other files
-    // with their compressed versions
-    // Dist to dist, act just on the compiled site
     usemin: {
       html: ['<%%= yeoman.dist %>/**/*.html'],
       css: ['<%%= yeoman.dist %>/<%%= yeoman.css %>/**/*.css'],
@@ -254,7 +226,6 @@ module.exports = function (grunt) {
         dirs: ['<%= yeoman.dist %>']
       }
     },
-
     htmlmin: {
       dist: {
         options: {
@@ -272,8 +243,6 @@ module.exports = function (grunt) {
         }]
       }
     },
-
-    // Called by useminPrepare
     cssmin: {
       dist: {
         options: {
@@ -281,17 +250,14 @@ module.exports = function (grunt) {
           // report: 'gzip'
           report: 'min'
         }
-        // Usemin is gathering the files. This shouldn't matter
         // files: {
-        //   // '<%= yeoman.dist %>/<%%= yeoman.css %>/main.css': [
-        //   //   '.tmp/<%%= yeoman.css %>/{,*/}*.css',
-        //   //   '<%= yeoman.app %>/<%%= yeoman.css %>/{,*/}*.css']
+        //   '<%= yeoman.dist %>/<%%= yeoman.css %>/main.css': [
+        //     '.tmp/<%%= yeoman.css %>/{,*/}*.css',
+        //     '<%= yeoman.app %>/<%%= yeoman.css %>/{,*/}*.css']
         // }
       }
     },
-    // Called by useminPrepare
-    uglify {},
-
+    uglify: {},
     imagemin: {
       dist: {
         options: {
@@ -315,8 +281,6 @@ module.exports = function (grunt) {
         }]
       }
     },
-
-    // Moves files not handled by other tasks
     copy: {
       dist: {
         files: [{
@@ -326,7 +290,7 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.dist %>',
           src: [
             // Jekyll transports all text files
-            // Copy transports asset drectories and binary files
+            // Copy transports image files and asset drectories
             '**/*.{png,jpg,jpeg,gif,webp,svg}',
             '<%= imgDir %>',
             '<%= cssDir %>',
@@ -335,8 +299,6 @@ module.exports = function (grunt) {
         }]
       }
     },
-
-    // Rev all assets
     rev: {
       options: {
         length: 4
@@ -345,13 +307,12 @@ module.exports = function (grunt) {
         files: {
           src: [
             '<%%= yeoman.dist %>/<%%= yeoman.js %>/**/*.js',
-            '<%%= yeoman.dist %>/<%%= yeoman.cs %>/**/*.css',
+            '<%%= yeoman.dist %>/<%%= yeoman.css %>/**/*.css',
             '<%%= yeoman.dist %>/<%%= yeoman.img %>/**/*.{png,jpg,jpeg,gif,webp,svg}',
             '<%%= yeoman.dist %>/<%%= yeoman.fonts %>/**/*.{eot*,woff,ttf,svg}']
         }
       }
     },
-
     concurrent: {
       server: [
         'coffee:server',
@@ -359,7 +320,6 @@ module.exports = function (grunt) {
         'compass:server',
         'jekyll:server',
         ],
-      // RWRW test needs work
       // test: [
       //   'coffee',
       //   'compass'],
@@ -372,77 +332,11 @@ module.exports = function (grunt) {
         'svgmin']
     });
 
-
-    // TODO: Tests and Reports
-
-    // add csslint https://github.com/gruntjs/grunt-contrib-csslint
-    // add jslint webapp config
-    // add csscss
-    // Custom tests for failed sass compile?
-
-
-  ///////////////////////////////////////////////////////////
   // Load plugins
-
-  // Load all grunt task plugins
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
-  ///////////////////////////////////////////////////////////
-  // Task lists
-
-
-  // RWRW TODO: clean, task lists, package depens
-
-// WEBAPP ///////////////////////////////////////////////////////////
-
-
-     grunt.registerTask('server', function(target) {
-    if (target === 'dist') {
-      return grunt.task.run(['build', 'open', 'connect:dist:keepalive']);
-    }
-
-    grunt.task.run([
-      'clean:server',
-      'concurrent:server',
-      'connect:livereload',
-      'open',
-      'watch']);
-  });
-
-  grunt.registerTask('test', [
-    'clean:server',
-    'concurrent:test',
-    'connect:test', <%
-  if (testFramework === 'mocha') { %>
-      'mocha' <%
-  } else if (testFramework === 'jasmine') { %>
-      'jasmine' <%
-  } %> ]);
-
-  grunt.registerTask('build', [
-    'clean:dist',
-    'useminPrepare',
-    'concurrent:dist', <%
-  if (includeRequireJS) { %>
-      'requirejs', <%
-  } %>
-    'cssmin',
-    'concat',
-    'uglify',
-    'copy',
-    'rev',
-    'usemin']);
-
-  grunt.registerTask('default', [
-    'jshint',
-    'test',
-    'build']);
-};
-
-
-// OLD ///////////////////////////////////////////////////////////
-
-  grunt.registerTask('server', function(target) {
+  // Define Tasks
+  grunt.registerTask('server', function (target) {
     if (target === 'dist') {
       return grunt.task.run(['build', 'open', 'connect:dist:keepalive']);
     }
@@ -456,27 +350,27 @@ module.exports = function (grunt) {
       'watch']);
   });
 
-  grunt.registerTask('test', [
-    'clean:server',
-    'concurrent:test',
-    'connect:test',
-    'mocha']);
+  // grunt.registerTask('test', [
+  //   'clean:server',
+  //   'concurrent:test',
+  //   'connect:test',
+  //   'mocha']);
 
+  // RWRW Need to know if other tasks overwrite results from first task
   grunt.registerTask('build', [
     'clean:dist',
+    'copy:dist',
+    'concurrent:dist',
     'useminPrepare',
-    'concurrent:dist', <%
-  if (includeRequireJS) { %>
-      'requirejs', <%
-  } %>
-    'concat',
+    'cssmin',
     'uglify',
-    'copy',
     'rev',
-    'usemin']);
+    'usemin',
+    'htmlmin'
+    ]);
 
   grunt.registerTask('default', [
     'jshint',
-    'test',
+    // 'test',
     'build']);
 };

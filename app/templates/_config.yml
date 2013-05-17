@@ -8,10 +8,10 @@ name: <%= appname %>
 description: <%= jekDescript %>
 
 # Exclude directories and/or files from the conversion.
-# Grunt moves image files and all asset directories.
+# Grunt moves image files and asset directories.
 exclude: ['**/*.{png,jpg,jpeg,gif,webp,svg}', 'components', '<%= imgDir %>', '<%= cssDir %>', '<%= jsDir %>', '<%= fontsDir %>'<%
-  if (cssPreDir) { %>, '<%= cssPreDir %>'<% } %><%
-  if (jsPreDir) { %>, '<%= jsPreDir %>'<% } %>]
+  if (cssPre) { %>, '<%= cssPreDir %>'<% } %><%
+  if (jsPre) { %>, '<%= jsPreDir %>'<% } %>]
 
 # Force inclusion of directories and/or files in the conversion.
 # .htaccess is a good example since dotfiles are excluded by default.
