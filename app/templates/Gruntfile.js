@@ -8,10 +8,10 @@ var mountFolder = function (connect, dir) {
 var yeomanConfig = {
   app: 'app',
   dist: 'dist',
-  css: '<%= cssDir %>',
-  cssPre: '<%= cssPreDir %>',
-  js: '<%= jsDir %>',
-  jsPre: '<%= jsPreDir %>',
+  css: '<%= cssDir %>',<% if (cssPre) { %>
+  cssPre: '<%= cssPreDir %>',<% } %>
+  js: '<%= jsDir %>',<% if (jsPre) { %>
+  jsPre: '<%= jsPreDir %>',<% } %>
   img: '<%= imgDir %>',
   fonts: '<%= fontsDir %>'
 };
@@ -33,15 +33,15 @@ module.exports = function (grunt) {
     watch: {
       options: {
         nospawn: true
-      },
+      },<% if (cssPre === 'sass') { %>
       sass: {
         files: ['<%%= yeoman.app %>/<%%= yeoman.cssPre %>/**/*.{scss,sass}'],
         tasks: ['sass:server']
-      },
+      },<% } %><% if (cssPre === 'compass') { %>
       compass: {
         files: ['<%%= yeoman.app %>/<%%= yeoman.cssPre %>/**/*.{scss,sass}'],
         tasks: ['compass:server']
-      },
+      },<% } %><% if (jsPre === 'cofeescript') { %>
       coffee: {
         files: ['<%%= yeoman.app %>/<%%= yeoman.jsPre %>/**/*.coffee'],
         tasks: ['coffee:server']
@@ -49,7 +49,7 @@ module.exports = function (grunt) {
       coffeeTest: {
         files: ['test/spec/**/*.coffee'],
         tasks: ['coffee:test']
-      },
+      },<% } %>
       jekyll: {
         files: ['<%%= yeoman.app %>/**/*.{html,yml,md,mkd,markdown}'],
         tasks: ['jekyll:server']
@@ -116,7 +116,7 @@ module.exports = function (grunt) {
         }]
       },
       server: '.tmp'
-    },
+    },<% if (cssPre === 'sass') { %>
     sass: {
       options: {
         bundleExec: true,
@@ -138,7 +138,7 @@ module.exports = function (grunt) {
         }
       },
       server: {}
-    },
+    },<% } %><% if (cssPre === 'compass') { %>
     compass: {
       options: {
         bundleExec: true,
@@ -161,7 +161,7 @@ module.exports = function (grunt) {
         }
       },
       server: {}
-    },
+    },<% } %><% if (jsPre === 'coffeescript') { %>
     coffee: {
       test: {
         files: [{
@@ -190,7 +190,7 @@ module.exports = function (grunt) {
           ext: '.js'
         }]
       },
-    },
+    },<% } %>
     jekyll: {
       options: {
         src : '<%%= yeoman.app %>',
@@ -245,10 +245,9 @@ module.exports = function (grunt) {
     },
     cssmin: {
       dist: {
-        options: {
-          banner: '/* See the sass code that generated this file at github.com/<%= github %>/xxxxxx */',
-          // report: 'gzip'
-          report: 'min'
+        options: {<% if (cssPre === 'compass') { %>
+          banner: '/* See the sass code that generated this file at github.com/<%= github %>/xxxxxx */',<% } %>
+          report: 'min' // 'gzip'
         }
         // files: {
         //   '<%= yeoman.dist %>/<%%= yeoman.css %>/main.css': [
@@ -314,19 +313,19 @@ module.exports = function (grunt) {
       }
     },
     concurrent: {
-      server: [
-        'coffee:server',
-        'sass:server',
-        'compass:server',
+      server: [<% if (cssPre === 'sass') { %>
+        'sass:server',<% } %><% if (cssPre === 'compass') { %>
+        'compass:server',<% } %><% if (jsPre === 'coffee') { %>
+        'coffee:server',<% } %>
         'jekyll:server',
         ],
       // test: [
       //   'coffee',
       //   'compass'],
-      dist: [
-        'coffee:dist',
-        'sass:dist',
-        'compass:dist',
+      dist: [<% if (cssPre === 'sass') { %>
+        'sass:dist',<% } %><% if (cssPre === 'compass') { %>
+        'compass:dist',<% } %><% if (jsPre === 'coffee') { %>
+        'coffee:dist',<% } %>
         'jekyll:dist',
         'imagemin',
         'svgmin']
