@@ -16,6 +16,8 @@ var yeomanConfig = {
   fonts: '<%= fontsDir %>'
 };
 
+// RWRW Usemin
+
 // TODO:
 // Add tests (js/csslint, csscss)
 // Add stylus and require
@@ -222,6 +224,22 @@ module.exports = function (grunt) {
         config: '_config.yml'
       }
     },
+    // Reports
+    jshint: {
+      options: {
+        jshintrc: '.jshintrc'
+      },
+      all: [
+        'Gruntfile.js',
+        '<%%= yeoman.app %>/<%%= yeoman.js %>/**/*.js',
+        '!<%%= yeoman.app %>/<%%= yeoman.js %>/vendor/**/*',
+        '!<%%= yeoman.app %>/bower_components/**/*',
+        'test/spec/**/*.js'],
+      dist: [
+        '<%%= yeoman.app %>/<%%= yeoman.js %>/**/*.js',
+        '!<%%= yeoman.app %>/<%%= yeoman.js %>/vendor/**/*',
+        '!<%%= yeoman.app %>/bower_components/**/*']
+    },
     // Cssmin and Uglify concatinate, but concat is still available if needed
     /*concat: {
       dist: {}
@@ -334,7 +352,7 @@ module.exports = function (grunt) {
         'sass:server',<% } %><% if (cssPre === 'compass') { %>
         'compass:server',<% } %><% if (jsPre === 'coffee') { %>
         'coffee:server',<% } %>
-        'jekyll:server',
+        'jekyll:server'
         ],
       // test: [
       //   'coffee',
