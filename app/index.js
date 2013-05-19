@@ -395,11 +395,6 @@ Generator.prototype.git = function git() {
   this.copy('gitattributes', '.gitattributes');
 };
 
-Generator.prototype.bower = function bower() {
-  this.copy('bowerrc', '.bowerrc');
-  this.template('_bower.json', 'bower.json');
-};
-
 Generator.prototype.gruntfile = function gruntfile() {
   this.template('Gruntfile.js');
 };
@@ -408,8 +403,17 @@ Generator.prototype.packageJSON = function packageJSON() {
   this.template('_package.json', 'package.json');
 };
 
+Generator.prototype.bower = function bower() {
+  this.copy('bowerrc', '.bowerrc');
+  this.template('_bower.json', 'bower.json');
+};
+
 Generator.prototype.jshint = function jshint() {
   this.copy('jshintrc', '.jshintrc');
+};
+
+Generator.prototype.csslint = function csslint() {
+  this.copy('csslintrc', '.csslintrc');
 };
 
 Generator.prototype.editor = function editor() {

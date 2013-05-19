@@ -19,7 +19,7 @@ var yeomanConfig = {
 // RWRW Usemin
 
 // TODO:
-// Add tests (js/csslint, csscss)
+// Add tests (maybe csslint?) if not sass, csscss)
 // Add stylus and require
 // Add task to bump versions
 // Add grunt-bower-install?
@@ -210,6 +210,7 @@ module.exports = function (grunt) {
       // },
       // server: {}
       dist: {
+        bundleExec: true,
         src : '<%%= yeoman.app %>',
         dest: '<%%= yeoman.dist %>',
         server : false,
@@ -217,6 +218,7 @@ module.exports = function (grunt) {
         config: '_config.yml,_config.build.yml'
       },
       server: {
+        bundleExec: true,
         src : '<%%= yeoman.app %>',
         dest: '.tmp',
         server : false,
@@ -235,11 +237,39 @@ module.exports = function (grunt) {
         '!<%%= yeoman.app %>/<%%= yeoman.js %>/vendor/**/*',
         '!<%%= yeoman.app %>/bower_components/**/*',
         'test/spec/**/*.js'],
-      dist: [
+      report: [
         '<%%= yeoman.app %>/<%%= yeoman.js %>/**/*.js',
         '!<%%= yeoman.app %>/<%%= yeoman.js %>/vendor/**/*',
         '!<%%= yeoman.app %>/bower_components/**/*']
     },
+    // Not useful until grunt-csscss supports file globbing.
+    // https://github.com/peterkeating/grunt-csscss/issues/7
+    csscss: {
+      options: {
+        minMatch: 2,<% if (cssPre === 'compass' || cssPre === 'sass') { %>
+        ignoreSassMixins: false,<% } %><% if (cssPre === 'compass') { %>
+        compass: true,
+        require: 'config.rb',<% } %><% if (!cssPre) { %>
+        showParserErrors: true,<% } %>
+        colorize: true,
+        shorthand: false,
+        verbose: true
+      },
+      report: {<% if (!cssPre) { %>
+       src: ['<%%= yeoman.app %>/<%%= yeoman.css %>/main.css']<% } %><% if (cssPre === 'compass' || cssPre === 'sass') { %>
+       src: ['<%%= yeoman.app %>/<%%= yeoman.cssPre %>/main.scss']<% } %>
+      }
+    },
+    //csslint
+    csslint: {
+      options: {
+        csslintrc: '.csslintrc'
+      },
+      report: {
+        src: ['<%%= yeoman.app %>/<%%= yeoman.css %>/**/*.css']
+      }
+    },
+
     // Cssmin and Uglify concatinate, but concat is still available if needed
     /*concat: {
       dist: {}
