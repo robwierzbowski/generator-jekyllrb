@@ -51,7 +51,7 @@ module.exports = function (grunt) {
         tasks: ['coffee:test']
       },<% } %>
       jekyll: {
-        files: ['<%%= yeoman.app %>/**/*.{html,yml,md,mkd,markdown}'],
+        files: ['<%%= yeoman.app %>/**/*.{html,yml,md,mkd,markdown}', '!<%%= yeoman.app %>/_plugins'],
         tasks: ['jekyll:server']
       },
       livereload: {
@@ -59,7 +59,7 @@ module.exports = function (grunt) {
           livereload: LIVERELOAD_PORT
         },
         files: [
-          '{.tmp,<%%= yeoman.app %>}/**/*.html',
+          '.tmp/**/*.html',
           '{.tmp,<%%= yeoman.app %>}/<%%= yeoman.css %>/**/*.css',
           '{.tmp,<%%= yeoman.app %>}/<%%= js %>/**/*.js',
           '<%%= yeoman.app %>/<%%= yeoman.img %>/**/*.{png,jpg,jpeg,gif,webp,svg}'
@@ -76,9 +76,9 @@ module.exports = function (grunt) {
         options: {
           middleware: function (connect) {
             return [
+            lrSnippet,
             mountFolder(connect, '.tmp'),
-            mountFolder(connect, yeomanConfig.app),
-            lrSnippet];
+            mountFolder(connect, yeomanConfig.app)];
           }
         }
       },
@@ -192,19 +192,35 @@ module.exports = function (grunt) {
       },
     },<% } %>
     jekyll: {
-      options: {
+      // Config for after https://github.com/dannygarcia/grunt-jekyll/pull/14
+      // options: {
+      //   src : '<%%= yeoman.app %>',
+      //   dest: '.tmp',
+      //   server : false,
+      //   auto : false,
+      //   config: '_config.yml'
+      // },
+      // dist: {
+      //   options: {
+      //     dest: '<%%= yeoman.dist %>',
+      //     config: '_config.yml,_config.build.yml'
+      //   }
+      // },
+      // server: {}
+      dist: {
+        src : '<%%= yeoman.app %>',
+        dest: '<%%= yeoman.dist %>',
+        server : false,
+        auto : false,
+        config: '_config.yml,_config.build.yml'
+      },
+      server: {
         src : '<%%= yeoman.app %>',
         dest: '.tmp',
         server : false,
         auto : false,
         config: '_config.yml'
-      },
-      dist: {
-        options: {
-          config: '_config.yml,_config.build.yml'
-        }
-      },
-      server : {}
+      }
     },
     // Cssmin and Uglify concatinate, but concat is still available if needed
     /*concat: {
@@ -214,17 +230,17 @@ module.exports = function (grunt) {
     // you have usemin blocks that aren't used in index.html, create a usemin
     // manifest page (hackery!) and point the task there.
     useminPrepare: {
-      html: '<%%= yeoman.dist %>/index.html',
       options: {
         dest: '<%%= yeoman.dist %>'
-      }
+      },
+      html: '<%%= yeoman.dist %>/index.html'
     },
     usemin: {
-      html: ['<%%= yeoman.dist %>/**/*.html'],
-      css: ['<%%= yeoman.dist %>/<%%= yeoman.css %>/**/*.css'],
       options: {
-        dirs: ['<%= yeoman.dist %>']
-      }
+        dirs: ['<%%= yeoman.dist %>']
+      },
+      html: ['<%%= yeoman.dist %>/**/*.html'],
+      css: ['<%%= yeoman.dist %>/<%%= yeoman.css %>/**/*.css']
     },
     htmlmin: {
       dist: {
@@ -237,9 +253,9 @@ module.exports = function (grunt) {
         },
         files: [{
           expand: true,
-          cwd: '<%= yeoman.dist %>',
+          cwd: '<%%= yeoman.dist %>',
           src: '**/*.html',
-          dest: '<%= yeoman.dist %>'
+          dest: '<%%= yeoman.dist %>'
         }]
       }
     },
@@ -250,9 +266,9 @@ module.exports = function (grunt) {
           report: 'min' // 'gzip'
         }
         // files: {
-        //   '<%= yeoman.dist %>/<%%= yeoman.css %>/main.css': [
+        //   '<%%= yeoman.dist %>/<%%= yeoman.css %>/main.css': [
         //     '.tmp/<%%= yeoman.css %>/{,*/}*.css',
-        //     '<%= yeoman.app %>/<%%= yeoman.css %>/{,*/}*.css']
+        //     '<%%= yeoman.app %>/<%%= yeoman.css %>/{,*/}*.css']
         // }
       }
     },
@@ -264,9 +280,9 @@ module.exports = function (grunt) {
         },
         files: [{
           expand: true,
-          cwd: '<%= yeoman.app %>/<%%= yeoman.img %>',
+          cwd: '<%%= yeoman.app %>/<%%= yeoman.img %>',
           src: '{,*/}*.{png,jpg,jpeg}',
-          dest: '<%= yeoman.dist %>/<%%= yeoman.img %>'
+          dest: '<%%= yeoman.dist %>/<%%= yeoman.img %>'
         }]
       }
     },
@@ -274,9 +290,9 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '<%= yeoman.app %>/<%%= yeoman.img %>',
+          cwd: '<%%= yeoman.app %>/<%%= yeoman.img %>',
           src: '{,*/}*.svg',
-          dest: '<%= yeoman.dist %>/<%%= yeoman.img %>'
+          dest: '<%%= yeoman.dist %>/<%%= yeoman.img %>'
         }]
       }
     },
@@ -285,11 +301,12 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           dot: true,
-          cwd: '<%= yeoman.app %>',
-          dest: '<%= yeoman.dist %>',
+          cwd: '<%%= yeoman.app %>',
+          dest: '<%%= yeoman.dist %>',
           src: [
-            // Jekyll transports all text files
+            // Jekyll transports all html files
             // Copy transports image files and asset drectories
+            // If your site requires it, add other file type patterns here
             '**/*.{png,jpg,jpeg,gif,webp,svg}',
             '<%= imgDir %>',
             '<%= cssDir %>',
@@ -329,7 +346,8 @@ module.exports = function (grunt) {
         'jekyll:dist',
         'imagemin',
         'svgmin']
-    });
+    }
+  });
 
   // Load plugins
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
@@ -343,7 +361,6 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server',
       'concurrent:server',
-      'livereload-start',
       'connect:livereload',
       'open',
       'watch']);
@@ -355,7 +372,6 @@ module.exports = function (grunt) {
   //   'connect:test',
   //   'mocha']);
 
-  // RWRW Need to know if other tasks overwrite results from first task
   grunt.registerTask('build', [
     'clean:dist',
     'copy:dist',
