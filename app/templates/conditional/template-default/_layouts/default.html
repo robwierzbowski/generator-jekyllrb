@@ -8,7 +8,7 @@
 
         <!-- build:css(.tmp) <%= cssDir %>/main.css --><% if (jekPyg) { %>
         <!-- Syntax highlighting CSS -->
-        <link rel="stylesheet" href="/<%= cssDir %>/syntax.css %>">
+        <link rel="stylesheet" href="/<%= cssDir %>/syntax.css">
 <% } %>
         <!-- Custom CSS -->
         <link rel="stylesheet" href="/<%= cssDir %>/main.css">
@@ -30,8 +30,7 @@
               <div class="contact">
                 <p>
                   <%= author %><br />
-                  What You Are<br />
-                  <%= email %>
+                  <a href="mailto:<%= email %>"><%= email %></a>
                 </p>
               </div>
               <div class="contact">

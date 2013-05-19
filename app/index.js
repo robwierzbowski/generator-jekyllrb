@@ -6,60 +6,64 @@ var shelljs = require('shelljs');
 var spawn = require('child_process').spawn;
 var yeoman = require('yeoman-generator');
 
+// RWRW take out the "what you are", link email
+
 // TODO:
-// Categories subgenerator
-// Better propmts when new prompt library lands
-// Pass object to the command line to auto populate prompts
 // Add Require.js, Stylus
+// Categories subgenerator
 // Glob remote files
-// Rewrite prompts to take advantage of multiple choice objects
 // Make template choices extensible?
 
-var Generator = module.exports = function Generator() {
+// Prompt helpers
+var promptHelp = {
+  // Return a formatted string of an object's key/value pairs
+  multi: function (obj) {
+    var string = '';
+    Object.keys(obj).forEach(function (value) {
+      string += '\n ' + value + ': ' + obj[value];
+    });
+    return string;
+  },
+  // Return a simple regex to match an object's keys
+  multiValid: function (obj) {
+    var pattern = '^' + Object.keys(obj).join('|') + '$';
+    return new RegExp(pattern, 'i');
+  },
+  boolValid: /^([yn]|(y\/n)|(n\/y))$/i,
+  message: {
+    multi: 'Enter one of the options above',
+    bool: 'Enter y or n'
+  }
+};
+
+var Generator = module.exports = function Generator(args, options) {
   yeoman.generators.Base.apply(this, arguments);
 
-  // Make sure Ruby dependencies are installed, or exit
+  // Exit if Ruby dependencies aren't installed
   var dependenciesInstalled = ['bundle', 'ruby'].every(function (depend) {
     return shelljs.which(depend);
   });
 
   if (!dependenciesInstalled) {
     console.log('Looks like you\'re missing some dependencies.' +
-      '\nMake sure ' + 'Ruby'.white + ' and the ' + 'Bundler gem'.white +
-      ' are installed, then run again.');
+      '\nMake sure ' + 'Ruby'.white + ' and the ' + 'Bundler gem'.white + ' are installed, then run again.');
     shelljs.exit(1);
   }
 
-  // Specify an appname from the command line, or use the parent directory name
-  this.argument('appname', { type: String, required: false });
-  this.appname = this.appname || path.basename(process.cwd());
-
-  // Default asset dirs to use for scaffolding
-  this.defaultDirs = {
-    css: 'css',
-    js: 'js',
-    img: 'image',
-    fonts: 'fonts',
-    cssPre: '_scss',
-    jsPre: '_coffee',
-    jekTmp: path.join(this.env.cwd, '.tmp/jekyll')
-  };
-  this.jekTmpDir = this.defaultDirs.jekTmp;
-
-  // Get user info from .gitconfig if available
+  // Get static info for templating
+  this.appname = path.basename(process.cwd());
+  this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
   this.gitInfo = {
     name: shelljs.exec('git config user.name', {silent: true}).output.replace(/\n/g, ''),
     email: shelljs.exec('git config user.email', {silent: true}).output.replace(/\n/g, ''),
     github: shelljs.exec('git config github.user', {silent: true}).output.replace(/\n/g, ''),
   };
 
-  // Get package.json for templating
-  this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
-
   this.on('end', function () {
 
     // Clean up temp files
     spawn('rm', ['-r', '.tmp'], { stdio: 'inherit' });
+
     // Install Grunt and Bower dependencies
     this.installDependencies({ skipInstall: options['skip-install'] });
   });
@@ -102,7 +106,6 @@ Generator.prototype.askForAuthor = function askForAuthor() {
       return this.emit('error', err);
     }
 
-    // Assign prompt results to Generator object
     this.author  = props.author;
     this.email   = props.email;
     this.github  = props.github;
@@ -115,7 +118,6 @@ Generator.prototype.askForAuthor = function askForAuthor() {
 Generator.prototype.askForTools = function askForTools() {
   var cb = this.async();
 
-  // Multiple select options
   var cssPreOptions = {
     s: 'sass',
     c: 'compass',
@@ -130,32 +132,23 @@ Generator.prototype.askForTools = function askForTools() {
 
   var prompts = [{
     name: 'cssPre',
-    description: 'Use a css preprocessor?\n s: Sass\n c: Sass & Compass\n n: none',
+    description: 'Use a css preprocessor?' + promptHelp.multi(cssPreOptions),
     default: 'n',
-    pattern: new RegExp('^[scn]$', 'i'),
-    message: 'Enter ' + 's'.white + ', ' + 'c'.white + ', or ' + 'n'.white
+    pattern: promptHelp.multiValid(cssPreOptions),
+    message: promptHelp.message.multi
   },
   {
     name: 'jsPre',
-    description: 'Use a javascript preprocessor?\n c: Coffeescript\n n: none',
+    description: 'Use a javascript preprocessor?' + promptHelp.multi(jsPreOptions),
     default: 'n',
-    pattern: new RegExp('^[cn]$', 'i'),
-    message: 'Enter ' + 'c'.white + ' or ' + 'n'.white
-  }
-  // {
-  //   name: 'requireJs',
-  //   description: 'Use Require.js?',
-  //   default: false
-  // }
-  ];
+    pattern: promptHelp.multiValid(jsPreOptions),
+    message: promptHelp.message.multi
+  }];
 
   this.prompt(prompts, function (err, props) {
     if (err) {
       return this.emit('error', err);
     }
-
-    // Assign prompt results to Generator object
-    // this.requireJs  = !(/n/i).test(props.requireJs);
 
     // Multiple choice 'none' to false
     this.cssPre = (/n/i).test(props.cssPre) ? false : cssPreOptions[props.cssPre];
@@ -174,32 +167,32 @@ Generator.prototype.askForStructure = function askForStructure() {
   var prompts = [{
     name: 'cssDir',
     description: 'Choose a css directory:',
-    default: this.defaultDirs.css
+    default: 'css'
   },
   {
     name: 'jsDir',
     description: 'Choose a javascript directory:',
-    default: this.defaultDirs.js
+    default: 'js'
   },
   {
     name: 'imgDir',
     description: 'Choose an image file directory:',
-    default: this.defaultDirs.img
+    default: 'image'
   },
   {
     name: 'fontsDir',
     description: 'Choose a webfonts directory:',
-    default: this.defaultDirs.fonts
+    default: 'fonts'
   }];
   var cssPreDirPrompt = {
     name: 'cssPreDir',
     description: 'Choose a css preprocessor directory:',
-    default: this.defaultDirs.cssPre
+    default: '_scss'
   };
   var jsPreDirPrompt = {
     name: 'jsPreDir',
     description: 'Choose a javascript preprocessor directory:',
-    default: this.defaultDirs.jsPre
+    default: 'coffee'
   };
 
   if (this.cssPre) {
@@ -214,14 +207,13 @@ Generator.prototype.askForStructure = function askForStructure() {
       return this.emit('error', err);
     }
 
-    // Assign prompt results to Generator object
     // Trim leading and trailing /'s for use in underscore templates
-    this.cssDir   = props.cssDir.replace(/^\/*|\/*$/g, '');
-    this.jsDir    = props.jsDir.replace(/^\/*|\/*$/g, '');
-    this.imgDir   = props.imgDir.replace(/^\/*|\/*$/g, '');
-    this.fontsDir = props.fontsDir.replace(/^\/*|\/*$/g, '');
-    this.cssPreDir = typeof props.cssPreDir !== 'undefined' ? props.cssPreDir.replace(/^\/*|\/*$/g, '') : false;
-    this.jsPreDir  = typeof props.jsPreDir !== 'undefined' ? props.jsPreDir.replace(/^\/*|\/*$/g, '') : false;
+    this.cssDir    = props.cssDir.replace(/^\/*|\/*$/g, '');
+    this.jsDir     = props.jsDir.replace(/^\/*|\/*$/g, '');
+    this.imgDir    = props.imgDir.replace(/^\/*|\/*$/g, '');
+    this.fontsDir  = props.fontsDir.replace(/^\/*|\/*$/g, '');
+    this.cssPreDir = this.cssPre ? props.cssPreDir.replace(/^\/*|\/*$/g, '') : false;
+    this.jsPreDir  = this.jsPre ? props.jsPreDir.replace(/^\/*|\/*$/g, '') : false;
 
     cb();
   }.bind(this));
@@ -230,20 +222,19 @@ Generator.prototype.askForStructure = function askForStructure() {
 Generator.prototype.askForTemplates = function askForTemplates() {
   var cb = this.async();
 
-  // Multiple select options
   var templateTypeOptions = {
     d: 'default',
-    h5: 'h5bp'
+    h5: 'HTML5 ★ Boilerplate'
   };
 
   console.log('\nChoose a template.'.yellow + ' ☛');
 
   var prompts = [{
     name: 'templateType',
-    description: 'Choose a Jekyll site template\n d:  Default\n h5: HTML5 ★ Boilerplate',
+    description: 'Choose a Jekyll site template' + promptHelp.multi(templateTypeOptions),
     default: 'd',
-    pattern: new RegExp('^d|h5$', 'i'),
-    message: 'Enter ' + 'd'.white + ' or ' + 'h5'.white
+    pattern: promptHelp.multiValid(templateTypeOptions),
+    message: promptHelp.message.multi
   }];
 
   this.prompt(prompts, function (err, props) {
@@ -251,8 +242,7 @@ Generator.prototype.askForTemplates = function askForTemplates() {
       return this.emit('error', err);
     }
 
-    // Assign prompt results to Generator object
-    this.templateType = templateTypeOptions[props.templateType];
+    this.templateType = props.templateType === 'h5' ? 'h5bp' : templateTypeOptions[props.templateType];
 
     cb();
   }.bind(this));
@@ -266,36 +256,36 @@ Generator.prototype.askForh5bp = function askForh5bp() {
       name: 'h5bpCss',
       description: 'Add H5★BP css files',
       default: 'Y/n',
-      pattern: new RegExp('^([yn]|(y\/n)|(n\/y))$', 'i'),
-      message: 'Enter ' + 'y'.white + ' or ' + 'n'.white
+      pattern: promptHelp.boolValid,
+      message: promptHelp.message.bool
     },
     {
       name: 'h5bpJs',
       description: 'Add H5★BP javascript files?',
       default: 'Y/n',
-      pattern: new RegExp('^([yn]|(y\/n)|(n\/y))$', 'i'),
-      message: 'Enter ' + 'y'.white + ' or ' + 'n'.white
+      pattern: promptHelp.boolValid,
+      message: promptHelp.message.bool
     },
     {
       name: 'h5bpIco',
       description: 'Add H5★BP favorite and touch icons?',
       default: 'Y/n',
-      pattern: new RegExp('^([yn]|(y\/n)|(n\/y))$', 'i'),
-      message: 'Enter ' + 'y'.white + ' or ' + 'n'.white
+      pattern: promptHelp.boolValid,
+      message: promptHelp.message.bool
     },
     {
       name: 'h5bpDocs',
       description: 'Add H5★BP documentation?',
       default: 'n/Y',
-      pattern: new RegExp ('^([yn]|(y\/n)|(n\/y))$', 'i'),
-      message: 'Enter ' + 'y'.white + ' or ' + 'n'.white
+      pattern: promptHelp.boolValid,
+      message: promptHelp.message.bool
     },
     {
       name: 'h5bpAnalytics',
       description: 'Include Google Analytics?',
       default: 'Y/n',
-      pattern: new RegExp('^([yn]|(y\/n)|(n\/y))$', 'i'),
-      message: 'Enter ' + 'y'.white + ' or ' + 'n'.white
+      pattern: promptHelp.boolValid,
+      message: promptHelp.message.bool
     }];
 
     this.prompt(prompts, function (err, props) {
@@ -303,7 +293,6 @@ Generator.prototype.askForh5bp = function askForh5bp() {
         return this.emit('error', err);
       }
 
-      // Assign prompt results to Generator object
       this.h5bpCss       = (/y/i).test(props.h5bpCss);
       this.h5bpJs        = (/y/i).test(props.h5bpJs);
       this.h5bpIco       = !(/n/i).test(props.h5bpIco);
@@ -325,7 +314,6 @@ Generator.prototype.askForh5bp = function askForh5bp() {
 Generator.prototype.askForJekyll = function askForJekyll() {
   var cb = this.async();
 
-  // Multiple select options
   var jekPostOptions = {
     d: 'date',
     p: 'pretty',
@@ -347,31 +335,31 @@ Generator.prototype.askForJekyll = function askForJekyll() {
   },
   {
     name: 'jekPost',
-    description: 'Choose a post permalink style\n d: date\n p: pretty\n n: none\n',
+    description: 'Choose a post permalink style' + promptHelp.multi(jekPostOptions),
     default: 'd',
-    pattern: new RegExp('^[dpn]$', 'i'),
-      message: 'Enter ' + 'd'.white + ', ' + 'p'.white + ' or ' + 'n'.white
+    pattern: promptHelp.multiValid(jekPostOptions),
+    message: promptHelp.message.multi
   },
   {
     name: 'jekMkd',
-    description: 'Markdown library \n m:  maruku\n rd: rdiscount\n k:  kramdown\n rc: redcarpet\n',
+    description: 'Markdown library' + promptHelp.multi(jekMkdOptions),
     default: 'm',
-    pattern: new RegExp('^m|(rd)|k|(rc)$', 'i'),
-      message: 'Enter ' + 'm'.white + ', ' + 'rd'.white + ', ' + 'k'.white + ' or ' + 'rc'.white
+    pattern: promptHelp.multiValid(jekMkdOptions),
+    message: promptHelp.message.multi
   },
   {
     name: 'jekPyg',
     description: 'Use the Pygments code highlighting library?',
     default: 'Y/n',
-    pattern: new RegExp('^([yn]|(y\/n)|(n\/y))$', 'i'),
-    message: 'Enter ' + 'y'.white + ' or ' + 'n'.white
+    pattern: promptHelp.boolValid,
+    message: promptHelp.message.bool
   },
   {
     name: 'jekPage',
-    description: 'How many posts should be shown on the home page?',
+    description: 'How many posts on the home page?',
     default: '# of posts/All',
     pattern: new RegExp('^[0-9]?|[aA]ll', 'i'),
-    message: 'Enter ' + 'a number'.white + ' or ' + 'all'.white
+    message: 'Enter a number or \'all\''
   }];
 
   this.prompt(prompts, function (err, props) {
@@ -379,14 +367,13 @@ Generator.prototype.askForJekyll = function askForJekyll() {
       return this.emit('error', err);
     }
 
-    // Assign prompt results to Generator object
-    this.jekPyg  = !(/n/i).test(props.jekPyg);
-    this.jekMkd  = jekMkdOptions[props.jekMkd];
-    this.jekPost = jekPostOptions[props.jekPost];
+    this.jekPyg      = (/y/i).test(props.jekPyg);
+    this.jekMkd      = jekMkdOptions[props.jekMkd];
+    this.jekPost     = jekPostOptions[props.jekPost];
+    this.jekDescript = props.jekDescript;
 
     // String properties without defaults to string or boolean
-    this.jekDescript = props.jekDescript !== '' ? props.jekDescript : false;
-    this.jekPage     = props.jekPage     !== '# of posts/All' ? 'all' : props.jekPage.toLowerCase;
+    this.jekPage     = props.jekPage % 1 === 0  ? 'all' : props.jekPage;
 
     cb();
   }.bind(this));
@@ -445,6 +432,7 @@ Generator.prototype.directories = function directories() {
 Generator.prototype.jekyllInit = function jekyllInit() {
 
   // Create a default Jekyll site in a temporary folder
+  this.jekTmpDir = path.join(this.env.cwd, '.tmp/jekyll');
   shelljs.exec('bundle exec jekyll new ' + this.jekTmpDir);
 };
 
