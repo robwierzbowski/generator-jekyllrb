@@ -16,7 +16,7 @@ var yeomanConfig = {
   fonts: '<%= fontsDir %>'
 };
 
-// RWRW usemin, rev, then scss, h5bp
+// RWRW then scss, h5bp
 // index not replaced with rev, posts yes
 // relative links for some reason
 // Add server tasks to build
@@ -290,9 +290,8 @@ module.exports = function (grunt) {
     },
     usemin: {
       options: {
-          // RWRW why basedir/dirs?
-          basedir: '<%= yeoman.dist %>',
-          dirs: ['<%= yeoman.dist %>/**/*']
+          basedir: '<%%= yeoman.dist %>',
+          dirs: ['<%%= yeoman.dist %>/**/*']
       },
       html: ['<%%= yeoman.dist %>/**/*.html'],
       css: ['<%%= yeoman.dist %>/<%%= yeoman.css %>/**/*.css']
@@ -318,7 +317,7 @@ module.exports = function (grunt) {
       dist: {
         options: {<% if (cssPre === 'compass') { %>
           banner: '/* See the sass code that generated this file at github.com/<%= github %>/xxxxxx */',<% } %>
-          report: 'min' // 'gzip'
+          report: 'gzip'
         },
         files: {
           '<%%= yeoman.dist %>/<%%= yeoman.css %>/main.css': [
@@ -403,11 +402,14 @@ module.exports = function (grunt) {
 
   // Load plugins
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
+  // Load patched version of grunt-usemin that respects absolute paths
+  // TODO: Remove when https://github.com/yeoman/grunt-usemin/pull/86 is pulled in
+  grunt.loadNpmTasks('grunt-usemin');
 
   // Define Tasks
   grunt.registerTask('server', function (target) {
     if (target === 'dist') {
-      return grunt.task.run(['build', 'open', 'connect:dist:keepalive']);
+      return grunt.task.run(['open', 'connect:dist:keepalive']);
     }
 
     grunt.task.run([
