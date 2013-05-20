@@ -16,10 +16,14 @@ var yeomanConfig = {
   fonts: '<%= fontsDir %>'
 };
 
-// RWRW Usemin
+// RWRW usemin, rev, then scss, h5bp
+// index not replaced with rev, posts yes
+// relative links for some reason
+// Add server tasks to build
+// server:dist should not build new site, just launch server
+
 
 // TODO:
-// Add tests (maybe csslint?) if not sass, csscss)
 // Add stylus and require
 // Add task to bump versions
 // Add grunt-bower-install?
@@ -246,6 +250,7 @@ module.exports = function (grunt) {
     // https://github.com/peterkeating/grunt-csscss/issues/7
     csscss: {
       options: {
+        // bundleExec: true, TODO: Uncomment for 5.0
         minMatch: 2,<% if (cssPre === 'compass' || cssPre === 'sass') { %>
         ignoreSassMixins: false,<% } %><% if (cssPre === 'compass') { %>
         compass: true,
@@ -270,7 +275,7 @@ module.exports = function (grunt) {
       }
     },
 
-    // Cssmin and Uglify concatinate, but concat is still available if needed
+    // UseminPrep runs concat, but it's left here if needed
     /*concat: {
       dist: {}
     },*/
@@ -285,7 +290,9 @@ module.exports = function (grunt) {
     },
     usemin: {
       options: {
-        dirs: ['<%%= yeoman.dist %>']
+          // RWRW why basedir/dirs?
+          basedir: '<%= yeoman.dist %>',
+          dirs: ['<%= yeoman.dist %>/**/*']
       },
       html: ['<%%= yeoman.dist %>/**/*.html'],
       css: ['<%%= yeoman.dist %>/<%%= yeoman.css %>/**/*.css']
@@ -312,12 +319,12 @@ module.exports = function (grunt) {
         options: {<% if (cssPre === 'compass') { %>
           banner: '/* See the sass code that generated this file at github.com/<%= github %>/xxxxxx */',<% } %>
           report: 'min' // 'gzip'
+        },
+        files: {
+          '<%%= yeoman.dist %>/<%%= yeoman.css %>/main.css': [
+            '.tmp/<%%= yeoman.css %>/{,*/}*.css',
+            '<%%= yeoman.app %>/<%%= yeoman.css %>/{,*/}*.css']
         }
-        // files: {
-        //   '<%%= yeoman.dist %>/<%%= yeoman.css %>/main.css': [
-        //     '.tmp/<%%= yeoman.css %>/{,*/}*.css',
-        //     '<%%= yeoman.app %>/<%%= yeoman.css %>/{,*/}*.css']
-        // }
       }
     },
     uglify: {},
@@ -379,11 +386,9 @@ module.exports = function (grunt) {
     },
     concurrent: {
       server: [<% if (cssPre === 'sass') { %>
-        'sass:server',<% } %><% if (cssPre === 'compass') { %>
-        'compass:server',<% } %><% if (jsPre === 'coffee') { %>
-        'coffee:server',<% } %>
-        'jekyll:server'
-        ],
+        'sass:server'<% } %><% if (cssPre === 'compass') { %>
+        'compass:server'<% } %><% if (cssPre && jsPre) { %>,<% } %><% if (jsPre === 'coffee') { %>
+        'coffee:server'<% } %>],
       // test: [
       //   'coffee',
       //   'compass'],
@@ -391,7 +396,6 @@ module.exports = function (grunt) {
         'sass:dist',<% } %><% if (cssPre === 'compass') { %>
         'compass:dist',<% } %><% if (jsPre === 'coffee') { %>
         'coffee:dist',<% } %>
-        'jekyll:dist',
         'imagemin',
         'svgmin']
     }
@@ -408,6 +412,8 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
+      // Jekyll cleans it's destination before it compiles, so must run first
+      'jekyll:server',
       'concurrent:server',
       'connect:livereload',
       'open',
@@ -422,9 +428,12 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
+    // Jekyll cleans it's destination before it compiles, so must run first
+    'jekyll:dist',
     'copy:dist',
     'concurrent:dist',
     'useminPrepare',
+    'concat',
     'cssmin',
     'uglify',
     'rev',
