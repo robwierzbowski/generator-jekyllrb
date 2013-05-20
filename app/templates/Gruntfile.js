@@ -17,11 +17,6 @@ var yeomanConfig = {
 };
 
 // RWRW then scss, h5bp
-// index not replaced with rev, posts yes
-// relative links for some reason
-// Add server tasks to build
-// server:dist should not build new site, just launch server
-
 
 // TODO:
 // Add stylus and require
@@ -111,6 +106,8 @@ module.exports = function (grunt) {
         path: 'http://localhost:<%%= connect.options.port %>'
       }
     },
+    // Running Jekyll also cleans all non-git files from its destination,
+    // unless specifically declared in _config.yml's `keep_files`
     clean: {
       dist: {
         files: [{
@@ -123,6 +120,9 @@ module.exports = function (grunt) {
       },
       server: '.tmp'
     },<% if (cssPre === 'sass') { %>
+    // Add the sass files you want to compile in this task.
+    // TODO: Revise to watch default directories when
+    // https://github.com/gruntjs/grunt-contrib-sass/issues/40 is resolved.
     sass: {
       options: {
         bundleExec: true,
@@ -131,19 +131,23 @@ module.exports = function (grunt) {
         lineNumbers: true,
         loadPath: 'app/components'
       },
-      files: {
-        '.tmp/<%%= yeoman.css %>': '<%%= yeoman.app %>/<%%= yeoman.cssPre %>'
-      },
       dist: {
         options: {
           debugInfo: false,
           lineNumbers: false
         },
+        // RWRW tailor for templates
         files: {
-         '<%%= yeoman.dist %><%%= yeoman.css %>': '<%%= yeoman.app %>/<%%= yeoman.cssPre %>'
+          '<%%= yeoman.dist %>/<%%= yeoman.css %>/main.css': '<%%= yeoman.app %>/<%%= yeoman.cssPre %>/main.scss',
+          '<%%= yeoman.dist %>/<%%= yeoman.css %>/syntax.css': '<%%= yeoman.app %>/<%%= yeoman.cssPre %>/syntax.scss'
         }
       },
-      server: {}
+      server: {
+        files: {
+          '.tmp/<%%= yeoman.css %>/main.css': '<%%= yeoman.app %>/<%%= yeoman.cssPre %>/main.scss',
+          '.tmp/<%%= yeoman.css %>/syntax.css': '<%%= yeoman.app %>/<%%= yeoman.cssPre %>/syntax.scss'
+        }
+      }
     },<% } %><% if (cssPre === 'compass') { %>
     compass: {
       options: {
@@ -237,14 +241,12 @@ module.exports = function (grunt) {
       },
       all: [
         'Gruntfile.js',
-        '<%%= yeoman.app %>/<%%= yeoman.js %>/**/*.js',
+        '{.tmp,<%%= yeoman.app %>}/<%%= yeoman.js %>/**/*.js',
         '!<%%= yeoman.app %>/<%%= yeoman.js %>/vendor/**/*',
-        '!<%%= yeoman.app %>/bower_components/**/*',
         'test/spec/**/*.js'],
       report: [
-        '<%%= yeoman.app %>/<%%= yeoman.js %>/**/*.js',
-        '!<%%= yeoman.app %>/<%%= yeoman.js %>/vendor/**/*',
-        '!<%%= yeoman.app %>/bower_components/**/*']
+        '{.tmp,<%%= yeoman.app %>}/<%%= yeoman.js %>/**/*.js',
+        '!<%%= yeoman.app %>/<%%= yeoman.js %>/vendor/**/*']
     },
     // Not useful until grunt-csscss supports file globbing.
     // https://github.com/peterkeating/grunt-csscss/issues/7
@@ -262,23 +264,20 @@ module.exports = function (grunt) {
       },
       report: {<% if (!cssPre) { %>
        src: ['<%%= yeoman.app %>/<%%= yeoman.css %>/main.css']<% } %><% if (cssPre === 'compass' || cssPre === 'sass') { %>
-       src: ['<%%= yeoman.app %>/<%%= yeoman.cssPre %>/main.scss']<% } %>
+       src: ['<%%= yeoman.app %>/<%%= yeoman.cssPre %>/main.scss'
+             // '<%%= yeoman.app %>/<%%= yeoman.cssPre %>/**/*.scss',
+             // '<%%= yeoman.app %>/<%%= yeoman.css %>/**/*.css'
+            ]<% } %>
       }
     },
-    //csslint
     csslint: {
       options: {
         csslintrc: '.csslintrc'
       },
       report: {
-        src: ['<%%= yeoman.app %>/<%%= yeoman.css %>/**/*.css']
+        src: ['{.tmp,<%%= yeoman.app %>}/<%%= yeoman.css %>/**/*.css']
       }
     },
-
-    // UseminPrep runs concat, but it's left here if needed
-    /*concat: {
-      dist: {}
-    },*/
     // Note that useminPrepare will only scan one page for usemin blocks. If
     // you have usemin blocks that aren't used in index.html, create a usemin
     // manifest page (hackery!) and point the task there.
@@ -296,6 +295,10 @@ module.exports = function (grunt) {
       html: ['<%%= yeoman.dist %>/**/*.html'],
       css: ['<%%= yeoman.dist %>/<%%= yeoman.css %>/**/*.css']
     },
+    // usemin runs concat, but this is left here if you need it.
+    /* concat: {
+      dist: {}
+    },*/
     htmlmin: {
       dist: {
         options: {
@@ -319,6 +322,7 @@ module.exports = function (grunt) {
           banner: '/* See the sass code that generated this file at github.com/<%= github %>/xxxxxx */',<% } %>
           report: 'gzip'
         },
+        // RWRW Make this use file shorthand as useminPrep
         files: {
           '<%%= yeoman.dist %>/<%%= yeoman.css %>/main.css': [
             '.tmp/<%%= yeoman.css %>/{,*/}*.css',
@@ -362,10 +366,10 @@ module.exports = function (grunt) {
             // Copy transports image files and asset drectories
             // If your site requires it, add other file type patterns here
             '**/*.{png,jpg,jpeg,gif,webp,svg}',
-            '<%= imgDir %>',
-            '<%= cssDir %>',
-            '<%= jsDir %>',
-            '<%= fontsDir %>']
+            '<%%= yeoman.css %>',
+            '<%%= yeoman.js %>',
+            '<%%= yeoman.img %>',
+            '<%%= yeoman.fonts %>']
         }]
       }
     },
@@ -387,16 +391,15 @@ module.exports = function (grunt) {
       server: [<% if (cssPre === 'sass') { %>
         'sass:server'<% } %><% if (cssPre === 'compass') { %>
         'compass:server'<% } %><% if (cssPre && jsPre) { %>,<% } %><% if (jsPre === 'coffee') { %>
-        'coffee:server'<% } %>],
-      // test: [
-      //   'coffee',
-      //   'compass'],
+        'coffee:server'<% } %>
+      ],
       dist: [<% if (cssPre === 'sass') { %>
         'sass:dist',<% } %><% if (cssPre === 'compass') { %>
         'compass:dist',<% } %><% if (jsPre === 'coffee') { %>
         'coffee:dist',<% } %>
         'imagemin',
-        'svgmin']
+        'svgmin'
+      ]
     }
   });
 
@@ -409,7 +412,7 @@ module.exports = function (grunt) {
   // Define Tasks
   grunt.registerTask('server', function (target) {
     if (target === 'dist') {
-      return grunt.task.run(['open', 'connect:dist:keepalive']);
+      return grunt.task.run(['build', 'open', 'connect:dist:keepalive']);
     }
 
     grunt.task.run([
@@ -422,11 +425,18 @@ module.exports = function (grunt) {
       'watch']);
   });
 
+  // No real tests yet. Add your own.
   // grunt.registerTask('test', [
   //   'clean:server',
   //   'concurrent:test',
-  //   'connect:test',
-  //   'mocha']);
+  //   'connect:test']);
+
+  grunt.registerTask('report', [
+    'concurrent:server',
+    'jshint:report',
+    'csscss:report',
+    'csslint:report'
+    ]);
 
   grunt.registerTask('build', [
     'clean:dist',
@@ -444,7 +454,6 @@ module.exports = function (grunt) {
     ]);
 
   grunt.registerTask('default', [
-    'jshint',
-    // 'test',
+    'report',
     'build']);
 };

@@ -413,7 +413,7 @@ Generator.prototype.jshint = function jshint() {
 };
 
 Generator.prototype.csslint = function csslint() {
-  this.copy('csslintrc', '.csslintrc');
+  this.template('csslintrc', '.csslintrc');
 };
 
 Generator.prototype.editor = function editor() {
@@ -472,6 +472,7 @@ Generator.prototype.templates = function templates() {
 
     // Yeoman tailored files from generator
     this.template('conditional/template-default/_layouts/default.html', 'app/_layouts/default.html');
+    this.write(path.join('app', this.jsDir, 'main.js'), '');
   }
 
   // HTML5 Boilerplate template

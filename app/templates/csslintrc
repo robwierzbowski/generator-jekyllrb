@@ -12,7 +12,7 @@
   "errors": false,
   "duplicate-background-images": false,
   "duplicate-properties": false,
-  "empty-rules": true,
+  "empty-rules": <% if (cssPre) { %>false<% } else { %>true<% } %>,
   "selector-max-approaching": false,
   "gradients": false,
   "fallback-colors": true,

@@ -10,12 +10,12 @@
     <name>
 
 # TECHNOLOGY COLOPHON
-    
-    Jekyll static site generator<% if (cssPre === 's') { %> 
-    Sass <% } %><% if (cssPre === 'c') { %> 
-    Sass and Compass <% } %><% if (jsPre === 'c') { %> 
-    Coffeescript <% } %><% if (templateType === 'h5') { %> 
+
+    Jekyll static site generator<% if (cssPre === 'sass') { %>
+    Sass <% } %><% if (cssPre === 'compass') { %>
+    Sass and Compass <% } %><% if (jsPre === 'coffeescript') { %>
+    Coffeescript <% } %><% if (templateType === 'h5bp') { %>
     HTML5 ★ Boilerplate <% } %><% if (h5bpCss) { %>
     Normalize.css <% } %><% if (h5bpJs) { %>
     jQuery, Modernizr <% } %>
- 
+
