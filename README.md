@@ -62,7 +62,7 @@ Runs your site through a buld process that combines files, minifies [css](https:
 
 ## Workflow
 
-A full workflow example, from scaffolding to development, to build and deployment is coming.
+A full workflow example, from scaffolding to development, to build and deployment, is coming.
 
 ## Contribute
 
