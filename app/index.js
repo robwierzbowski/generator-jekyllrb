@@ -192,7 +192,7 @@ Generator.prototype.askForStructure = function askForStructure() {
   var jsPreDirPrompt = {
     name: 'jsPreDir',
     description: 'Choose a javascript preprocessor directory:',
-    default: 'coffee'
+    default: '_js-src'
   };
 
   if (this.cssPre) {
@@ -327,7 +327,7 @@ Generator.prototype.askForJekyll = function askForJekyll() {
   };
 
   console.log('\nAnd configure Jekyll.'.yellow + ' ☛' +
-              '\nYou can change all of these options in Jekyll\'s config.yml.');
+              '\nYou can change all of these options in Jekyll\'s _config.yml.');
 
   var prompts = [{
     name: 'jekDescript',
@@ -565,11 +565,6 @@ Generator.prototype.cssPreprocessor = function cssPreprocessor() {
       // Cleanup old css files
       spawn('rm', ['-f', path.join('app', this.cssDir, file)], { stdio: 'inherit' });
     }, this);
-
-    // Compass only files
-    if (this.cssPre === 'compass') {
-      this.template('conditional/sass-compass/config.rb', 'config.rb');
-    }
   }
 };
 

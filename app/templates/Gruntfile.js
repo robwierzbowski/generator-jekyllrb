@@ -31,10 +31,7 @@ module.exports = function (grunt) {
     yeoman: yeomanConfig,
     pkg: grunt.file.readJSON('package.json'),
 
-    watch: {
-      options: {
-        nospawn: true
-      },<% if (cssPre === 'sass') { %>
+    watch: {<% if (cssPre === 'sass') { %>
       sass: {
         files: ['<%%= yeoman.app %>/<%%= yeoman.cssPre %>/**/*.{scss,sass}'],
         tasks: ['sass:server']
@@ -70,7 +67,7 @@ module.exports = function (grunt) {
     connect: {
       options: {
         port: 9000,
-        // Change this to '*' to access the server from outside.
+        // Change hostname to null to access the server from outside.
         hostname: 'localhost'
       },
       livereload: {
@@ -152,25 +149,29 @@ module.exports = function (grunt) {
     compass: {
       options: {
         bundleExec: true,
-        config: 'config.rb',
         sassDir: '<%%= yeoman.app %>/<%%= yeoman.cssPre %>',
-        cssDir: '.tmp/<%%= yeoman.css %>',
         imagesDir: '<%%= yeoman.app %>/<%%= yeoman.img %>',
-        generatedImagesDir: '.tmp/<%%= yeoman.img %>/generated',
+        fontsDir: '<%%= yeoman.app %>/<%%= yeoman.fonts %>',
+        javascriptsDir: '<%%= yeoman.app %>/<%%= yeoman.js %>',
+        relativeAssets: false,
         httpImagesPath: '/<%%= yeoman.img %>',
         httpGeneratedImagesPath: '/<%%= yeoman.img %>/generated',
-        fontsDir: '<%%= yeoman.app %>/<%%= yeoman.fonts %>',
-        javascriptsDir: '<%%= yeoman.app %>/<%%= js %>',
-        relativeAssets: false
+        outputStyle: 'expanded',
+        raw: 'asset_cache_buster :none \nextensions_dir = "<%= yeoman.app %>/bower_components"\n'
       },
       dist: {
         options: {
-          debugInfo: false,
           cssDir: '<%%= yeoman.dist %>/<%%= yeoman.css %>',
           generatedImagesDir: '.<%%= yeoman.dist %>/<%%= yeoman.img %>/generated'
         }
       },
-      server: {}
+      server: {
+        options: {
+          debugInfo: true,
+          cssDir: '.tmp/<%%= yeoman.css %>',
+          generatedImagesDir: '.tmp/<%%= yeoman.img %>/generated'
+        }
+      }
     },<% } %><% if (jsPre === 'coffeescript') { %>
     coffee: {
       test: {
