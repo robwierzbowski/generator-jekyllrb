@@ -1,11 +1,12 @@
 {
-  "name": "generator-yo-jekyll",
+  "name": "generator-jekyllrb",
   "version": "0.1.0",
-  "description": "Comprehensive Yeoman generator for the Jekyll static site generator. Yo, Jekyll!",
+  "description": "Comprehensive Yeoman generator for the Jekyll static site generator. Yo, Jekyllrb!",
   "keywords": [
     "yeoman-generator",
     "web",
     "front-end",
+    "jekyllrb",
     "jekyll",
     "static",
     "site",
@@ -15,8 +16,8 @@
     "compass",
     "coffeescript"
   ],
-  "homepage": "https://github.com/robwierzbowski/generator-jekyll",
-  "bugs": "https://github.com/robwierzbowski/generator-jekyll/issues",
+  "homepage": "https://github.com/robwierzbowski/generator-jekyllrb",
+  "bugs": "https://github.com/robwierzbowski/generator-jekyllrb/issues",
   "author": "Rob Wierzbowski <hello@robwierzbowski.com> (http://robwierzbowski.com)",
   "main": "app/index.js",
   "repository": {

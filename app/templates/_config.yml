@@ -7,6 +7,12 @@
 name: <%= appname %>
 description: <%= jekDescript %>
 
+author:
+  name: <%= author %>
+  email: <%= email %>
+  github: <%= github %>
+  twitter: <%= twitter %>
+
 # Exclude directories and/or files from the conversion.
 # Grunt moves image files and asset directories.
 exclude: [<% if (cssPre) { %>'<%= cssPreDir %>', <% } %><% if (jsPre) { %>'<%= jsPreDir %>', <% } %>'bower_components', '<%= imgDir %>', '<%= cssDir %>', '<%= jsDir %>', '<%= fontsDir %>', '*.png', '**/*.png', '*.jpg', '**/*.jpg', '*.jpeg', '**/*.jpeg', '*.gif', '**/*.gif', '*.webp', '**/*.webp', '*.svg', '**/*.svg', '*.ico']
