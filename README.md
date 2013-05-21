@@ -1,15 +1,11 @@
-<!-- RWRW Edit it up! -->
+# generator-yo-jekyll
 
-**Work in progress. Not functioning yet, pre-pre-alpha.**
-
-# generator-jekyll
-
-> A generator for Jekyll projects. yo, jekyll!
+> A generator for Jekyll projects. Yo, Jekyll!
 
 ## Getting started
 - Make sure you have [yo](https://github.com/yeoman/yo) installed:
     `npm install -g yo`
-- Install the generator **locally**: `npm install generator-jekyll`
+- Install the generator **locally**: `npm install generator-yo-jekyll`
 - Run: `yo jekyll`
 
 ## License

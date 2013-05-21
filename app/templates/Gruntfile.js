@@ -16,20 +16,11 @@ var yeomanConfig = {
   fonts: '<%= fontsDir %>'
 };
 
-// RWRW code clean, Docs
-
-// TODO:
-// Add stylus and require
-// Add task to bump versions
-// Add grunt-bower-install?
-// Have coffeescript tested by someone that actually uses it
-
 module.exports = function (grunt) {
 
   // Configuration
   grunt.initConfig({
     yeoman: yeomanConfig,
-    pkg: grunt.file.readJSON('package.json'),
 
     watch: {<% if (cssPre === 'sass') { %>
       sass: {
@@ -112,8 +103,6 @@ module.exports = function (grunt) {
         files: [{
           dot: true,
           src: [
-            '.tmp',
-            '.jekyll',
             '<%%= yeoman.dist %>/*',
             '!<%%= yeoman.dist %>/.git*']
         }]
@@ -129,7 +118,7 @@ module.exports = function (grunt) {
         style: 'expanded',
         debugInfo: true,
         lineNumbers: true,
-        loadPath: 'app/components'
+        loadPath: 'app/bower_components'
       },
       dist: {
         options: {
@@ -151,6 +140,7 @@ module.exports = function (grunt) {
     },<% } %><% if (cssPre === 'compass') { %>
     compass: {
       options: {
+        // require: ['singularity', 'jacket'],
         bundleExec: true,
         sassDir: '<%%= yeoman.app %>/<%%= yeoman.cssPre %>',
         imagesDir: '<%%= yeoman.app %>/<%%= yeoman.img %>',
@@ -165,7 +155,7 @@ module.exports = function (grunt) {
       dist: {
         options: {
           cssDir: '<%%= yeoman.dist %>/<%%= yeoman.css %>',
-          generatedImagesDir: '.<%%= yeoman.dist %>/<%%= yeoman.img %>/generated'
+          generatedImagesDir: '<%%= yeoman.dist %>/<%%= yeoman.img %>/generated'
         }
       },
       server: {
@@ -206,21 +196,8 @@ module.exports = function (grunt) {
       },
     },<% } %>
     jekyll: {
-      // Config for after https://github.com/dannygarcia/grunt-jekyll/pull/14
-      // options: {
-      //   src : '<%%= yeoman.app %>',
-      //   dest: '.jekyll',
-      //   server : false,
-      //   auto : false,
-      //   config: '_config.yml'
-      // },
-      // dist: {
-      //   options: {
-      //     dest: '<%%= yeoman.dist %>',
-      //     config: '_config.yml,_config.build.yml'
-      //   }
-      // },
-      // server: {}
+      // TODO: switch config to options style after
+      // https://github.com/dannygarcia/grunt-jekyll/pull/14
       dist: {
         bundleExec: true,
         src : '<%%= yeoman.app %>',
@@ -238,7 +215,6 @@ module.exports = function (grunt) {
         config: '_config.yml'
       }
     },
-    // Reports
     jshint: {
       options: {
         jshintrc: '.jshintrc'
@@ -252,20 +228,18 @@ module.exports = function (grunt) {
         '{.tmp,<%%= yeoman.app %>}/<%%= yeoman.js %>/**/*.js',
         '!<%%= yeoman.app %>/<%%= yeoman.js %>/vendor/**/*']
     },
-    // Not as useful until it supports file globbing.
-    // https://github.com/peterkeating/grunt-csscss/issues/7
+    // TODO: rewrite for globbing and bundleExec when 5.0 is released
     csscss: {
       options: {
-        // bundleExec: true, TODO: Uncomment for 5.0
         minMatch: 2,<% if (cssPre === 'compass' || cssPre === 'sass') { %>
         ignoreSassMixins: false,<% } %><% if (cssPre === 'compass') { %>
-        compass: true,
-        require: 'config.rb',<% } %><% if (!cssPre) { %>
+        compass: true,<% } %><% if (!cssPre) { %>
         showParserErrors: true,<% } %>
         colorize: true,
         shorthand: false,
         verbose: true
       },
+      // Check files manually here until we can glob with 5.0
       report: {<% if (!cssPre) { %>
        src: ['<%%= yeoman.app %>/<%%= yeoman.css %>/main.css']<% } %><% if (cssPre === 'compass' || cssPre === 'sass') { %>
        src: ['<%%= yeoman.app %>/<%%= yeoman.cssPre %>/main.scss']<% } %>
@@ -296,7 +270,7 @@ module.exports = function (grunt) {
       html: ['<%%= yeoman.dist %>/**/*.html'],
       css: ['<%%= yeoman.dist %>/<%%= yeoman.css %>/**/*.css']
     },
-    // usemin runs concat, but this is left here if you need it.
+    // usemin runs concat, but this is left here if you need it
     /* concat: {
       dist: {}
     },*/
@@ -319,11 +293,10 @@ module.exports = function (grunt) {
     },
     cssmin: {
       dist: {
-        options: {<% if (cssPre === 'compass') { %>
-          banner: '/* See the sass code that generated this file at github.com/<%= github %>/xxxxxx */',<% } %>
+        options: {
+          // banner: '/* See more of my projects at github.com/<%= github %> */',
           report: 'gzip'
         },
-        // RWRW Make this use file shorthand as useminPrep
         files: {
           '<%%= yeoman.dist %>/<%%= yeoman.css %>/main.css': [
             '.tmp/<%%= yeoman.css %>/{,*/}*.css',
@@ -363,7 +336,7 @@ module.exports = function (grunt) {
           cwd: '<%%= yeoman.app %>',
           dest: '<%%= yeoman.dist %>',
           src: [
-            // Jekyll transports all html files
+            // Jekyll moves all html and text files
             // Copy transports image files and asset drectories
             // If your site requires it, add other file type patterns here
             '**/*.{png,jpg,jpeg,gif,webp,svg}',
@@ -406,9 +379,6 @@ module.exports = function (grunt) {
 
   // Load plugins
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
-  // Load patched version of grunt-usemin that respects absolute paths
-  // TODO: Remove when https://github.com/yeoman/grunt-usemin/pull/86 is pulled in
-  grunt.loadNpmTasks('grunt-usemin');
 
   // Define Tasks
   grunt.registerTask('server', function (target) {
@@ -418,7 +388,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
-      // Jekyll cleans it's destination before it compiles, so must run first
+      // Jekyll cleans its destination before it compiles, so must run first
       'jekyll:server',
       'concurrent:server',
       'connect:livereload',
@@ -441,7 +411,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
-    // Jekyll cleans it's destination before it compiles, so must run first
+    // Jekyll cleans its destination before it compiles, so must run first
     'jekyll:dist',
     'copy:dist',
     'concurrent:dist',

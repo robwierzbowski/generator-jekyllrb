@@ -1,4 +1,4 @@
-# Get caffienated!
+# Get Caffeinated!
 
 Grunt handles all <%= jsPre %> configuration. You can configure compiler settings in the project's Gruntfile.js.
 

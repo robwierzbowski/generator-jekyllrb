@@ -3,7 +3,7 @@
 
 # TEAM
 
-    <%= author %> -- Site Maker<% if (github) { %> --  http://github.com/<%= github %><% } %>
+    <%= author %> -- Site Maker<% if (twitter) { %> --  http://twitter.com/<%= twitter %><% } %>
 
 # THANKS
 

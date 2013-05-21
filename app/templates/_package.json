@@ -1,7 +1,7 @@
 {
   "name": "<%= _.slugify(appname) %>",
   "version": "0.0.0",
-  "description": "Yeoman workflow for <%= appname %>: <%= jekDescript %>",
+  "description": "Yeoman / Grunt workflow for <%= appname %>",
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",

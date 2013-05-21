@@ -6,13 +6,12 @@ var shelljs = require('shelljs');
 var spawn = require('child_process').spawn;
 var yeoman = require('yeoman-generator');
 
-// RWRW take out the "what you are", link email
-
 // TODO:
-// Add Require.js, Stylus
+// Add stylus and require.js
 // Categories subgenerator
 // Glob remote files
-// Make template choices extensible?
+// Add task to bump versions
+// Add grunt-bower-install
 
 // Prompt helpers
 var promptHelp = {
@@ -295,9 +294,9 @@ Generator.prototype.askForh5bp = function askForh5bp() {
 
       this.h5bpCss       = (/y/i).test(props.h5bpCss);
       this.h5bpJs        = (/y/i).test(props.h5bpJs);
-      this.h5bpIco       = !(/n/i).test(props.h5bpIco);
+      this.h5bpIco       = (/y/i).test(props.h5bpIco);
       this.h5bpDocs      = !(/n/i).test(props.h5bpDocs);
-      this.h5bpAnalytics = !(/n/i).test(props.h5bpAnalytics);
+      this.h5bpAnalytics = (/y/i).test(props.h5bpAnalytics);
 
       cb();
     }.bind(this));
@@ -371,8 +370,6 @@ Generator.prototype.askForJekyll = function askForJekyll() {
     this.jekMkd      = jekMkdOptions[props.jekMkd];
     this.jekPost     = jekPostOptions[props.jekPost];
     this.jekDescript = props.jekDescript;
-
-    // String properties without defaults to string or boolean
     this.jekPage     = props.jekPage % 1 === 0  ? 'all' : props.jekPage;
 
     cb();
@@ -462,7 +459,7 @@ Generator.prototype.templates = function templates() {
   this.copy(path.join(this.jekTmpDir, '_posts', formattedDate + '-welcome-to-jekyll.markdown'), path.join('app/_posts', formattedDate + '-welcome-to-jekyll.md'));
   this.template('app/_posts/yo-jekyll.md', 'app/_posts/' + formattedDate + '-yo-jekyll.md');
 
-  // Jekyll cli template
+  // Jekyll default template
   if (this.templateType === 'default') {
 
     // From cli generated template

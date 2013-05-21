@@ -1,13 +1,15 @@
 {
-  "name": "generator-jekyll",
+  "name": "generator-yo-jekyll",
   "version": "0.1.0",
-  "description": "Comprehensive Yeoman generator for Jekyll projects. Yo, Jekyll!",
+  "description": "Comprehensive Yeoman generator for the Jekyll static site generator. Yo, Jekyll!",
   "keywords": [
     "yeoman-generator",
     "web",
     "front-end",
     "jekyll",
-    "static-site",
+    "static",
+    "site",
+    "website",
     "h5bp",
     "sass",
     "compass",
@@ -15,11 +17,7 @@
   ],
   "homepage": "https://github.com/robwierzbowski/generator-jekyll",
   "bugs": "https://github.com/robwierzbowski/generator-jekyll/issues",
-  "author": {
-    "name": "Rob Wierzbowski",
-    "email": "hello@robwierzbowski.com",
-    "url": "http://robwierzbowski.com"
-  },
+  "author": "Rob Wierzbowski <hello@robwierzbowski.com> (http://robwierzbowski.com)",
   "main": "app/index.js",
   "repository": {
     "type": "git",
@@ -32,7 +30,7 @@
     "yeoman-generator": "~0.11.1",
     "globule": "~0.1.0",
     "shelljs": "~0.1.4"
-    },
+  },
   "peerDependencies": {
     "generator-mocha": "~0.1.1"
   },
@@ -46,5 +44,11 @@
     {
       "type": "BSD-new"
     }
-  ]
+  ],
+  "readmeFilename": "README.md",
+  "gitHead": "74d433d444f86334eca369e21131a7cc8fcd5b21",
+  "directories": {
+    "test": "test"
+  },
+  "license": "BSD"
 }

@@ -1,15 +1,15 @@
-# Base Jekyll configuration for a Yeoman Jekyll project
+# Base Jekyll configuration
 
 # Note: Grunt handles some Jekyll configuration. If you set something here and
-# it doesn't work, check if it has been set in the Gruntfile. There is also a
-# _config.build.yml to set custom overrides for grunt build.
+# it doesn't work, check if it is set in the Gruntfile. There is also a
+# _config.build.yml to set custom overrides for `grunt build`.
 
 name: <%= appname %>
 description: <%= jekDescript %>
 
 # Exclude directories and/or files from the conversion.
 # Grunt moves image files and asset directories.
-exclude: [<% if (cssPre) { %>'<%= cssPreDir %>', <% } %><% if (jsPre) { %>'<%= jsPreDir %>', <% } %>'**/*.{png,jpg,jpeg,gif,webp,svg}', 'bower_components', '<%= imgDir %>', '<%= cssDir %>', '<%= jsDir %>', '<%= fontsDir %>']
+exclude: [<% if (cssPre) { %>'<%= cssPreDir %>', <% } %><% if (jsPre) { %>'<%= jsPreDir %>', <% } %>'bower_components', '<%= imgDir %>', '<%= cssDir %>', '<%= jsDir %>', '<%= fontsDir %>', '*.png', '**/*.png', '*.jpg', '**/*.jpg', '*.jpeg', '**/*.jpeg', '*.gif', '**/*.gif', '*.webp', '**/*.webp', '*.svg', '**/*.svg', '*.ico']
 
 # Force inclusion of directories and/or files in the conversion.
 # .htaccess is a good example since dotfiles are excluded by default.
@@ -22,11 +22,11 @@ include: ['.htaccess']
 permalink: <%= jekPost %>
 
 # Publish posts with future date.
-# _config.build.yml sets this to false on grunt build
+# _config.build.yml sets this to false on `grunt build`
 future: true
 
 # Compile posts in the _drafts directory.
-# _config.build.yml sets this to false on grunt build
+# _config.build.yml sets this to false on `grunt build`
 show_drafts: true<% if (jekPage !== 'all') { %>
 
 # Split posts over multiple subdirectories called “page2”, “page3”, … “pageN”
