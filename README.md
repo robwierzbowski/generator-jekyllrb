@@ -54,7 +54,7 @@ Runs your site through a buld process that combines files, minifies [css](https:
 
 `grunt` by itself runs reports and then builds your site. There are many individual task and targets in the Gruntfile, all of which are also available on the command line, so read through that thing. And Grunt's so easy to use you'll probably want to [set up some of your own](http://gruntjs.com/configuring-tasks).
 
-## Options
+## Command line options
 
 `yo` takes some command line options.
 

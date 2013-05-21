@@ -463,7 +463,7 @@ Generator.prototype.templates = function templates() {
 
   // Copy universal template files
   this.copy(path.join(this.jekTmpDir, '_posts', formattedDate + '-welcome-to-jekyll.markdown'), path.join('app/_posts', formattedDate + '-welcome-to-jekyll.md'));
-  this.template('app/_posts/yo-jekyll.md', 'app/_posts/' + formattedDate + '-yo-jekyll.md');
+  this.template('app/_posts/yo-jekyllrb.md', 'app/_posts/' + formattedDate + '-yo-jekyllrb.md');
 
   // Jekyll default template
   if (this.templateType === 'default') {
