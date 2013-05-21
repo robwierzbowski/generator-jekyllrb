@@ -16,7 +16,7 @@ var yeomanConfig = {
   fonts: '<%= fontsDir %>'
 };
 
-// RWRW then scss, h5bp
+// RWRW code clean, Docs
 
 // TODO:
 // Add stylus and require
@@ -39,7 +39,7 @@ module.exports = function (grunt) {
       compass: {
         files: ['<%%= yeoman.app %>/<%%= yeoman.cssPre %>/**/*.{scss,sass}'],
         tasks: ['compass:server']
-      },<% } %><% if (jsPre === 'cofeescript') { %>
+      },<% } %><% if (jsPre === 'coffeescript') { %>
       coffee: {
         files: ['<%%= yeoman.app %>/<%%= yeoman.jsPre %>/**/*.coffee'],
         tasks: ['coffee:server']
@@ -49,7 +49,8 @@ module.exports = function (grunt) {
         tasks: ['coffee:test']
       },<% } %>
       jekyll: {
-        files: ['<%%= yeoman.app %>/**/*.{html,yml,md,mkd,markdown}', '!<%%= yeoman.app %>/_plugins'],
+        files: ['<%%= yeoman.app %>/**/*.{html,yml,md,mkd,markdown}',
+                '!<%%= yeoman.app %>/{<% if (cssPre) { %><%%= yeoman.cssPre %>,<% } %><% if (jsPre) { %><%%= yeoman.jsPre %>,<% } %>_plugins}'],
         tasks: ['jekyll:server']
       },
       livereload: {
@@ -57,7 +58,7 @@ module.exports = function (grunt) {
           livereload: LIVERELOAD_PORT
         },
         files: [
-          '.tmp/**/*.html',
+          '.jekyll/**/*.html',
           '{.tmp,<%%= yeoman.app %>}/<%%= yeoman.css %>/**/*.css',
           '{.tmp,<%%= yeoman.app %>}/<%%= js %>/**/*.js',
           '<%%= yeoman.app %>/<%%= yeoman.img %>/**/*.{png,jpg,jpeg,gif,webp,svg}'
@@ -76,6 +77,7 @@ module.exports = function (grunt) {
             return [
             lrSnippet,
             mountFolder(connect, '.tmp'),
+            mountFolder(connect, '.jekyll'),
             mountFolder(connect, yeomanConfig.app)];
           }
         }
@@ -111,11 +113,12 @@ module.exports = function (grunt) {
           dot: true,
           src: [
             '.tmp',
+            '.jekyll',
             '<%%= yeoman.dist %>/*',
             '!<%%= yeoman.dist %>/.git*']
         }]
       },
-      server: '.tmp'
+      server: ['.tmp', '.jekyll']
     },<% if (cssPre === 'sass') { %>
     // Add the sass files you want to compile in this task.
     // TODO: Revise to watch default directories when
@@ -157,7 +160,7 @@ module.exports = function (grunt) {
         httpImagesPath: '/<%%= yeoman.img %>',
         httpGeneratedImagesPath: '/<%%= yeoman.img %>/generated',
         outputStyle: 'expanded',
-        raw: 'asset_cache_buster :none \nextensions_dir = "<%= yeoman.app %>/bower_components"\n'
+        raw: 'asset_cache_buster :none \nextensions_dir = "<%%= yeoman.app %>/bower_components"\n'
       },
       dist: {
         options: {
@@ -206,7 +209,7 @@ module.exports = function (grunt) {
       // Config for after https://github.com/dannygarcia/grunt-jekyll/pull/14
       // options: {
       //   src : '<%%= yeoman.app %>',
-      //   dest: '.tmp',
+      //   dest: '.jekyll',
       //   server : false,
       //   auto : false,
       //   config: '_config.yml'
@@ -229,7 +232,7 @@ module.exports = function (grunt) {
       server: {
         bundleExec: true,
         src : '<%%= yeoman.app %>',
-        dest: '.tmp',
+        dest: '.jekyll',
         server : false,
         auto : false,
         config: '_config.yml'
@@ -249,7 +252,7 @@ module.exports = function (grunt) {
         '{.tmp,<%%= yeoman.app %>}/<%%= yeoman.js %>/**/*.js',
         '!<%%= yeoman.app %>/<%%= yeoman.js %>/vendor/**/*']
     },
-    // Not useful until grunt-csscss supports file globbing.
+    // Not as useful until it supports file globbing.
     // https://github.com/peterkeating/grunt-csscss/issues/7
     csscss: {
       options: {
@@ -265,10 +268,7 @@ module.exports = function (grunt) {
       },
       report: {<% if (!cssPre) { %>
        src: ['<%%= yeoman.app %>/<%%= yeoman.css %>/main.css']<% } %><% if (cssPre === 'compass' || cssPre === 'sass') { %>
-       src: ['<%%= yeoman.app %>/<%%= yeoman.cssPre %>/main.scss'
-             // '<%%= yeoman.app %>/<%%= yeoman.cssPre %>/**/*.scss',
-             // '<%%= yeoman.app %>/<%%= yeoman.css %>/**/*.css'
-            ]<% } %>
+       src: ['<%%= yeoman.app %>/<%%= yeoman.cssPre %>/main.scss']<% } %>
       }
     },
     csslint: {

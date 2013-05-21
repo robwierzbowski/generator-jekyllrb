@@ -62,7 +62,7 @@ var Generator = module.exports = function Generator(args, options) {
   this.on('end', function () {
 
     // Clean up temp files
-    spawn('rm', ['-r', '.tmp'], { stdio: 'inherit' });
+    spawn('rm', ['-r', '.jekyll'], { stdio: 'inherit' });
 
     // Install Grunt and Bower dependencies
     this.installDependencies({ skipInstall: options['skip-install'] });
@@ -192,7 +192,7 @@ Generator.prototype.askForStructure = function askForStructure() {
   var jsPreDirPrompt = {
     name: 'jsPreDir',
     description: 'Choose a javascript preprocessor directory:',
-    default: '_js-src'
+    default: '_src'
   };
 
   if (this.cssPre) {
@@ -276,7 +276,7 @@ Generator.prototype.askForh5bp = function askForh5bp() {
     {
       name: 'h5bpDocs',
       description: 'Add H5★BP documentation?',
-      default: 'n/Y',
+      default: 'y/N',
       pattern: promptHelp.boolValid,
       message: promptHelp.message.bool
     },
@@ -436,7 +436,7 @@ Generator.prototype.directories = function directories() {
 Generator.prototype.jekyllInit = function jekyllInit() {
 
   // Create a default Jekyll site in a temporary folder
-  this.jekTmpDir = path.join(this.env.cwd, '.tmp/jekyll');
+  this.jekTmpDir = path.join(this.env.cwd, '.jekyll');
   shelljs.exec('bundle exec jekyll new ' + this.jekTmpDir);
 };
 
