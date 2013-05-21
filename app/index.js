@@ -6,13 +6,6 @@ var shelljs = require('shelljs');
 var spawn = require('child_process').spawn;
 var yeoman = require('yeoman-generator');
 
-// TODO:
-// Add stylus and require.js
-// Categories subgenerator
-// Glob remote files
-// Add task to bump versions
-// Add grunt-bower-install
-
 // Prompt helpers
 var promptHelp = {
   // Return a formatted string of an object's key/value pairs
