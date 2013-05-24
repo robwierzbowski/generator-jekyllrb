@@ -1,6 +1,6 @@
 {
   "name": "generator-jekyllrb",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A Yeoman generator, workflow, and build system for the Jekyll static site generator. Yo, Jekyllrb!",
   "keywords": [
     "yeoman-generator",
@@ -22,7 +22,7 @@
   "main": "app/index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/robwierzbowski/generator-jekyll.git"
+    "url": "git://github.com/robwierzbowski/generator-jekyllrb.git"
   },
   "scripts": {
     "test": "mocha"
