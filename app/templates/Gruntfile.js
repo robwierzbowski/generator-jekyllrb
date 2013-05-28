@@ -165,6 +165,27 @@ module.exports = function (grunt) {
           generatedImagesDir: '.tmp/<%%= yeoman.img %>/generated'
         }
       }
+    },<% } %><% if (autoPre) { %>
+    autoprefixer: {
+      options: {
+        browsers: ['last 2 versions']
+      },
+      dist: {
+        files: [{
+          expand: true,
+          cwd: '<%%= yeoman.dist %>/<%%= yeoman.css %>',
+          src: '**/*.css',
+          dest: '<%%= yeoman.dist %>/<%%= yeoman.css %>'
+        }]
+      },
+      server: {
+        files: [{
+          expand: true,
+          cwd: '<%%= yeoman.app %>',
+          src: ['<%%= yeoman.css %>/**/*.css', '../.tmp/<%%= yeoman.css %>/**/*.css'],
+          dest: '.tmp'
+        }]
+      }
     },<% } %><% if (jsPre === 'coffeescript') { %>
     coffee: {
       test: {

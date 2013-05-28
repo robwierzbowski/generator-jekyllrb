@@ -143,6 +143,13 @@ Generator.prototype.askForTools = function askForTools() {
     message: promptHelp.message.multi
   },
   {
+    name: 'autoPre',
+    description: 'Use Autoprefixer?',
+    default: 'y/N',
+    pattern: promptHelp.boolValid,
+    message: promptHelp.message.bool
+  },
+  {
     name: 'jsPre',
     description: 'Use a javascript preprocessor?' + promptHelp.multi(jsPreOptions),
     default: 'n',
@@ -156,8 +163,9 @@ Generator.prototype.askForTools = function askForTools() {
     }
 
     // Multiple choice 'none' to false
-    this.cssPre = (/n/i).test(props.cssPre) ? false : cssPreOptions[props.cssPre];
-    this.jsPre  = (/n/i).test(props.jsPre)  ? false : jsPreOptions[props.jsPre];
+    this.cssPre  = (/n/i).test(props.cssPre) ? false : cssPreOptions[props.cssPre];
+    this.jsPre   = (/n/i).test(props.jsPre)  ? false : jsPreOptions[props.jsPre];
+    this.autoPre = !(/n/i).test(props.autoPre);
 
     cb();
   }.bind(this));
@@ -562,6 +570,7 @@ Generator.prototype.cssPreprocessor = function cssPreprocessor() {
     var files = globule.find('**/*.css', {srcBase: path.join('app', this.cssDir)});
 
     files.forEach(function (file) {
+
       this.copy(path.join(process.cwd(), 'app', this.cssDir, file),
                 path.join('app', this.cssPreDir, file.replace(/\.css$/, '.scss')));
 

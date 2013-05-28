@@ -4,7 +4,8 @@
   "description": "Yeoman / Grunt workflow for <%= appname %>",
   "dependencies": {},
   "devDependencies": {
-    "grunt": "~0.4.1",
+    "grunt": "~0.4.1",<% if (autoPre) { %>
+    "grunt-autoprefixer": "~0.1.20130516",<% } %>
     "grunt-contrib-clean": "~0.4.0",
     "grunt-contrib-copy": "~0.4.1",
     "grunt-contrib-concat": "~0.1.3",<% if (jsPre === 'coffeescript') { %>
