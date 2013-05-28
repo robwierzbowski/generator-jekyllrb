@@ -296,15 +296,15 @@ module.exports = function (grunt) {
         options: {
           // banner: '/* See more of my projects at github.com/<%= github %> */',
           report: 'gzip'
-        },
-        files: {
-          '<%%= yeoman.dist %>/<%%= yeoman.css %>/main.css': [
-            '.tmp/<%%= yeoman.css %>/{,*/}*.css',
-            '<%%= yeoman.app %>/<%%= yeoman.css %>/{,*/}*.css']
         }
+        // usemin adds files to cssmin
+        // files: {}
       }
     },
-    uglify: {},
+    uglify: {
+      // usemin adds files to uglify
+      // files: {}
+    },
     imagemin: {
       dist: {
         options: {
