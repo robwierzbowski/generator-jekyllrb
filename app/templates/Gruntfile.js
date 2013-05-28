@@ -312,9 +312,9 @@ module.exports = function (grunt) {
         },
         files: [{
           expand: true,
-          cwd: '<%%= yeoman.app %>/<%%= yeoman.img %>',
-          src: '{,*/}*.{png,jpg,jpeg}',
-          dest: '<%%= yeoman.dist %>/<%%= yeoman.img %>'
+          cwd: '<%%= yeoman.app %>',
+          src: ['*.png', '<%%= yeoman.img %>/**/*.{png,jpg,jpeg}'],
+          dest: '<%%= yeoman.dist %>'
         }]
       }
     },
@@ -323,7 +323,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '<%%= yeoman.app %>/<%%= yeoman.img %>',
-          src: '{,*/}*.svg',
+          src: '**/*.svg',
           dest: '<%%= yeoman.dist %>/<%%= yeoman.img %>'
         }]
       }
@@ -337,9 +337,9 @@ module.exports = function (grunt) {
           dest: '<%%= yeoman.dist %>',
           src: [
             // Jekyll moves all html and text files
-            // Copy transports image files and asset drectories
+            // Copy and *min tasks transport image files and asset drectories
             // If your site requires it, add other file type patterns here
-            '**/*.{png,jpg,jpeg,gif,webp,svg}',
+            '**/*.{gif,ico,webp}',
             '<%%= yeoman.css %>',
             '<%%= yeoman.js %>',
             '<%%= yeoman.img %>',
