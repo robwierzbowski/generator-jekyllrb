@@ -562,7 +562,8 @@ Generator.prototype.cssPreprocessor = function cssPreprocessor() {
     var files = globule.find('**/*.css', {srcBase: path.join('app', this.cssDir)});
 
     files.forEach(function (file) {
-      this.copy(path.join('../../../../app', this.cssDir, file),
+
+      this.copy(path.join(process.cwd(), 'app', this.cssDir, file),
                 path.join('app', this.cssPreDir, file.replace(/\.css$/, '.scss')));
 
       // Cleanup old css files
