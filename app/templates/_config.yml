@@ -33,7 +33,7 @@ future: true
 
 # Compile posts in the _drafts directory.
 # _config.build.yml sets this to false on `grunt build`
-show_drafts: true<% if (jekPage !== 'all') { %>
+show_drafts: true<% if (jekPage) { %>
 
 # Split posts over multiple subdirectories called “page2”, “page3”, … “pageN”
 paginate: <%= jekPage %>

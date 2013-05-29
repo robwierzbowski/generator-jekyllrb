@@ -369,10 +369,10 @@ Generator.prototype.askForJekyll = function askForJekyll() {
   },
   {
     name: 'jekPage',
-    description: 'How many posts on the home page?',
-    default: '# of posts/All',
-    pattern: new RegExp('^[0-9]?|[aA]ll', 'i'),
-    message: 'Enter a number or \'all\''
+    description: 'Enable pagination?',
+    default: 'Number of posts, or 0 for all',
+    pattern: new RegExp('^[0-9]+$'),
+    message: 'Enter a number'
   }];
 
   this.prompt(prompts, function (err, props) {
@@ -384,7 +384,7 @@ Generator.prototype.askForJekyll = function askForJekyll() {
     this.jekMkd      = jekMkdOptions[props.jekMkd];
     this.jekPost     = jekPostOptions[props.jekPost];
     this.jekDescript = props.jekDescript;
-    this.jekPage     = props.jekPage % 1 === 0  ? 'all' : props.jekPage;
+    this.jekPage     = props.jekPage > 0 ? props.jekPage : false;
 
     cb();
   }.bind(this));
