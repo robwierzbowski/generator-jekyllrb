@@ -382,25 +382,35 @@ module.exports = function (grunt) {
           dest: '<%%= yeoman.dist %>'
         }]
       },
-      // Copy bower_component assets in case we need them for concatination
       stageCss: {
         files: [{
           expand: true,
           dot: true,
-          cwd: '<%%= yeoman.app %>',
-          src: ['{<%%= yeoman.css %>,bower_components}/**/*.css', '!bower_components/**/test/**/*'],
-          dest: '.tmp/'
+          cwd: '<%%= yeoman.app %>/<%%= yeoman.css %>',
+          src: '**/*.css',
+          dest: '.tmp/<%%= yeoman.css %>'
         }]
       },
       stageJs: {
         files: [{
           expand: true,
           dot: true,
+          cwd: '<%%= yeoman.app %>/<%%= yeoman.js %>',
+          src: '**/*.js',
+          dest: '.tmp/<%%= yeoman.js %>'
+        }]
+      },
+      // Copy bower_component assets in case we need them for concatination
+      stageComponents: {
+        files: [{
+          expand: true,
+          dot: true,
           cwd: '<%%= yeoman.app %>',
-          src: ['{<%%= yeoman.js %>,bower_components}/**/*.js', '!bower_components/**/test/**/*'],
+          src: 'bower_components/**/*.{css,js}',
           dest: '.tmp/'
         }]
       }
+    },
     },
     rev: {
       options: {
@@ -429,6 +439,7 @@ module.exports = function (grunt) {
         'coffee:dist',<% } %>
         'copy:stageCss',
         'copy:stageJs',
+        'copy:stageComponents',
         'copy:dist']
     }
   });
