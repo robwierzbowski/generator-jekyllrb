@@ -75,10 +75,11 @@ module.exports = function (grunt) {
         options: {
           middleware: function (connect) {
             return [
-            lrSnippet,
-            mountFolder(connect, '.tmp'),
-            mountFolder(connect, '.jekyll'),
-            mountFolder(connect, yeomanConfig.app)];
+              lrSnippet,
+              mountFolder(connect, '.tmp'),
+              mountFolder(connect, '.jekyll'),
+              mountFolder(connect, yeomanConfig.app)
+            ];
           }
         }
       },
@@ -86,8 +87,9 @@ module.exports = function (grunt) {
         options: {
           middleware: function (connect) {
             return [
-            mountFolder(connect, '.tmp'),
-            mountFolder(connect, 'test')];
+              mountFolder(connect, '.tmp'),
+              mountFolder(connect, 'test')
+            ];
           }
         }
       },
@@ -95,7 +97,8 @@ module.exports = function (grunt) {
         options: {
           middleware: function (connect) {
             return [
-            mountFolder(connect, yeomanConfig.dist)];
+              mountFolder(connect, yeomanConfig.dist)
+            ];
           }
         }
       }
@@ -114,7 +117,8 @@ module.exports = function (grunt) {
           src: [
             '.tmp',
             '<%%= yeoman.dist %>/*',
-            '!<%%= yeoman.dist %>/.git*']
+            '!<%%= yeoman.dist %>/.git*'
+          ]
         }]
       },
       server: ['.tmp', '.jekyll']
@@ -190,7 +194,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '.tmp/<%%= yeoman.css %>',
-          src: ['**/*.css'],
+          src: '**/*.css',
           dest: '.tmp/<%%= yeoman.css %>'
         }]
       }
@@ -296,10 +300,10 @@ module.exports = function (grunt) {
     usemin: {
       options: {
           basedir: '<%%= yeoman.dist %>',
-          dirs: ['<%%= yeoman.dist %>/**/*']
+          dirs: '<%%= yeoman.dist %>/**/*'
       },
-      html: ['<%%= yeoman.dist %>/**/*.html'],
-      css: ['<%%= yeoman.dist %>/<%%= yeoman.css %>/**/*.css']
+      html: '<%%= yeoman.dist %>/**/*.html',
+      css: '<%%= yeoman.dist %>/<%%= yeoman.css %>/**/*.css'
     },
     // Usemin runs concat, but this is left here if you need it
     /* concat: {
@@ -378,7 +382,7 @@ module.exports = function (grunt) {
             // Reduce cruft by excluding tests
             '!bower_components/**/test/**/*',
             '!{.,_}*'
-            ],
+          ],
           dest: '<%%= yeoman.dist %>'
         }]
       },
@@ -421,7 +425,8 @@ module.exports = function (grunt) {
             '<%%= yeoman.dist %>/<%%= yeoman.js %>/**/*.js',
             '<%%= yeoman.dist %>/<%%= yeoman.css %>/**/*.css',
             '<%%= yeoman.dist %>/<%%= yeoman.img %>/**/*.{gif,jpg,jpeg,png,svg,webp}',
-            '<%%= yeoman.dist %>/<%%= yeoman.fonts %>/**/*.{eot*,svg,ttf,woff}']
+            '<%%= yeoman.dist %>/<%%= yeoman.fonts %>/**/*.{eot*,svg,ttf,woff}'
+          ]
         }
       }
     },
@@ -431,7 +436,8 @@ module.exports = function (grunt) {
         'compass:server',<% } %><% if (jsPre === 'coffee') { %>
         'coffee:server',<% } %>
         'copy:stageCss',
-        'jekyll:server'],
+        'jekyll:server'
+      ],
       dist: [<% if (cssPre === 'sass') { %>
         'sass:dist',<% } %><% if (cssPre === 'compass') { %>
         'compass:dist',<% } %><% if (jsPre === 'coffee') { %>
@@ -439,7 +445,8 @@ module.exports = function (grunt) {
         'copy:stageCss',
         'copy:stageJs',
         'copy:stageComponents',
-        'copy:dist']
+        'copy:dist'
+      ]
     }
   });
 
@@ -458,14 +465,16 @@ module.exports = function (grunt) {
       'autoprefixer:server',<% } %>
       'connect:livereload',
       'open',
-      'watch']);
+      'watch'
+    ]);
   });
 
   // No real tests yet. Add your own.
   // grunt.registerTask('test', [
   //   'clean:server',
   //   'concurrent:test',
-  //   'connect:test']);
+  //   'connect:test'
+  // ]);
 
   grunt.registerTask('report', [
     'clean:server',<% if (cssPre === 'sass') { %>
@@ -496,5 +505,6 @@ module.exports = function (grunt) {
 
   grunt.registerTask('default', [
     'report',
-    'build']);
+    'build'
+  ]);
 };
