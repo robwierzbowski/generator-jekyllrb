@@ -83,6 +83,7 @@ Report bugs and feature proposals in the [Github issue tracker](https://github.c
 
 ## Release History
  
+0.2.1, May 30, 2013: Bugfixes.    
 0.2.0, May 29, 2013: Add Autoprefixer, rewrite Grunt workflow, bugfixes.    
 0.1.3, May 29, 2013: Bugfixes.  
 0.1.2, May 24, 2013: Documentation updates, name change.  
