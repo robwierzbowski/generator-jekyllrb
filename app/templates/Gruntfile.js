@@ -108,8 +108,7 @@ module.exports = function (grunt) {
         path: 'http://localhost:<%%= connect.options.port %>'
       }
     },
-    // Running Jekyll also cleans all non-git files from its destination unless
-    // they are specifically declared in _config.yml's `keep_files`
+    // Running Jekyll also cleans all non-git files from the target directory
     clean: {
       dist: {
         files: [{
@@ -123,28 +122,27 @@ module.exports = function (grunt) {
       },
       server: ['.tmp', '.jekyll']
     },<% if (cssPre === 'sass') { %>
-    // Add the sass files you want to compile in this task.
+    // Add Sass files you want to compile here
     // TODO: Revise to watch default directories when
     // https://github.com/gruntjs/grunt-contrib-sass/issues/40 is resolved.
     sass: {
       options: {
         bundleExec: true,
-        style: 'expanded',
-        debugInfo: true,
-        lineNumbers: true,
+        debugInfo: false,
+        lineNumbers: false,
         loadPath: 'app/bower_components'
       },
       dist: {
-        options: {
-          debugInfo: false,
-          lineNumbers: false
-        },
         files: {
           '.tmp/<%%= yeoman.css %>/main.css': '<%%= yeoman.app %>/<%%= yeoman.cssPre %>/main.scss',
           '.tmp/<%%= yeoman.css %>/syntax.css': '<%%= yeoman.app %>/<%%= yeoman.cssPre %>/syntax.scss'
         }
       },
       server: {
+        options: {
+          debugInfo: true,
+          lineNumbers: true,
+        },
         files: {
           '.tmp/<%%= yeoman.css %>/main.css': '<%%= yeoman.app %>/<%%= yeoman.cssPre %>/main.scss',
           '.tmp/<%%= yeoman.css %>/syntax.css': '<%%= yeoman.app %>/<%%= yeoman.cssPre %>/syntax.scss'
@@ -153,6 +151,7 @@ module.exports = function (grunt) {
     },<% } %><% if (cssPre === 'compass') { %>
     compass: {
       options: {
+        // If you're using global Sass gems, require them here, e.g.:
         // require: ['singularity', 'jacket'],
         bundleExec: true,
         sassDir: '<%%= yeoman.app %>/<%%= yeoman.cssPre %>',
@@ -255,8 +254,9 @@ module.exports = function (grunt) {
       all: [
         'Gruntfile.js',
         '{.tmp,<%%= yeoman.app %>}/<%%= yeoman.js %>/**/*.js',
+        'test/spec/**/*.js',
         '!<%%= yeoman.app %>/<%%= yeoman.js %>/vendor/**/*',
-        'test/spec/**/*.js'
+        '!<%%= yeoman.app %>/bower_components/**/*'
       ],
       report: [
         '{.tmp,<%%= yeoman.app %>}/<%%= yeoman.js %>/**/*.js',
@@ -274,7 +274,7 @@ module.exports = function (grunt) {
         shorthand: false,
         verbose: true
       },
-      // Add files to be checked here
+      // Add files to be tested here
       report: {<% if (!cssPre) { %>
        src: ['<%%= yeoman.app %>/<%%= yeoman.css %>/main.css']<% } %><% if (cssPre === 'compass' || cssPre === 'sass') { %>
        src: ['<%%= yeoman.app %>/<%%= yeoman.cssPre %>/main.scss']<% } %>
@@ -300,15 +300,11 @@ module.exports = function (grunt) {
     usemin: {
       options: {
           basedir: '<%%= yeoman.dist %>',
-          dirs: '<%%= yeoman.dist %>/**/*'
+          dirs: ['<%%= yeoman.dist %>/**/*']
       },
-      html: '<%%= yeoman.dist %>/**/*.html',
-      css: '<%%= yeoman.dist %>/<%%= yeoman.css %>/**/*.css'
+      html: ['<%%= yeoman.dist %>/**/*.html'],
+      css: ['<%%= yeoman.dist %>/<%%= yeoman.css %>/**/*.css']
     },
-    // Usemin runs concat, but this is left here if you need it
-    /* concat: {
-      dist: {}
-    },*/
     htmlmin: {
       dist: {
         options: {
@@ -326,19 +322,17 @@ module.exports = function (grunt) {
         }]
       }
     },
+    // Usemin adds files to concat
+    concat: {},
+    // Usemin adds files to uglify
+    uglify: {},
+    // Usemin adds files to cssmin
     cssmin: {
       dist: {
         options: {
-          // banner: '/* See more of my projects at github.com/<%= github %> */',
           report: 'gzip'
         }
-        // Usemin adds files to cssmin
-        // files: {}
       }
-    },
-    uglify: {
-      // Usemin adds files to uglify
-      // files: {}
     },
     imagemin: {
       dist: {
@@ -348,7 +342,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '<%%= yeoman.dist %>',
-          src: ['<%%= yeoman.img %>/**/*.{jpg,jpeg,png}', '*.png'],
+          src: '**/*.{jpg,jpeg,png}',
           dest: '<%%= yeoman.dist %>'
         }]
       }
@@ -358,12 +352,11 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '<%%= yeoman.dist %>',
-          src: '<%%= yeoman.img %>/**/*.svg',
+          src: '**/*.svg',
           dest: '<%%= yeoman.dist %>'
         }]
       }
     },
-    // TODO: Create more elegant bower_components workflow
     copy: {
       dist: {
         files: [{
@@ -374,14 +367,14 @@ module.exports = function (grunt) {
             // Jekyll moves all html and text files
             // Usemin moves css and js files with concat
             // If your site requires it, add other file type patterns here
+            // e.g., Bower components that aren't in a usemin block:
+            <% if (!h5bpJs) { %>// <% } %>'bower_components/jquery.min.js',
+            // Copy moves asset files and directories
             '*.{ico,png}',
-            '<%%= yeoman.fonts %>/**/*',
+            '<%%= yeoman.js %>/**/*',
+            '<%%= yeoman.css %>/**/*',
             '<%%= yeoman.img %>/**/*',
-            // Move Bower assets to dist
-            'bower_components/**/*.{css,js,gif,jpg,jpeg,png,svg,webp,eot*,ttf,woff}',
-            // Reduce cruft by excluding tests
-            '!bower_components/**/test/**/*',
-            '!{.,_}*'
+            '<%%= yeoman.fonts %>/**/*'
           ],
           dest: '<%%= yeoman.dist %>'
         }]
@@ -404,7 +397,7 @@ module.exports = function (grunt) {
           dest: '.tmp/<%%= yeoman.js %>'
         }]
       },
-      // Copy bower_component assets in case we need them for concatination
+      // Copy bower_components assets in case we need them for concatination
       stageComponents: {
         files: [{
           expand: true,
@@ -442,10 +435,10 @@ module.exports = function (grunt) {
         'sass:dist',<% } %><% if (cssPre === 'compass') { %>
         'compass:dist',<% } %><% if (jsPre === 'coffee') { %>
         'coffee:dist',<% } %>
+        'copy:dist',
         'copy:stageCss',
         'copy:stageJs',
-        'copy:stageComponents',
-        'copy:dist'
+        'copy:stageComponents'
       ]
     }
   });
@@ -488,7 +481,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
-    // Jekyll cleans its destination before it compiles, so must run first
+    // Jekyll cleans all non-git files from the target directory, so must run first
     'jekyll:dist',
     'concurrent:dist',<% if (autoPre) { %>
     'autoprefixer:dist',<% } %>
