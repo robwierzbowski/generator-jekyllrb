@@ -145,7 +145,7 @@ Generator.prototype.askForTools = function askForTools() {
   {
     name: 'autoPre',
     description: 'Use Autoprefixer?',
-    default: 'y/N',
+    default: 'Y/n',
     pattern: promptHelp.boolValid,
     message: promptHelp.message.bool
   },
@@ -165,7 +165,7 @@ Generator.prototype.askForTools = function askForTools() {
     // Multiple choice 'none' to false
     this.cssPre  = (/n/i).test(props.cssPre) ? false : cssPreOptions[props.cssPre];
     this.jsPre   = (/n/i).test(props.jsPre)  ? false : jsPreOptions[props.jsPre];
-    this.autoPre = !(/n/i).test(props.autoPre);
+    this.autoPre = (/y/i).test(props.autoPre);
 
     cb();
   }.bind(this));
@@ -370,8 +370,7 @@ Generator.prototype.askForJekyll = function askForJekyll() {
   {
     name: 'jekPage',
     description: 'Enable pagination?',
-    default: 'Number of posts, or 0 for all',
-    pattern: new RegExp('^[0-9]+$'),
+    default: 'Number of posts, or \'all\'',
     message: 'Enter a number'
   }];
 
@@ -384,7 +383,7 @@ Generator.prototype.askForJekyll = function askForJekyll() {
     this.jekMkd      = jekMkdOptions[props.jekMkd];
     this.jekPost     = jekPostOptions[props.jekPost];
     this.jekDescript = props.jekDescript;
-    this.jekPage     = props.jekPage > 0 ? props.jekPage : false;
+    this.jekPage     = typeof props.jekPage === 'number' ? props.jekPage : false;
 
     cb();
   }.bind(this));
