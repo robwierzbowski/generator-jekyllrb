@@ -411,7 +411,6 @@ module.exports = function (grunt) {
         }]
       }
     },
-    },
     rev: {
       options: {
         length: 4
