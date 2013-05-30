@@ -1,6 +1,6 @@
 {
   "name": "generator-jekyllrb",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "A Yeoman generator, workflow, and build system for the Jekyll static site generator. Yo, Jekyllrb!",
   "keywords": [
     "yeoman-generator",
