@@ -16,12 +16,12 @@ Generator-jekyllrb wraps the [Jekyll](http://jekyllrb.com/) static site generato
 **Workflow features:**
 
 - Built in server with livereload
-- Code quality reports / linting with [Jshint](http://www.jshint.com/), [CssLint](http://csslint.net/), and [CSSCSS](http://zmoazeni.github.io/csscss/)
+- Code linting with [Jshint](http://www.jshint.com/), [CssLint](http://csslint.net/), and [CSSCSS](http://zmoazeni.github.io/csscss/)
 - Build process with asset minification, uglification, and revving
 
 ## Requirements
 
-Just the basics: [Node.js](http://nodejs.org/) and npm, [Ruby](http://www.ruby-lang.org/) 1.9+ and [Bundler](http://gembundler.com/). It will install everything else itself.
+Just the basics: [Node.js](http://nodejs.org/) and npm, [Ruby](http://www.ruby-lang.org/) 1.9+ and [Bundler](http://gembundler.com/). The generator will install everything else.
 
 ## Quick start
 
@@ -76,13 +76,13 @@ Report bugs and feature proposals in the [Github issue tracker](https://github.c
 
 ## Release History
 
-0.2.3, May 30, 2013: Documentation update.   
-0.2.2, May 30, 2013: Gruntfile and Bower workflow refinement.    
-0.2.1, May 30, 2013: Bugfixes.    
-0.2.0, May 29, 2013: Add Autoprefixer, rewrite Grunt workflow, bugfixes.    
-0.1.3, May 29, 2013: Bugfixes.  
-0.1.2, May 24, 2013: Documentation updates, name change.  
-0.1.1, May 21, 2013: Documentation updates.  
+0.2.3, May 30, 2013: Documentation update.  
+0.2.2, May 30, 2013: Gruntfile and Bower workflow refinement.  
+0.2.1, May 30, 2013: Bugfixes.  
+0.2.0, May 29, 2013: Add Autoprefixer, rewrite Grunt workflow, bugfixes.  
+0.1.3, May 29, 2013: Bugfixes.  
+0.1.2, May 24, 2013: Documentation updates, name change.  
+0.1.1, May 21, 2013: Documentation updates.  
 0.1.0, May 21, 2013: Initial release.
 
 ## License
