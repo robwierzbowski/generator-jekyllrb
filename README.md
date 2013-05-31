@@ -21,12 +21,12 @@ Generator-jekyllrb wraps the [Jekyll](http://jekyllrb.com/) static site generato
 
 ## Requirements
 
-The generator only needs the basics: [Node.js](http://nodejs.org/) and npm, [Ruby](http://www.ruby-lang.org/) 1.9+ and [Bundler](http://gembundler.com/) . It will install everything else itself.
+Just the basics: [Node.js](http://nodejs.org/) and npm, [Ruby](http://www.ruby-lang.org/) 1.9+ and [Bundler](http://gembundler.com/). It will install everything else itself.
 
 ## Quick start
 
-- Make sure you have [yo](https://github.com/yeoman/yo) installed: `npm install -g yo`
-- Install the generator **locally**: `npm install generator-jekyllrb`
+- Make sure you have yo installed: `npm install -g yo`
+- Install the generator: `npm install -g generator-jekyllrb`
 - Run: `yo jekyllrb`
 
 ## Workflow
