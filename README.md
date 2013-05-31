@@ -76,6 +76,7 @@ Report bugs and feature proposals in the [Github issue tracker](https://github.c
 
 ## Release History
 
+0.2.4, May 31, 2013: Minor improvements, documentation update.  
 0.2.3, May 30, 2013: Documentation update.  
 0.2.2, May 30, 2013: Gruntfile and Bower workflow refinement.  
 0.2.1, May 30, 2013: Bugfixes.  
