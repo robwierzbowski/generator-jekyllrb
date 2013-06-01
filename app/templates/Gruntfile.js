@@ -29,15 +29,11 @@ module.exports = function (grunt) {
       },<% } %><% if (cssPre === 'compass') { %>
       compass: {
         files: ['<%%= yeoman.app %>/<%%= yeoman.cssPre %>/**/*.{scss,sass}'],
-        tasks: ['compass:server']
+        tasks: ['compass:server'<% if (autoPre) { %>, 'autoprefixer:server'<% } %>]
       },<% } %><% if (autoPre) { %>
       stageCss: {
         files: ['<%%= yeoman.app %>/<%%= yeoman.css %>/**/*.css'],
-        tasks: ['copy:stageCss']
-      },
-      autoprefixer: {
-        files: ['.tmp/<%%= yeoman.css %>/**/*.css'],
-        tasks: ['autoprefixer:server']
+        tasks: ['copy:stageCss', 'autoprefixer:server']
       },<% } %><% if (jsPre === 'coffeescript') { %>
       coffee: {
         files: ['<%%= yeoman.app %>/<%%= yeoman.jsPre %>/**/*.coffee'],

@@ -69,6 +69,7 @@ Report bugs and feature proposals in the [Github issue tracker](https://github.c
 
 ## To Do
 
+- Import current site instructions
 - Add deployment options
 - Add stylus and require.js
 - Add a categories subgenerator
