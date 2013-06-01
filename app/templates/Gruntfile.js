@@ -118,9 +118,6 @@ module.exports = function (grunt) {
       },
       server: ['.tmp', '.jekyll']
     },<% if (cssPre === 'sass') { %>
-    // Add Sass files you want to compile here
-    // TODO: Revise to watch default directories when
-    // https://github.com/gruntjs/grunt-contrib-sass/issues/40 is resolved.
     sass: {
       options: {
         bundleExec: true,
@@ -129,20 +126,28 @@ module.exports = function (grunt) {
         loadPath: 'app/bower_components'
       },
       dist: {
-        files: {
-          '.tmp/<%%= yeoman.css %>/main.css': '<%%= yeoman.app %>/<%%= yeoman.cssPre %>/main.scss',
-          '.tmp/<%%= yeoman.css %>/syntax.css': '<%%= yeoman.app %>/<%%= yeoman.cssPre %>/syntax.scss'
-        }
+        files: [{
+          expand: true,
+          cwd: '<%%= yeoman.app %>/<%%= yeoman.cssPre %>',
+          src: '**/*.{scss,sass}',
+          dest: '.tmp/<%%= yeoman.css %>',
+          filter: 'isFile',
+          ext: '.css'
+        }]
       },
       server: {
         options: {
           debugInfo: true,
-          lineNumbers: true,
+          lineNumbers: true
         },
-        files: {
-          '.tmp/<%%= yeoman.css %>/main.css': '<%%= yeoman.app %>/<%%= yeoman.cssPre %>/main.scss',
-          '.tmp/<%%= yeoman.css %>/syntax.css': '<%%= yeoman.app %>/<%%= yeoman.cssPre %>/syntax.scss'
-        }
+        files: [{
+          expand: true,
+          cwd: '<%%= yeoman.app %>/<%%= yeoman.cssPre %>',
+          src: '**/*.{scss,sass}',
+          dest: '.tmp/<%%= yeoman.css %>',
+          filter: 'isFile',
+          ext: '.css'
+        }]
       }
     },<% } %><% if (cssPre === 'compass') { %>
     compass: {
