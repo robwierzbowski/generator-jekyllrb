@@ -185,9 +185,9 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '.tmp/<%%= yeoman.css %>',
+          cwd: '<%%= yeoman.dist %>/<%%= yeoman.css %>',
           src: '**/*.css',
-          dest: '.tmp/<%%= yeoman.css %>'
+          dest: '<%%= yeoman.dist %>/<%%= yeoman.css %>'
         }]
       },
       server: {
@@ -380,6 +380,7 @@ module.exports = function (grunt) {
           dest: '<%%= yeoman.dist %>'
         }]
       },
+      // Stage assets in case we need them for concatination
       stageCss: {
         files: [{
           expand: true,
@@ -398,7 +399,6 @@ module.exports = function (grunt) {
           dest: '.tmp/<%%= yeoman.js %>'
         }]
       },
-      // Copy bower_components assets in case we need them for concatination
       stageComponents: {
         files: [{
           expand: true,
@@ -428,8 +428,8 @@ module.exports = function (grunt) {
       server: [<% if (cssPre === 'sass') { %>
         'sass:server',<% } %><% if (cssPre === 'compass') { %>
         'compass:server',<% } %><% if (jsPre === 'coffee') { %>
-        'coffee:server',<% } %>
-        'copy:stageCss',
+        'coffee:server',<% } %><% if (autoPre) { %>
+        'copy:stageCss',<% } %>
         'jekyll:server'
       ],
       dist: [<% if (cssPre === 'sass') { %>
@@ -484,10 +484,10 @@ module.exports = function (grunt) {
     'clean:dist',
     // Jekyll cleans all non-git files from the target directory, so must run first
     'jekyll:dist',
-    'concurrent:dist',<% if (autoPre) { %>
-    'autoprefixer:dist',<% } %>
+    'concurrent:dist',
     'useminPrepare',
-    'concat',
+    'concat',<% if (autoPre) { %>
+    'autoprefixer:dist',<% } %>
     'cssmin',
     'uglify',
     'imagemin',
