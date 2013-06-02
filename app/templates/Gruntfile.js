@@ -427,14 +427,14 @@ module.exports = function (grunt) {
     concurrent: {
       server: [<% if (cssPre === 'sass') { %>
         'sass:server',<% } %><% if (cssPre === 'compass') { %>
-        'compass:server',<% } %><% if (jsPre === 'coffee') { %>
+        'compass:server',<% } %><% if (jsPre === 'coffeescript') { %>
         'coffee:server',<% } %><% if (autoPre) { %>
         'copy:stageCss',<% } %>
         'jekyll:server'
       ],
       dist: [<% if (cssPre === 'sass') { %>
         'sass:dist',<% } %><% if (cssPre === 'compass') { %>
-        'compass:dist',<% } %><% if (jsPre === 'coffee') { %>
+        'compass:dist',<% } %><% if (jsPre === 'coffeescript') { %>
         'coffee:dist',<% } %>
         'copy:dist',
         'copy:stageCss',
@@ -473,7 +473,7 @@ module.exports = function (grunt) {
   grunt.registerTask('report', [
     'clean:server',<% if (cssPre === 'sass') { %>
     'sass:server',<% } %><% if (cssPre === 'compass') { %>
-    'compass:server',<% } %><% if (jsPre === 'coffee') { %>
+    'compass:server',<% } %><% if (jsPre === 'coffeescript') { %>
     'coffee:server',<% } %>
     'jshint:report',
     'csscss:report',
