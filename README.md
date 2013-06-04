@@ -89,6 +89,7 @@ Report bugs and feature proposals in the [Github issue tracker](https://github.c
 
 ## Release History
 
+0.2.7, June 4, 2013: Update grunt-csscss to test (s)css directories, improve readme.  
 0.2.6, June 1, 2013: Coffeescript bugfixes.  
 0.2.5, June 1, 2013: Improve Sass and Autoprefixer tasks.  
 0.2.4, May 31, 2013: Minor improvements, documentation update.  
