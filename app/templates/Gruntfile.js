@@ -264,9 +264,9 @@ module.exports = function (grunt) {
         '!<%%= yeoman.app %>/<%%= yeoman.js %>/vendor/**/*'
       ]
     },
-    // TODO: rewrite for globbing and bundleExec when 5.0 is released
     csscss: {
       options: {
+        bundleExec: true,
         minMatch: 2,<% if (cssPre === 'compass' || cssPre === 'sass') { %>
         ignoreSassMixins: false,<% } %><% if (cssPre === 'compass') { %>
         compass: true,<% } %><% if (!cssPre) { %>
@@ -276,9 +276,8 @@ module.exports = function (grunt) {
         verbose: true
       },
       // Add files to be tested here
-      report: {<% if (!cssPre) { %>
-       src: ['<%%= yeoman.app %>/<%%= yeoman.css %>/main.css']<% } %><% if (cssPre === 'compass' || cssPre === 'sass') { %>
-       src: ['<%%= yeoman.app %>/<%%= yeoman.cssPre %>/main.scss']<% } %>
+      report: {
+       src: ['<%%= yeoman.app %>/<%%= yeoman.css %>/**/*.css'<% if (cssPre === 'compass' || cssPre === 'sass') { %>, '<%%= yeoman.app %>/<%%= yeoman.cssPre %>/**/*.scss'<% } %>]
       }
     },
     csslint: {
