@@ -446,7 +446,7 @@ Generator.prototype.directories = function directories() {
 Generator.prototype.jekyllInit = function jekyllInit() {
 
   // Create a default Jekyll site in a temporary folder
-  this.jekTmpDir = path.join(this.env.cwd, '.jekyll');
+  this.jekTmpDir = path.join(process.cwd(), '.jekyll');
   shelljs.exec('bundle exec jekyll new ' + this.jekTmpDir);
 };
 
