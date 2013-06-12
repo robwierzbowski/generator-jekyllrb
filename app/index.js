@@ -569,12 +569,18 @@ Generator.prototype.cssPreprocessor = function cssPreprocessor() {
     var files = globule.find('**/*.css', {srcBase: path.join('app', this.cssDir)});
 
     files.forEach(function (file) {
+      var cssDir = this.cssDir;
 
-      this.copy(path.join(process.cwd(), 'app', this.cssDir, file),
+      this.copy(path.join(process.cwd(), 'app', cssDir, file),
                 path.join('app', this.cssPreDir, file.replace(/\.css$/, '.scss')));
 
-      // Cleanup old css files
-      spawn('rm', ['-f', path.join('app', this.cssDir, file)], { stdio: 'inherit' });
+      // Wait until copy is completely finished, and then delete files.
+      this.conflicter.resolve(function (err) {
+        if (err) {
+          return this.emit('error', err);
+        }
+        spawn('rm', [path.join('app', cssDir, file)], { stdio: 'inherit' });
+      });
     }, this);
   }
 };
