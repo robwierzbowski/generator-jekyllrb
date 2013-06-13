@@ -7,13 +7,7 @@ var mountFolder = function (connect, dir) {
 };
 var yeomanConfig = {
   app: 'app',
-  dist: 'dist',
-  css: '<%= cssDir %>',<% if (cssPre) { %>
-  cssPre: '<%= cssPreDir %>',<% } %>
-  js: '<%= jsDir %>',<% if (jsPre) { %>
-  jsPre: '<%= jsPreDir %>',<% } %>
-  img: '<%= imgDir %>',
-  fonts: '<%= fontsDir %>'
+  dist: 'dist'
 };
 
 module.exports = function (grunt) {
@@ -24,19 +18,19 @@ module.exports = function (grunt) {
 
     watch: {<% if (cssPre === 'sass') { %>
       sass: {
-        files: ['<%%= yeoman.app %>/<%%= yeoman.cssPre %>/**/*.{scss,sass}'],
+        files: ['<%%= yeoman.app %>/<%= cssPreDir %>/**/*.{scss,sass}'],
         tasks: ['sass:server']
       },<% } %><% if (cssPre === 'compass') { %>
       compass: {
-        files: ['<%%= yeoman.app %>/<%%= yeoman.cssPre %>/**/*.{scss,sass}'],
+        files: ['<%%= yeoman.app %>/<%= cssPreDir %>/**/*.{scss,sass}'],
         tasks: ['compass:server'<% if (autoPre) { %>, 'autoprefixer:server'<% } %>]
       },<% } %><% if (autoPre) { %>
       stageCss: {
-        files: ['<%%= yeoman.app %>/<%%= yeoman.css %>/**/*.css'],
+        files: ['<%%= yeoman.app %>/<%= cssDir %>/**/*.css'],
         tasks: ['copy:stageCss', 'autoprefixer:server']
       },<% } %><% if (jsPre === 'coffeescript') { %>
       coffee: {
-        files: ['<%%= yeoman.app %>/<%%= yeoman.jsPre %>/**/*.coffee'],
+        files: ['<%%= yeoman.app %>/<%= jsPreDir %>/**/*.coffee'],
         tasks: ['coffee:server']
       },
       coffeeTest: {
@@ -54,10 +48,10 @@ module.exports = function (grunt) {
         },
         files: [
           '.jekyll/**/*.html',<% if (autoPre) { %>
-          '.tmp/<%%= yeoman.css %>/**/*.css',<% } else { %>
-          '{.tmp,<%%= yeoman.app %>}/<%%= yeoman.css %>/**/*.css',<% } %>
+          '.tmp/<%= cssDir %>/**/*.css',<% } else { %>
+          '{.tmp,<%%= yeoman.app %>}/<%= cssDir %>/**/*.css',<% } %>
           '{.tmp,<%%= yeoman.app %>}/<%%= js %>/**/*.js',
-          '<%%= yeoman.app %>/<%%= yeoman.img %>/**/*.{gif,jpg,jpeg,png,svg,webp}'
+          '<%%= yeoman.app %>/<%= imgDir %>/**/*.{gif,jpg,jpeg,png,svg,webp}'
         ]
       }
     },
@@ -128,9 +122,9 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '<%%= yeoman.app %>/<%%= yeoman.cssPre %>',
+          cwd: '<%%= yeoman.app %>/<%= cssPreDir %>',
           src: '**/*.{scss,sass}',
-          dest: '.tmp/<%%= yeoman.css %>',
+          dest: '.tmp/<%= cssDir %>',
           filter: 'isFile',
           ext: '.css'
         }]
@@ -142,9 +136,9 @@ module.exports = function (grunt) {
         },
         files: [{
           expand: true,
-          cwd: '<%%= yeoman.app %>/<%%= yeoman.cssPre %>',
+          cwd: '<%%= yeoman.app %>/<%= cssPreDir %>',
           src: '**/*.{scss,sass}',
-          dest: '.tmp/<%%= yeoman.css %>',
+          dest: '.tmp/<%= cssDir %>',
           filter: 'isFile',
           ext: '.css'
         }]
@@ -155,26 +149,26 @@ module.exports = function (grunt) {
         // If you're using global Sass gems, require them here, e.g.:
         // require: ['singularity', 'jacket'],
         bundleExec: true,
-        sassDir: '<%%= yeoman.app %>/<%%= yeoman.cssPre %>',
-        cssDir: '.tmp/<%%= yeoman.css %>',
-        imagesDir: '<%%= yeoman.app %>/<%%= yeoman.img %>',
-        fontsDir: '<%%= yeoman.app %>/<%%= yeoman.fonts %>',
-        javascriptsDir: '<%%= yeoman.app %>/<%%= yeoman.js %>',
+        sassDir: '<%%= yeoman.app %>/<%= cssPreDir %>',
+        cssDir: '.tmp/<%= cssDir %>',
+        imagesDir: '<%%= yeoman.app %>/<%= imgDir %>',
+        fontsDir: '<%%= yeoman.app %>/<%= fontsDir %>',
+        javascriptsDir: '<%%= yeoman.app %>/<%= jsDir %>',
         relativeAssets: false,
-        httpImagesPath: '/<%%= yeoman.img %>',
-        httpGeneratedImagesPath: '/<%%= yeoman.img %>/generated',
+        httpImagesPath: '/<%= imgDir %>',
+        httpGeneratedImagesPath: '/<%= imgDir %>/generated',
         outputStyle: 'expanded',
         raw: 'asset_cache_buster :none \nextensions_dir = "<%%= yeoman.app %>/bower_components"\n'
       },
       dist: {
         options: {
-          generatedImagesDir: '<%%= yeoman.dist %>/<%%= yeoman.img %>/generated'
+          generatedImagesDir: '<%%= yeoman.dist %>/<%= imgDir %>/generated'
         }
       },
       server: {
         options: {
           debugInfo: true,
-          generatedImagesDir: '.tmp/<%%= yeoman.img %>/generated'
+          generatedImagesDir: '.tmp/<%= imgDir %>/generated'
         }
       }
     },<% } %><% if (autoPre) { %>
@@ -185,17 +179,17 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '<%%= yeoman.dist %>/<%%= yeoman.css %>',
+          cwd: '<%%= yeoman.dist %>/<%= cssDir %>',
           src: '**/*.css',
-          dest: '<%%= yeoman.dist %>/<%%= yeoman.css %>'
+          dest: '<%%= yeoman.dist %>/<%= cssDir %>'
         }]
       },
       server: {
         files: [{
           expand: true,
-          cwd: '.tmp/<%%= yeoman.css %>',
+          cwd: '.tmp/<%= cssDir %>',
           src: '**/*.css',
-          dest: '.tmp/<%%= yeoman.css %>'
+          dest: '.tmp/<%= cssDir %>'
         }]
       }
     },<% } %><% if (jsPre === 'coffeescript') { %>
@@ -212,18 +206,18 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '<%%= yeoman.app %>/<%%= yeoman.jsPre %>',
+          cwd: '<%%= yeoman.app %>/<%= jsPreDir %>',
           src: '**/*.coffee',
-          dest: '.tmp/<%%= yeoman.js %>',
+          dest: '.tmp/<%= jsDir %>',
           ext: '.js'
         }]
       },
       server: {
         files: [{
           expand: true,
-          cwd: '<%%= yeoman.app %>/<%%= yeoman.jsPre %>',
+          cwd: '<%%= yeoman.app %>/<%= jsPreDir %>',
           src: '**/*.coffee',
-          dest: '.tmp/<%%= yeoman.js %>',
+          dest: '.tmp/<%= jsDir %>',
           ext: '.js'
         }]
       }
@@ -254,14 +248,14 @@ module.exports = function (grunt) {
       },
       all: [
         'Gruntfile.js',
-        '{.tmp,<%%= yeoman.app %>}/<%%= yeoman.js %>/**/*.js',
+        '{.tmp,<%%= yeoman.app %>}/<%= jsDir %>/**/*.js',
         'test/spec/**/*.js',
-        '!<%%= yeoman.app %>/<%%= yeoman.js %>/vendor/**/*',
+        '!<%%= yeoman.app %>/<%= jsDir %>/vendor/**/*',
         '!<%%= yeoman.app %>/bower_components/**/*'
       ],
       report: [
-        '{.tmp,<%%= yeoman.app %>}/<%%= yeoman.js %>/**/*.js',
-        '!<%%= yeoman.app %>/<%%= yeoman.js %>/vendor/**/*'
+        '{.tmp,<%%= yeoman.app %>}/<%= jsDir %>/**/*.js',
+        '!<%%= yeoman.app %>/<%= jsDir %>/vendor/**/*'
       ]
     },
     csscss: {
@@ -277,7 +271,8 @@ module.exports = function (grunt) {
       },
       // Add files to be tested here
       report: {
-       src: ['<%%= yeoman.app %>/<%%= yeoman.css %>/**/*.css'<% if (cssPre === 'compass' || cssPre === 'sass') { %>, '<%%= yeoman.app %>/<%%= yeoman.cssPre %>/**/*.scss'<% } %>]
+       src: ['<%%= yeoman.app %>/<%= cssDir %>/**/*.css'<% if (cssPre === 'compass' || cssPre === 'sass') { %>,
+             '<%%= yeoman.app %>/<%= cssPreDir %>/**/*.scss'<% } %>]
       }
     },
     csslint: {
@@ -285,7 +280,7 @@ module.exports = function (grunt) {
         csslintrc: '.csslintrc'
       },
       report: {
-        src: ['{.tmp,<%%= yeoman.app %>}/<%%= yeoman.css %>/**/*.css']
+        src: ['{.tmp,<%%= yeoman.app %>}/<%= cssDir %>/**/*.css']
       }
     },
     // UseminPrepare will only scan one page for usemin blocks. If you have
@@ -303,7 +298,7 @@ module.exports = function (grunt) {
           dirs: ['<%%= yeoman.dist %>/**/*']
       },
       html: ['<%%= yeoman.dist %>/**/*.html'],
-      css: ['<%%= yeoman.dist %>/<%%= yeoman.css %>/**/*.css']
+      css: ['<%%= yeoman.dist %>/<%= cssDir %>/**/*.css']
     },
     htmlmin: {
       dist: {
@@ -371,10 +366,10 @@ module.exports = function (grunt) {
             <% if (!h5bpJs) { %>// <% } %>'bower_components/jquery.min.js',
             // Copy moves asset files and directories
             '*.{ico,png}',
-            '<%%= yeoman.js %>/**/*',
-            '<%%= yeoman.css %>/**/*',
-            '<%%= yeoman.img %>/**/*',
-            '<%%= yeoman.fonts %>/**/*'
+            '<%= jsDir %>/**/*',
+            '<%= cssDir %>/**/*',
+            '<%= imgDir %>/**/*',
+            '<%= fontsDir %>/**/*'
           ],
           dest: '<%%= yeoman.dist %>'
         }]
@@ -384,18 +379,18 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           dot: true,
-          cwd: '<%%= yeoman.app %>/<%%= yeoman.css %>',
+          cwd: '<%%= yeoman.app %>/<%= cssDir %>',
           src: '**/*.css',
-          dest: '.tmp/<%%= yeoman.css %>'
+          dest: '.tmp/<%= cssDir %>'
         }]
       },
       stageJs: {
         files: [{
           expand: true,
           dot: true,
-          cwd: '<%%= yeoman.app %>/<%%= yeoman.js %>',
+          cwd: '<%%= yeoman.app %>/<%= jsDir %>',
           src: '**/*.js',
-          dest: '.tmp/<%%= yeoman.js %>'
+          dest: '.tmp/<%= jsDir %>'
         }]
       },
       stageComponents: {
@@ -415,10 +410,10 @@ module.exports = function (grunt) {
       dist: {
         files: {
           src: [
-            '<%%= yeoman.dist %>/<%%= yeoman.js %>/**/*.js',
-            '<%%= yeoman.dist %>/<%%= yeoman.css %>/**/*.css',
-            '<%%= yeoman.dist %>/<%%= yeoman.img %>/**/*.{gif,jpg,jpeg,png,svg,webp}',
-            '<%%= yeoman.dist %>/<%%= yeoman.fonts %>/**/*.{eot*,svg,ttf,woff}'
+            '<%%= yeoman.dist %>/<%= jsDir %>/**/*.js',
+            '<%%= yeoman.dist %>/<%= cssDir %>/**/*.css',
+            '<%%= yeoman.dist %>/<%= imgDir %>/**/*.{gif,jpg,jpeg,png,svg,webp}',
+            '<%%= yeoman.dist %>/<%= fontsDir %>/**/*.{eot*,svg,ttf,woff}'
           ]
         }
       }
