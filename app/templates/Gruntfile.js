@@ -10,6 +10,14 @@ var yeomanConfig = {
   dist: 'dist'
 };
 
+// Directory reference
+//   css: <%= cssDir %><% if (cssPre) { %>
+//   <%= cssPre %>: <%= cssPreDir %><% } %>
+//   javascript: <%= jsDir %><% if (jsPre) { %>
+//   <%= jsPre %>: <%= jsPreDir %><% } %>
+//   images: <%= imgDir %>
+//   fonts: <%= fontsDir %>
+
 module.exports = function (grunt) {
 
   // Configuration
