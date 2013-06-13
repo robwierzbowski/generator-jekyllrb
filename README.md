@@ -89,7 +89,8 @@ Report bugs and feature proposals in the [Github issue tracker](https://github.c
 
 ## Release History
 
-0.3.0, June 13, 2013: Switch to Generator 0.12, new prompt, simplify Gruntfile output.  
+0.3.1, June 13, 2013: Remove stray debug code.  
+0.3.0, June 13, 2013: Switch to Generator 0.12, new prompt, simplify Gruntfile.  
 0.2.7, June 12, 2013: Fix race condition bug (Issue [#11](https://github.com/robwierzbowski/generator-jekyllrb/issues/11)).  
 0.2.7, June 4, 2013: Update grunt-csscss to test (s)css directories, improve readme.  
 0.2.6, June 1, 2013: Coffeescript bugfixes.  

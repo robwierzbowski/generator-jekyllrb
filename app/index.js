@@ -491,9 +491,6 @@ Generator.prototype.templates = function templates() {
 
 Generator.prototype.cssPreprocessor = function cssPreprocessor() {
   if (this.cssPre) {
-
-    console.log(this.cssPreDir);
-
     this.mkdir(path.join('app', this.cssPreDir));
   }
 
