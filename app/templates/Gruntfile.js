@@ -33,7 +33,7 @@ module.exports = function (grunt) {
         files: ['<%%= yeoman.app %>/<%= cssPreDir %>/**/*.{scss,sass}'],
         tasks: ['compass:server'<% if (autoPre) { %>, 'autoprefixer:server'<% } %>]
       },<% } %><% if (autoPre) { %>
-      stageCss: {
+      prefixCss: {
         files: ['<%%= yeoman.app %>/<%= cssDir %>/**/*.css'],
         tasks: ['copy:stageCss', 'autoprefixer:server']
       },<% } %><% if (jsPre === 'coffeescript') { %>
@@ -367,10 +367,10 @@ module.exports = function (grunt) {
           dot: true,
           cwd: '<%%= yeoman.app %>',
           src: [
-            // Jekyll moves all html and text files
-            // Usemin moves css and js files with concat
-            // If your site requires it, add other file type patterns here
-            // e.g., Bower components that aren't in a usemin block:
+            // Jekyll moves all html and text files. Usemin moves css and js
+            // files with concat. Add other files and patterns your site
+            // reqires for distrobution here, e.g., Bower components that
+            // aren't in a usemin block.
             <% if (!h5bpJs) { %>// <% } %>'bower_components/jquery.min.js',
             // Copy moves asset files and directories
             '*.{ico,png}',
@@ -381,8 +381,8 @@ module.exports = function (grunt) {
           ],
           dest: '<%%= yeoman.dist %>'
         }]
-      },
-      // Stage assets in case we need them for concatination
+      }<% if (autoPre) { %>,
+      // Copy css into .tmp directory for processing
       stageCss: {
         files: [{
           expand: true,
@@ -391,25 +391,7 @@ module.exports = function (grunt) {
           src: '**/*.css',
           dest: '.tmp/<%= cssDir %>'
         }]
-      },
-      stageJs: {
-        files: [{
-          expand: true,
-          dot: true,
-          cwd: '<%%= yeoman.app %>/<%= jsDir %>',
-          src: '**/*.js',
-          dest: '.tmp/<%= jsDir %>'
-        }]
-      },
-      stageComponents: {
-        files: [{
-          expand: true,
-          dot: true,
-          cwd: '<%%= yeoman.app %>',
-          src: 'bower_components/**/*.{css,js}',
-          dest: '.tmp/'
-        }]
-      }
+      }<% } %>
     },
     rev: {
       options: {
@@ -438,10 +420,7 @@ module.exports = function (grunt) {
         'sass:dist',<% } %><% if (cssPre === 'compass') { %>
         'compass:dist',<% } %><% if (jsPre === 'coffeescript') { %>
         'coffee:dist',<% } %>
-        'copy:dist',
-        'copy:stageCss',
-        'copy:stageJs',
-        'copy:stageComponents'
+        'copy:dist'
       ]
     }
   });
