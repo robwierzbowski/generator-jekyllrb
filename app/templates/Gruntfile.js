@@ -1,7 +1,7 @@
 // Generated on <%= (new Date).toISOString().split('T')[0] %> using <%= pkg.name %> <%= pkg.version %>. Yo Jekyll!
 'use strict';
-var LIVERELOAD_PORT = 35729;
-var lrSnippet = require('connect-livereload')({port: LIVERELOAD_PORT});
+var liveReloadPort = 35729;
+var lrSnippet = require('connect-livereload')({port: liveReloadPort});
 var mountFolder = function (connect, dir) {
   return connect.static(require('path').resolve(dir));
 };
@@ -10,7 +10,7 @@ var yeomanConfig = {
   dist: 'dist'
 };
 
-// Directory reference
+// Directory reference:
 //   css: <%= cssDir %><% if (cssPre) { %>
 //   <%= cssPre %>: <%= cssPreDir %><% } %>
 //   javascript: <%= jsDir %><% if (jsPre) { %>
@@ -52,7 +52,7 @@ module.exports = function (grunt) {
       },
       livereload: {
         options: {
-          livereload: LIVERELOAD_PORT
+          livereload: liveReloadPort
         },
         files: [
           '.jekyll/**/*.html',<% if (autoPre) { %>

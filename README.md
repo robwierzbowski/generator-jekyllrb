@@ -39,8 +39,6 @@ This is your development workhorse. Running `grunt server` starts a watch task f
 
 You can use the `:build` target (`grunt server:build`) to run the build process, start a server, and review your site before deployment.
 
-*__Note for Windows users:__ if the server fails on launch try refreshing your browser or moving the lrSnippet in the Grunt `connect` task below other middleware. [The issue is being addressed in generator-webapp](https://github.com/yeoman/generator-webapp/issues/63).* 
-
 #### `grunt report`
 
 Reports are similar to tests, but they check code quality instead of functionality. `grunt report` checks code with [Jshint](http://www.jshint.com/), [CSS Lint](http://csslint.net/) and [CSSCSS](http://zmoazeni.github.io/csscss/). BAMF! You just became a better developer. 
