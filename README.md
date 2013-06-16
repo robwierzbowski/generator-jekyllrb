@@ -57,8 +57,6 @@ When you're ready to publish your site, run `grunt build` to send it through a b
 
 [Bower](http://bower.io/) is a front-end package manager. It's awesome. Use it to download and manage CSS, javascript, Sass, and Compass components for your site. 
 
-While developing with `grunt server` everything in the `bower_components` directory is available.
-
 To include components in the build either place them inside of a Usemin block, or add them manually to the `copy:dist` task.
 
 ## Migrating an existing site
@@ -87,9 +85,10 @@ Report bugs and feature proposals in the [Github issue tracker](https://github.c
 
 ## Release History
 
+0.3.2, June 16, 2013: Update livereload, improve usemin workflow.  
 0.3.1, June 13, 2013: Remove stray debug code.  
 0.3.0, June 13, 2013: Switch to Generator 0.12, new prompt, simplify Gruntfile.  
-0.2.7, June 12, 2013: Fix race condition bug (Issue [#11](https://github.com/robwierzbowski/generator-jekyllrb/issues/11)).  
+0.2.8, June 12, 2013: Fix race condition bug (Issue [#11](https://github.com/robwierzbowski/generator-jekyllrb/issues/11)).  
 0.2.7, June 4, 2013: Update grunt-csscss to test (s)css directories, improve readme.  
 0.2.6, June 1, 2013: Coffeescript bugfixes.  
 0.2.5, June 1, 2013: Improve Sass and Autoprefixer tasks.  
