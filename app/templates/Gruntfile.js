@@ -374,8 +374,6 @@ module.exports = function (grunt) {
             <% if (!h5bpJs) { %>// <% } %>'bower_components/jquery.min.js',
             // Copy moves asset files and directories
             '*.{ico,png}',
-            '<%= jsDir %>/**/*',
-            '<%= cssDir %>/**/*',
             '<%= imgDir %>/**/*',
             '<%= fontsDir %>/**/*'
           ],

@@ -57,7 +57,7 @@ When you're ready to publish your site, run `grunt build` to send it through a b
 
 [Bower](http://bower.io/) is a front-end package manager. It's awesome. Use it to download and manage CSS, javascript, Sass, and Compass components for your site. 
 
-To include components in the build either place them inside of a Usemin block, or add them manually to the `copy:dist` task.
+To include components in the build either place them inside of a Usemin block, or add them manually to the `copy:dist`, uglify, and cssmin tasks. This workflow will be streamlined with the release of Usemin 2.0.
 
 ## Migrating an existing site
 
