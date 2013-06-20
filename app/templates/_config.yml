@@ -15,7 +15,8 @@ author:
 
 # Exclude directories and/or files from the conversion.
 # Grunt moves image files and asset directories.
-exclude: [<% if (cssPre) { %>'<%= cssPreDir %>', <% } %><% if (jsPre) { %>'<%= jsPreDir %>', <% } %>'<%= imgDir %>', '<%= cssDir %>', '<%= jsDir %>', '<%= fontsDir %>', 'bower_components', '**.png', '**.jpg', '**.jpeg', '**.gif', '**.webp', '**.svg', '**.ico']
+exclude: [<% if (cssPre) { %>'<%= cssPreDir %>', <% } %><% if (jsPre) { %>'<%= jsPreDir %>', <% } %>'<%= imgDir %>', '<%= cssDir %>', '<%= jsDir %>', '<%= fontsDir %>', 'bower_components',
+          '**.png', '**.jpg', '**.jpeg', '**.gif', '**.webp', '**.svg', '**.ico']
 
 # Force inclusion of directories and/or files in the conversion.
 # .htaccess is a good example since dotfiles are excluded by default.
@@ -64,7 +65,7 @@ markdown: <%= jekMkd %>
   #   coderay_bold_every: 10
   #   coderay_css: style<% } %><% if (jekMkd === 'redcarpet') {%>
 # redcarpet:
-  # extensions: [ fenced_code_blocks, smart ]<% } %>
+  # extensions: ['fenced_code_blocks', 'smart']<% } %>
 
 # Use Pygments to highlight code blocks
 pygments: <%= jekPyg %>
