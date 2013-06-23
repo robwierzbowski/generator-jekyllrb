@@ -48,7 +48,7 @@ module.exports = function (grunt) {
       jekyll: {
         files: ['<%%= yeoman.app %>/**/*.{html,yml,md,mkd,markdown}',
                 '_config.yml',
-                '!<%%= yeoman.app %>/bower_components'],
+                '!<%%= yeoman.app %>/_bower_components'],
         tasks: ['jekyll:server']
       },
       livereload: {
@@ -126,7 +126,7 @@ module.exports = function (grunt) {
         bundleExec: true,
         debugInfo: false,
         lineNumbers: false,
-        loadPath: 'app/bower_components'
+        loadPath: 'app/_bower_components'
       },
       dist: {
         files: [{
@@ -167,7 +167,7 @@ module.exports = function (grunt) {
         httpImagesPath: '/<%= imgDir %>',
         httpGeneratedImagesPath: '/<%= imgDir %>/generated',
         outputStyle: 'expanded',
-        raw: 'asset_cache_buster :none \nextensions_dir = "<%%= yeoman.app %>/bower_components"\n'
+        raw: 'asset_cache_buster :none \nextensions_dir = "<%%= yeoman.app %>/_bower_components"\n'
       },
       dist: {
         options: {
@@ -260,7 +260,7 @@ module.exports = function (grunt) {
         '{.tmp,<%%= yeoman.app %>}/<%= jsDir %>/**/*.js',
         'test/spec/**/*.js',
         '!<%%= yeoman.app %>/<%= jsDir %>/vendor/**/*',
-        '!<%%= yeoman.app %>/bower_components/**/*'
+        '!<%%= yeoman.app %>/_bower_components/**/*'
       ],
       report: [
         '{.tmp,<%%= yeoman.app %>}/<%= jsDir %>/**/*.js',
@@ -372,7 +372,7 @@ module.exports = function (grunt) {
             // files with concat. Add other files and patterns your site
             // reqires for distrobution here, e.g., Bower components that
             // aren't in a usemin block.
-            <% if (!h5bpJs) { %>// <% } %>'bower_components/jquery.min.js',
+            <% if (!h5bpJs) { %>// <% } %>'_bower_components/jquery.min.js',
             // Copy moves asset files and directories
             '*.{ico,png}',
             '<%= imgDir %>/**/*',
