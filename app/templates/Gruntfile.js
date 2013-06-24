@@ -232,23 +232,21 @@ module.exports = function (grunt) {
       }
     },<% } %>
     jekyll: {
-      // TODO: switch config to options style after
-      // https://github.com/dannygarcia/grunt-jekyll/pull/14
-      dist: {
+      options: {
         bundleExec: true,
-        src : '<%%= yeoman.app %>',
-        dest: '<%%= yeoman.dist %>',
-        server : false,
-        auto : false,
-        config: '_config.yml,_config.build.yml'
+        src : '<%%= yeoman.app %>'
+      },
+      dist: {
+        options: {
+          dest: '<%%= yeoman.dist %>',
+          config: '_config.yml,_config.build.yml'
+        }
       },
       server: {
-        bundleExec: true,
-        src : '<%%= yeoman.app %>',
-        dest: '.jekyll',
-        server : false,
-        auto : false,
-        config: '_config.yml'
+        options: {
+          dest: '.jekyll',
+          config: '_config.yml'
+        }
       }
     },
     jshint: {
