@@ -108,6 +108,7 @@ module.exports = function (grunt) {
       }
     },
     // Running Jekyll also cleans all non-git files from the target directory
+    // If you've added anything to Jekyll's 'keep_files', add them here as well.
     clean: {
       dist: {
         files: [{
