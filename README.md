@@ -86,6 +86,7 @@ Report bugs and feature proposals in the [Github issue tracker](https://github.c
 
 ## Release History
 
+0.3.5, July 15, 2013: Switch default markdown parser to Redcarpet.  
 0.3.4, June 24, 2013: Refinements, update to grunt-jekyll 3.8.  
 0.3.3, June 20, 2013: Minor improvements.  
 0.3.2, June 16, 2013: Update livereload, improve usemin workflow.  
