@@ -25,7 +25,6 @@ Just the basics: [Node.js](http://nodejs.org/) and npm, [Ruby](http://www.ruby-l
 
 ## Quick start
 
-- Install the Yeoman tools: `npm install -g yo grunt-cli bower`
 - Install the generator: `npm install -g generator-jekyllrb`
 - Run: `yo jekyllrb`
 
