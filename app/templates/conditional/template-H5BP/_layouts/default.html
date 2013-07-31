@@ -12,13 +12,13 @@
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-    <!-- build:css<% if (cssPre) { %>({app,.tmp})<% } %> /<%= cssDir %>/main.css --><% if (h5bpCss) { %>
+    <!-- build:css<% if (cssPre) { %>({app,.tmp})<% } else { %>(app)<% } %> /<%= cssDir %>/main.css --><% if (h5bpCss) { %>
     <link rel="stylesheet" href="/<%= cssDir %>/normalize.css"><% } %><% if (jekPyg) { %>
     <link rel="stylesheet" href="/<%= cssDir %>/syntax.css"><% } %>
     <link rel="stylesheet" href="/<%= cssDir %>/main.css">
     <!-- endbuild --><% if (h5bpJs) { %>
 
-    <!-- build:js<% if (jsPre) { %>({app,.tmp})<% } %> /<%= jsDir %>/head-scripts.js -->
+    <!-- build:js<% if (jsPre) { %>({app,.tmp})<% } else { %>(app)<% } %> /<%= jsDir %>/head-scripts.js -->
     <!-- Replace with a custom modernizer build for production -->
     <script src="_bower_components/modernizr/modernizr.js"></script><% } %>
     <!-- endbuild -->
