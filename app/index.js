@@ -16,7 +16,7 @@ var Generator = module.exports = function Generator(args, options) {
 
   if (!dependenciesInstalled) {
     console.log('Looks like you\'re missing some dependencies.' +
-      '\nMake sure ' + 'Ruby'.white + ' and the ' + 'Bundler gem'.white + ' are installed, then run again.');
+      '\nMake sure ' + chalk.white('Ruby') + ' and the ' + chalk.white('Bundler gem') + ' are installed, then run again.');
     shelljs.exit(1);
   }
 
@@ -47,8 +47,8 @@ Generator.prototype.askForAuthor = function askForAuthor() {
 
   // welcome message
   console.log(this.yeoman);
-  console.log('This generator will scaffold and wire a Jekyll site. Yo, Jekyllrb!'.yellow +
-    '\n\nTell us a little about yourself.'.yellow + ' ☛');
+  console.log(chalk.yellow('This generator will scaffold and wire a Jekyll site. Yo, Jekyllrb!') +
+    chalk.yellow('\n\nTell us a little about yourself.') + ' ☛');
 
   var prompts = [{
     name: 'author',
@@ -85,7 +85,7 @@ Generator.prototype.askForAuthor = function askForAuthor() {
 Generator.prototype.askForTools = function askForTools() {
   var cb = this.async();
 
-  console.log('\nWire tools and preprocessors.'.yellow + ' ☛');
+  console.log(chalk.yellow('\nWire tools and preprocessors.') + ' ☛');
 
   var prompts = [{
     name: 'cssPre',
@@ -119,7 +119,7 @@ Generator.prototype.askForTools = function askForTools() {
 Generator.prototype.askForStructure = function askForStructure() {
   var cb = this.async();
 
-  console.log('\nSet up some directories.'.yellow + ' ☛' +
+  console.log(chalk.yellow('\nSet up some directories.') + ' ☛' +
     '\nNested directories are fine.');
 
   var slashFilter = function (input) {
@@ -186,7 +186,7 @@ Generator.prototype.askForStructure = function askForStructure() {
 Generator.prototype.askForTemplates = function askForTemplates() {
   var cb = this.async();
 
-  console.log('\nChoose a template.'.yellow + ' ☛');
+  console.log(chalk.yellow('\nChoose a template.') + ' ☛');
 
   var prompts = [{
     name: 'templateType',
@@ -261,7 +261,7 @@ Generator.prototype.askForh5bp = function askForh5bp() {
 Generator.prototype.askForJekyll = function askForJekyll() {
   var cb = this.async();
 
-  console.log('\nAnd configure Jekyll.'.yellow + ' ☛' +
+  console.log(chalk.yellow('\nAnd configure Jekyll.') + ' ☛' +
               '\nYou can change all of these options in Jekyll\'s _config.yml.');
 
   var prompts = [{
