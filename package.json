@@ -28,7 +28,7 @@
     "test": "mocha"
   },
   "dependencies": {
-    "yeoman-generator": "~0.12.3",
+    "yeoman-generator": "~0.13.3",
     "globule": "~0.1.0",
     "shelljs": "~0.1.4"
   },
