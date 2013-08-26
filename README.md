@@ -85,7 +85,7 @@ Report bugs and feature proposals in the [Github issue tracker](https://github.c
 
 ## Release History
 
-0.3.7, July 15, 2013: Ascii hotfix :D.  
+0.3.8, July 15, 2013: Chalk fixes, update generator dependency.
 0.3.6, July 15, 2013: Easier install, package updates, and bugfixes.  
 0.3.5, July 15, 2013: Switch default markdown parser to Redcarpet.  
 0.3.4, June 24, 2013: Refinements, update to grunt-jekyll 3.8.  
