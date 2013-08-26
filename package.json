@@ -30,7 +30,8 @@
   "dependencies": {
     "yeoman-generator": "~0.13.3",
     "globule": "~0.1.0",
-    "shelljs": "~0.1.4"
+    "shelljs": "~0.1.4",
+    "chalk": "~0.2.0"
   },
   "peerDependencies": {
     "generator-mocha": "~0.1.1",
