@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "yeoman-generator": "~0.13.3",
+    "chalk": "~0.2.0",
     "globule": "~0.1.0",
     "shelljs": "~0.1.4"
   },
