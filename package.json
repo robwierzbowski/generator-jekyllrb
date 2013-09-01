@@ -28,30 +28,25 @@
     "test": "mocha"
   },
   "dependencies": {
-    "yeoman-generator": "~0.13.3",
+    "yeoman-generator": "~0.13.4",
     "globule": "~0.1.0",
     "shelljs": "~0.1.4",
     "chalk": "~0.2.0"
   },
   "peerDependencies": {
-    "generator-mocha": "~0.1.1",
-    "yo": ">=1.0.0-rc.1.1"
+    "yo": ">=1.0.4",
+    "generator-mocha": "~0.1.1"
   },
   "devDependencies": {
-    "mocha": "~1.9.0"
+    "mocha": "~1.12.0"
   },
   "engines": {
-    "node": ">=0.8.0"
+    "node": ">=0.8.0",
+    "npm": ">=1.2.10"
   },
   "licenses": [
     {
       "type": "BSD-new"
     }
-  ],
-  "readmeFilename": "README.md",
-  "gitHead": "74d433d444f86334eca369e21131a7cc8fcd5b21",
-  "directories": {
-    "test": "test"
-  },
-  "license": "BSD"
+  ]
 }
