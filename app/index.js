@@ -415,7 +415,8 @@ Generator.prototype.templates = function templates() {
     }
 
     // Pull H5BP in from Github
-    this.remote('h5bp', 'html5-boilerplate', 'v4.2.0', function (err, remote) {
+    // Using a pre-release commit because there's so much good stuff in it.
+    this.remote('h5bp', 'html5-boilerplate', '23f5e084e559177b434f702ff6be1d83e66374d3', function (err, remote) {
       if (err) {
         return cb(err);
       }
