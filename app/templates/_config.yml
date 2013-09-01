@@ -1,8 +1,9 @@
 # Base Jekyll configuration
 
-# Note: Grunt handles some Jekyll configuration. If you set something here and
-# it doesn't work, check if it is set in the Gruntfile. There is also a
-# _config.build.yml to set custom overrides for `grunt build`.
+# Grunt handles some Jekyll configuration. If you set something here and
+# it doesn't work, check if it is set in the Gruntfile.
+
+# Use _config.build.yml to override these settings on `grunt build`.
 
 name: <%= appname %>
 description: <%= jekDescript %>

@@ -67,7 +67,7 @@ module.exports = function (grunt) {
     connect: {
       options: {
         port: 9000,
-        // Change hostname to null to access the server from outside.
+        // Change hostname to null to access the server from outside
         hostname: 'localhost'
       },
       livereload: {
@@ -107,8 +107,6 @@ module.exports = function (grunt) {
         path: 'http://localhost:<%%= connect.options.port %>'
       }
     },
-    // Running Jekyll also cleans all non-git files from the target directory
-    // If you've added anything to Jekyll's 'keep_files', add them here as well.
     clean: {
       dist: {
         files: [{
@@ -116,6 +114,9 @@ module.exports = function (grunt) {
           src: [
             '.tmp',
             '<%%= yeoman.dist %>/*',
+            // Running Jekyll also cleans all non-git files from the target
+            // directory.  Exclude any non-standard 'keep_files' item here
+            // (e.g., the generated files directory from Jekyll Picture Tag).
             '!<%%= yeoman.dist %>/.git*'
           ]
         }]
@@ -156,7 +157,7 @@ module.exports = function (grunt) {
     },<% } %><% if (cssPre === 'compass') { %>
     compass: {
       options: {
-        // If you're using global Sass gems, require them here, e.g.:
+        // If you're using global Sass gems, require them here.
         // require: ['singularity', 'jacket'],
         bundleExec: true,
         sassDir: '<%%= yeoman.app %>/<%= cssPreDir %>',
@@ -277,7 +278,6 @@ module.exports = function (grunt) {
         shorthand: false,
         verbose: true
       },
-      // Add files to be tested here
       report: {
        src: ['<%%= yeoman.app %>/<%= cssDir %>/**/*.css'<% if (cssPre === 'compass' || cssPre === 'sass') { %>,
              '<%%= yeoman.app %>/<%= cssPreDir %>/**/*.scss'<% } %>]
@@ -291,7 +291,7 @@ module.exports = function (grunt) {
         src: ['{.tmp,<%%= yeoman.app %>}/<%= cssDir %>/**/*.css']
       }
     },
-    // UseminPrepare will only scan one page for usemin blocks. If you have
+    // UseminPrepare will only scan a single page for usemin blocks. If you have
     // usemin blocks that aren't used in index.html, create a usemin manifest
     // page (hackery!) and point this task there.
     useminPrepare: {
@@ -367,10 +367,9 @@ module.exports = function (grunt) {
           dot: true,
           cwd: '<%%= yeoman.app %>',
           src: [
-            // Jekyll moves all html and text files. Usemin moves css and js
-            // files with concat. Add other files and patterns your site
-            // reqires for distrobution here, e.g., Bower components that
-            // aren't in a usemin block.
+            // Jekyll processes and moves HTML and text files. Usemin processes
+            // and moves CSS and javascript inside of Usemin blocks. Add all
+            // other files your site needs for distribution here.
             <% if (!h5bpJs) { %>// <% } %>'_bower_components/jquery.min.js',
             // Copy moves asset files and directories
             '*.{ico,png}',
@@ -380,7 +379,7 @@ module.exports = function (grunt) {
           dest: '<%%= yeoman.dist %>'
         }]
       }<% if (autoPre) { %>,
-      // Copy css into .tmp directory for processing
+      // Copy CSS into .tmp directory for Autoprefixer processing
       stageCss: {
         files: [{
           expand: true,
@@ -461,7 +460,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
-    // Jekyll cleans all non-git files from the target directory, so must run first
+    // Jekyll cleans files from the target directory, so must run first
     'jekyll:dist',
     'concurrent:dist',
     'useminPrepare',
