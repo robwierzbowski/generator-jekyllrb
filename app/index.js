@@ -429,7 +429,7 @@ Generator.prototype.templates = function templates() {
 
       // Css boilerplate
       if (this.h5bpCss) {
-        remote.directory('css', path.join('app', this.cssDir));
+        remote.copy('css/main.css', path.join('app', this.cssDir, 'main.css'));
       }
       else {
         // Create empty file
