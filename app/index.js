@@ -1,20 +1,20 @@
 'use strict';
 var util = require('util');
 var path = require('path');
+var spawn = require('child_process').spawn;
+var chalk = require('chalk');
+var yeoman = require('yeoman-generator');
 var globule = require('globule');
 var shelljs = require('shelljs');
-var spawn = require('child_process').spawn;
-var yeoman = require('yeoman-generator');
-var chalk = require('chalk');
 
 var Generator = module.exports = function Generator(args, options) {
   yeoman.generators.Base.apply(this, arguments);
 
-  // Exit if Ruby dependencies aren't installed
   var dependenciesInstalled = ['bundle', 'ruby'].every(function (depend) {
     return shelljs.which(depend);
   });
 
+  // Exit if Ruby dependencies aren't installed
   if (!dependenciesInstalled) {
     console.log('Looks like you\'re missing some dependencies.' +
       '\nMake sure ' + chalk.white('Ruby') + ' and the ' + chalk.white('Bundler gem') + ' are installed, then run again.');
@@ -31,7 +31,6 @@ var Generator = module.exports = function Generator(args, options) {
   };
 
   this.on('end', function () {
-
     // Clean up temp files
     spawn('rm', ['-r', '.jekyll'], { stdio: 'inherit' });
 
@@ -43,10 +42,9 @@ var Generator = module.exports = function Generator(args, options) {
 util.inherits(Generator, yeoman.generators.Base);
 
 // User input
-Generator.prototype.askForAuthor = function askForAuthor() {
+Generator.prototype.askForUser = function askForUser() {
   var cb = this.async();
 
-  // welcome message
   console.log(this.yeoman);
   console.log(chalk.yellow('This generator will scaffold and wire a Jekyll site. Yo, Jekyllrb!') +
     chalk.yellow('\n\nTell us a little about yourself.') + ' ☛');
@@ -63,12 +61,12 @@ Generator.prototype.askForAuthor = function askForAuthor() {
   },
   {
     name: 'github',
-    message: 'GitHub Username',
+    message: 'GitHub username',
     default: this.gitInfo.github
   },
   {
     name: 'twitter',
-    message: 'Twitter Username',
+    message: 'Twitter username',
     default: '@' + this.gitInfo.github
   }];
 
@@ -91,7 +89,7 @@ Generator.prototype.askForTools = function askForTools() {
   var prompts = [{
     name: 'cssPre',
     type: 'list',
-    message: 'Use a css preprocessor?',
+    message: 'CSS preprocessor',
     choices: ['None', 'Sass', 'Compass']
   },
   {
@@ -102,13 +100,13 @@ Generator.prototype.askForTools = function askForTools() {
   {
     name: 'jsPre',
     type: 'list',
-    message: 'Use a javascript preprocessor?',
+    message: 'Javascript preprocessor',
     choices: ['None', 'Coffeescript'],
   }];
 
   this.prompt(prompts, function (props) {
 
-    // Multiple choice 'none' to false
+    // Multiple choice 'None' to false
     this.cssPre  = props.cssPre === 'None' ? false : props.cssPre.toLowerCase();
     this.jsPre   = props.jsPre === 'None' ? false : props.jsPre.toLowerCase();
     this.autoPre = props.autoPre;
@@ -129,37 +127,37 @@ Generator.prototype.askForStructure = function askForStructure() {
 
   var prompts = [{
     name: 'cssDir',
-    message: 'Choose a css directory',
+    message: 'CSS directory',
     default: 'css',
     filter: slashFilter
   },
   {
     name: 'jsDir',
-    message: 'Choose a javascript directory',
+    message: 'Javascript directory',
     default: 'js',
     filter: slashFilter
   },
   {
     name: 'imgDir',
-    message: 'Choose an image file directory',
-    default: 'image',
+    message: 'Image directory',
+    default: 'img',
     filter: slashFilter
   },
   {
     name: 'fontsDir',
-    message: 'Choose a webfonts directory',
+    message: 'Webfont directory',
     default: 'fonts',
     filter: slashFilter
   }];
   var cssPreDirPrompt = {
     name: 'cssPreDir',
-    message: 'Choose a css preprocessor directory',
+    message: 'CSS preprocessor directory',
     default: '_scss',
     filter: slashFilter
   };
   var jsPreDirPrompt = {
     name: 'jsPreDir',
-    message: 'Choose a javascript preprocessor directory',
+    message: 'Javascript preprocessor directory',
     default: '_src',
     filter: slashFilter
   };
@@ -192,7 +190,7 @@ Generator.prototype.askForTemplates = function askForTemplates() {
   var prompts = [{
     name: 'templateType',
     type: 'list',
-    message: 'Choose a Jekyll site template',
+    message: 'Site template',
     choices: ['Default Jekyll', 'HTML5 ★ Boilerplate']
   }];
 
@@ -216,7 +214,7 @@ Generator.prototype.askForh5bp = function askForh5bp() {
     var prompts = [{
       name: 'h5bpCss',
       type: 'confirm',
-      message: 'Add H5★BP css files?'
+      message: 'Add H5★BP CSS files?'
     },
     {
       name: 'h5bpJs',
@@ -262,17 +260,17 @@ Generator.prototype.askForh5bp = function askForh5bp() {
 Generator.prototype.askForJekyll = function askForJekyll() {
   var cb = this.async();
 
-  console.log(chalk.yellow('\nAnd configure Jekyll.') + ' ☛' +
-              '\nYou can change all of these options in Jekyll\'s _config.yml.');
+  console.log(chalk.yellow('\nAnd finally, configure Jekyll.') + ' ☛' +
+              '\nYou can change all of these options in _config.yml.');
 
   var prompts = [{
     name: 'jekDescript',
-    message: 'Site Description'
+    message: 'Site description'
   },
   {
     name: 'jekPost',
     type: 'list',
-    message: 'Choose a post permalink style',
+    message: 'Post permalink style',
     choices: ['date', 'pretty', 'none']
   },
   {
@@ -288,7 +286,7 @@ Generator.prototype.askForJekyll = function askForJekyll() {
   },
   {
     name: 'jekPage',
-    message: 'How many posts should be shown on the home page?',
+    message: 'Number of posts to show on the home page',
     default: 'all',
     validate: function (input) {
       if (/^[0-9]*$/.test(input)) {
@@ -356,7 +354,7 @@ Generator.prototype.editor = function editor() {
 
 Generator.prototype.jekyllInit = function jekyllInit() {
 
-  // Create a default Jekyll site in a temporary folder
+  // Create the default Jekyll site in a temp folder
   this.jekTmpDir = path.join(process.cwd(), '.jekyll');
   shelljs.exec('bundle exec jekyll new ' + this.jekTmpDir);
 };
@@ -395,6 +393,7 @@ Generator.prototype.templates = function templates() {
 
     // Jekyll files tailored for Yeoman
     this.template('conditional/template-default/_layouts/default.html', 'app/_layouts/default.html');
+    // Empty file for Usemin defaults
     this.write(path.join('app', this.jsDir, 'main.js'), '');
   }
 
@@ -415,36 +414,36 @@ Generator.prototype.templates = function templates() {
     }
 
     // Pull H5BP in from Github
-    // Using a pre-release commit because there's so much good stuff in it.
+    // Use a pre-release commit because there's so much good stuff in it.
     this.remote('h5bp', 'html5-boilerplate', '23f5e084e559177b434f702ff6be1d83e66374d3', function (err, remote) {
       if (err) {
         return cb(err);
       }
 
-      // Always included files
+      // Always include files
       remote.copy('.htaccess', 'app/.htaccess');
       remote.copy('404.html', 'app/404.html');
       remote.copy('crossdomain.xml', 'app/crossdomain.xml');
       remote.copy('LICENSE.md', 'app/_h5bp-docs/LICENSE.md');
       remote.copy('robots.txt', 'app/robots.txt');
 
-      // Css boilerplate
+      // CSS boilerplate
       if (this.h5bpCss) {
         remote.copy('css/main.css', path.join('app', this.cssDir, 'main.css'));
       }
       else {
-        // Create empty file
+        // Empty file
         this.write(path.join('app', this.cssDir, 'main.css'), '');
       }
 
       // Js boilerplate
-      // Vendor js is handled by Bower
+      // Vendor javascript is handled by Bower
       if (this.h5bpJs) {
         remote.copy('js/main.js', path.join('app', this.jsDir, 'main.js'));
         remote.copy('js/plugins.js', path.join('app', this.jsDir, 'plugins.js'));
       }
       else {
-        // Create empty file
+        // Empty file
         this.write(path.join('app', this.jsDir, 'main.js'), '');
       }
 
@@ -480,12 +479,12 @@ Generator.prototype.cssPreprocessor = function cssPreprocessor() {
     this.mkdir(path.join('app', this.cssPreDir));
   }
 
-  // Sass and Compass files
+  // Sass and Compass
   if (['sass', 'compass'].indexOf(this.cssPre) !== -1) {
 
     this.template('conditional/sass-compass/readme.md', path.join('app', this.cssPreDir, 'readme.md'));
 
-    // Move css files to scss files
+    // Copy CSS files to SCSS
     var files = globule.find('**/*.css', {srcBase: path.join('app', this.cssDir)});
     var cssDir = this.cssDir;
     var cssDir = this.cssDir;
@@ -495,7 +494,7 @@ Generator.prototype.cssPreprocessor = function cssPreprocessor() {
       this.copy(path.join(process.cwd(), 'app', cssDir, file),
                 path.join('app', this.cssPreDir, file.replace(/\.css$/, '.scss')));
 
-      // Wait until copy is completely finished, and then delete files.
+      // Wait until copy is completely finished and then delete files.
       this.conflicter.resolve(function (err) {
         if (err) {
           return this.emit('error', err);
