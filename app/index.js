@@ -25,8 +25,8 @@ var Generator = module.exports = function Generator(args, options) {
   this.appname = path.basename(process.cwd());
   this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
   this.gitInfo = {
-    name: shelljs.exec('git config user.name', {silent: true}).output.replace(/\n/g, ''),
-    email: shelljs.exec('git config user.email', {silent: true}).output.replace(/\n/g, ''),
+    name: this.user.git.username,
+    email: this.user.git.email,
     github: shelljs.exec('git config github.user', {silent: true}).output.replace(/\n/g, ''),
   };
 
