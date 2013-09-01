@@ -374,7 +374,11 @@ module.exports = function (grunt) {
             // Copy moves asset files and directories
             '*.{ico,png}',
             '<%= imgDir %>/**/*',
-            '<%= fontsDir %>/**/*'
+            '<%= fontsDir %>/**/*',
+            // Follow the Jekyll pattern and exclude all files and folders
+            // prefixed with an underscore
+            '!**/_*/**',
+            '!**/_*'
           ],
           dest: '<%%= yeoman.dist %>'
         }]
