@@ -449,12 +449,7 @@ Generator.prototype.templates = function templates() {
 
       // Touch and favicon
       if (this.h5bpIco) {
-        remote.copy('apple-touch-icon-114x114-precomposed.png', 'app/apple-touch-icon-114x114-precomposed.png');
-        remote.copy('apple-touch-icon-144x144-precomposed.png', 'app/apple-touch-icon-144x144-precomposed.png');
-        remote.copy('apple-touch-icon-57x57-precomposed.png', 'app/apple-touch-icon-57x57-precomposed.png');
-        remote.copy('apple-touch-icon-72x72-precomposed.png', 'app/apple-touch-icon-72x72-precomposed.png');
-        remote.copy('apple-touch-icon-precomposed.png', 'app/apple-touch-icon-precomposed.png');
-        remote.copy('apple-touch-icon.png', 'app/apple-touch-icon.png');
+        remote.copy('apple-touch-icon-144x144-precomposed.png', 'app/apple-touch-icon-precomposed.png');
         remote.copy('favicon.ico', 'app/favicon.ico');
       }
 
