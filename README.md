@@ -38,11 +38,11 @@ This is your development workhorse. Running `grunt server` starts a watch task f
 
 You can use the `:build` target (`grunt server:build`) to run the build process, start a server, and review your site before deployment.
 
-#### `grunt report`
+#### `grunt check`
 
-Reports are similar to tests, but they check code quality instead of functionality. `grunt report` checks code with [Jshint](http://www.jshint.com/), [CSS Lint](http://csslint.net/) and [CSSCSS](http://zmoazeni.github.io/csscss/). BAMF! You just became a better developer. 
+Check your code quality with [Jshint](http://www.jshint.com/), [CSS Lint](http://csslint.net/) and [CSSCSS](http://zmoazeni.github.io/csscss/). BAMF! You just became a better developer. 
 
-You can configure report options in the Gruntfile or the task's '.rc' files.
+You can configure the `check` plugin options in the Gruntfile or the '.rc' files in the project root direcory.
 
 #### `grunt build`
 

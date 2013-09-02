@@ -265,7 +265,7 @@ module.exports = function (grunt) {
         shorthand: false,
         verbose: true
       },
-      report: {
+      check: {
        src: ['<%%= yeoman.app %>/<%= cssDir %>/**/*.css'<% if (cssPre === 'compass' || cssPre === 'sass') { %>,
              '<%%= yeoman.app %>/<%= cssPreDir %>/**/*.scss'<% } %>]
       }
@@ -274,7 +274,7 @@ module.exports = function (grunt) {
       options: {
         csslintrc: '.csslintrc'
       },
-      report: {
+      check: {
         src: [
           '<%%= yeoman.app %>}/<%= cssDir %>/**/*.css',
           '<%%= yeoman.app %>}/<%= cssPreDir %>/**/*.scss'
@@ -322,7 +322,7 @@ module.exports = function (grunt) {
     cssmin: {
       dist: {
         options: {
-          report: 'gzip'
+          check: 'gzip'
         }
       }
     },
@@ -432,20 +432,20 @@ module.exports = function (grunt) {
   });
 
   // No real tests yet. Add your own.
-  // grunt.registerTask('test', [
+  grunt.registerTask('test', [
   //   'clean:server',
   //   'concurrent:test',
   //   'connect:test'
-  // ]);
+  ]);
 
-  grunt.registerTask('report', [
+  grunt.registerTask('check', [
     'clean:server',<% if (cssPre === 'sass') { %>
     'sass:server',<% } %><% if (cssPre === 'compass') { %>
     'compass:server',<% } %><% if (jsPre === 'coffeescript') { %>
     'coffee:dist',<% } %>
     'jshint:all',
-    'csscss:report',
-    'csslint:report'
+    'csscss:check',
+    'csslint:check'
   ]);
 
   grunt.registerTask('build', [
@@ -466,7 +466,8 @@ module.exports = function (grunt) {
     ]);
 
   grunt.registerTask('default', [
-    'report',
+    'check',
+    'test',
     'build'
   ]);
 };
