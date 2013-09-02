@@ -20,6 +20,11 @@ var yeomanConfig = {
 
 module.exports = function (grunt) {
 
+  // show elapsed time at the end
+  require('time-grunt')(grunt);
+  // load all grunt tasks
+  require('load-grunt-tasks')(grunt);
+
   // Configuration
   grunt.initConfig({
     yeoman: yeomanConfig,
@@ -425,9 +430,6 @@ module.exports = function (grunt) {
       ]
     }
   });
-
-  // Load plugins
-  require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
   // Define Tasks
   grunt.registerTask('server', function (target) {
