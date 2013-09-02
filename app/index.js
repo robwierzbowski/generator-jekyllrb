@@ -46,7 +46,7 @@ Generator.prototype.askForUser = function askForUser() {
   var cb = this.async();
 
   console.log(this.yeoman);
-  console.log(chalk.yellow('This generator will scaffold and wire a Jekyll site. Yo, Jekyllrb!') +
+  console.log(chalk.yellow.bold('This generator will scaffold and wire a Jekyll site. Yo, Jekyllrb!') +
     chalk.yellow('\n\nTell us a little about yourself.') + ' ☛');
 
   var prompts = [{
