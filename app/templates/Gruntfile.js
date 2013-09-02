@@ -275,7 +275,10 @@ module.exports = function (grunt) {
         csslintrc: '.csslintrc'
       },
       report: {
-        src: ['{.tmp,<%%= yeoman.app %>}/<%= cssDir %>/**/*.css']
+        src: [
+          '<%%= yeoman.app %>}/<%= cssDir %>/**/*.css',
+          '<%%= yeoman.app %>}/<%= cssPreDir %>/**/*.scss'
+        ]
       }
     },
     // UseminPrepare will only scan a single page for usemin blocks. If you
