@@ -4,17 +4,17 @@
   "description": "Supercharge Jekyll development with Yeoman. Yo, Jekyllrb!",
   "keywords": [
     "yeoman-generator",
-    "web",
-    "front-end",
-    "jekyllrb",
     "jekyll",
+    "jekyllrb",
     "static",
+    "front-end",
+    "web",
     "site",
-    "website",
     "h5bp",
     "sass",
     "compass",
-    "coffeescript"
+    "coffeescript",
+    "autoprefixer"
   ],
   "homepage": "https://github.com/robwierzbowski/generator-jekyllrb",
   "bugs": "https://github.com/robwierzbowski/generator-jekyllrb/issues",
