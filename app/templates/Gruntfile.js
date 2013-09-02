@@ -174,7 +174,7 @@ module.exports = function (grunt) {
         httpImagesPath: '/<%= imgDir %>',
         httpGeneratedImagesPath: '/<%= imgDir %>/generated',
         outputStyle: 'expanded',
-        raw: 'asset_cache_buster :none \nextensions_dir = "<%%= yeoman.app %>/_bower_components"\n'
+        raw: 'extensions_dir = "<%%= yeoman.app %>/_bower_components"\n'
       },
       dist: {
         options: {
