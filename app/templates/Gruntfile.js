@@ -1,13 +1,9 @@
 // Generated on <%= (new Date).toISOString().split('T')[0] %> using <%= pkg.name %> <%= pkg.version %>
 'use strict';
-var liveReloadPort = 35729;
-var lrSnippet = require('connect-livereload')({port: liveReloadPort});
+var LIVERELOAD_PORT = 35729;
+var lrSnippet = require('connect-livereload')({port: LIVERELOAD_PORT});
 var mountFolder = function (connect, dir) {
   return connect.static(require('path').resolve(dir));
-};
-var yeomanConfig = {
-  app: 'app',
-  dist: 'dist'
 };
 
 // Directory reference:
@@ -19,24 +15,23 @@ var yeomanConfig = {
 //   fonts: <%= fontsDir %>
 
 module.exports = function (grunt) {
-
   // show elapsed time at the end
   require('time-grunt')(grunt);
   // load all grunt tasks
   require('load-grunt-tasks')(grunt);
 
-  // Configuration
+  // Configurable paths
+  var yeomanConfig = {
+    app: 'app',
+    dist: 'dist'
+  };
+
   grunt.initConfig({
     yeoman: yeomanConfig,
-
-    watch: {<% if (cssPre === 'sass') { %>
-      sass: {
+    watch: {<% if (cssPre) { %>
+      <%= cssPre %>: {
         files: ['<%%= yeoman.app %>/<%= cssPreDir %>/**/*.{scss,sass}'],
-        tasks: ['sass:server']
-      },<% } %><% if (cssPre === 'compass') { %>
-      compass: {
-        files: ['<%%= yeoman.app %>/<%= cssPreDir %>/**/*.{scss,sass}'],
-        tasks: ['compass:server'<% if (autoPre) { %>, 'autoprefixer:server'<% } %>]
+        tasks: ['<%= cssPre %>:server'<% if (autoPre) { %>, 'autoprefixer:server'<% } %>]
       },<% } %><% if (autoPre) { %>
       prefixCss: {
         files: ['<%%= yeoman.app %>/<%= cssDir %>/**/*.css'],
@@ -44,21 +39,23 @@ module.exports = function (grunt) {
       },<% } %><% if (jsPre === 'coffeescript') { %>
       coffee: {
         files: ['<%%= yeoman.app %>/<%= jsPreDir %>/**/*.coffee'],
-        tasks: ['coffee:server']
+        tasks: ['coffee:dist']
       },
       coffeeTest: {
         files: ['test/spec/**/*.coffee'],
         tasks: ['coffee:test']
       },<% } %>
       jekyll: {
-        files: ['<%%= yeoman.app %>/**/*.{html,yml,md,mkd,markdown}',
-                '_config.yml',
-                '!<%%= yeoman.app %>/_bower_components'],
+        files: [
+          '<%%= yeoman.app %>/**/*.{html,yml,md,mkd,markdown}',
+          '_config.yml',
+          '!<%%= yeoman.app %>/_bower_components'
+        ],
         tasks: ['jekyll:server']
       },
       livereload: {
         options: {
-          livereload: liveReloadPort
+          livereload: LIVERELOAD_PORT
         },
         files: [
           '.jekyll/**/*.html',<% if (autoPre) { %>
@@ -72,7 +69,7 @@ module.exports = function (grunt) {
     connect: {
       options: {
         port: 9000,
-        // Change hostname to null to access the server from outside
+        // Change hostname to '0.0.0.0' to access the server from outside
         hostname: 'localhost'
       },
       livereload: {
@@ -87,21 +84,22 @@ module.exports = function (grunt) {
           }
         }
       },
-      test: {
-        options: {
-          middleware: function (connect) {
-            return [
-              mountFolder(connect, '.tmp'),
-              mountFolder(connect, 'test')
-            ];
-          }
-        }
-      },
       dist: {
         options: {
           middleware: function (connect) {
             return [
               mountFolder(connect, yeomanConfig.dist)
+            ];
+          }
+        }
+      },
+      test: {
+        options: {
+          middleware: function (connect) {
+            return [
+              mountFolder(connect, '.tmp'),
+              mountFolder(connect, 'test'),
+              mountFolder(connect, yeomanConfig.app)
             ];
           }
         }
@@ -119,9 +117,9 @@ module.exports = function (grunt) {
           src: [
             '.tmp',
             '<%%= yeoman.dist %>/*',
-            // Running Jekyll also cleans all non-git files from the target
-            // directory.  Exclude any non-standard 'keep_files' item here
-            // (e.g., the generated files directory from Jekyll Picture Tag).
+            // Running Jekyll also cleans the target directory.  Exclude any
+            // non-standard `keep_files` here (e.g., the generated files
+            // directory from Jekyll Picture Tag).
             '!<%%= yeoman.dist %>/.git*'
           ]
         }]
@@ -141,7 +139,6 @@ module.exports = function (grunt) {
           cwd: '<%%= yeoman.app %>/<%= cssPreDir %>',
           src: '**/*.{scss,sass}',
           dest: '.tmp/<%= cssDir %>',
-          filter: 'isFile',
           ext: '.css'
         }]
       },
@@ -155,7 +152,6 @@ module.exports = function (grunt) {
           cwd: '<%%= yeoman.app %>/<%= cssPreDir %>',
           src: '**/*.{scss,sass}',
           dest: '.tmp/<%= cssDir %>',
-          filter: 'isFile',
           ext: '.css'
         }]
       }
@@ -168,7 +164,6 @@ module.exports = function (grunt) {
         sassDir: '<%%= yeoman.app %>/<%= cssPreDir %>',
         cssDir: '.tmp/<%= cssDir %>',
         imagesDir: '<%%= yeoman.app %>/<%= imgDir %>',
-        fontsDir: '<%%= yeoman.app %>/<%= fontsDir %>',
         javascriptsDir: '<%%= yeoman.app %>/<%= jsDir %>',
         relativeAssets: false,
         httpImagesPath: '/<%= imgDir %>',
@@ -210,15 +205,6 @@ module.exports = function (grunt) {
       }
     },<% } %><% if (jsPre === 'coffeescript') { %>
     coffee: {
-      test: {
-        files: [{
-          expand: true,
-          cwd: 'test/spec',
-          src: '**/*.coffee',
-          dest: '.tmp/spec',
-          ext: '.js'
-        }]
-      },
       dist: {
         files: [{
           expand: true,
@@ -228,12 +214,12 @@ module.exports = function (grunt) {
           ext: '.js'
         }]
       },
-      server: {
+      test: {
         files: [{
           expand: true,
-          cwd: '<%%= yeoman.app %>/<%= jsPreDir %>',
+          cwd: 'test/spec',
           src: '**/*.coffee',
-          dest: '.tmp/<%= jsDir %>',
+          dest: '.tmp/spec',
           ext: '.js'
         }]
       }
@@ -241,7 +227,8 @@ module.exports = function (grunt) {
     jekyll: {
       options: {
         bundleExec: true,
-        src : '<%%= yeoman.app %>'
+        config: '_config.yml',
+        src: '<%%= yeoman.app %>'
       },
       dist: {
         options: {
@@ -252,7 +239,6 @@ module.exports = function (grunt) {
       server: {
         options: {
           dest: '.jekyll',
-          config: '_config.yml'
         }
       }
     },
@@ -262,20 +248,16 @@ module.exports = function (grunt) {
       },
       all: [
         'Gruntfile.js',
-        '{.tmp,<%%= yeoman.app %>}/<%= jsDir %>/**/*.js',
+        '<%%= yeoman.app %>/<%= jsDir %>/**/*.js',
         'test/spec/**/*.js',
         '!<%%= yeoman.app %>/<%= jsDir %>/vendor/**/*',
         '!<%%= yeoman.app %>/_bower_components/**/*'
-      ],
-      report: [
-        '{.tmp,<%%= yeoman.app %>}/<%= jsDir %>/**/*.js',
-        '!<%%= yeoman.app %>/<%= jsDir %>/vendor/**/*'
       ]
     },
     csscss: {
       options: {
         bundleExec: true,
-        minMatch: 2,<% if (cssPre === 'compass' || cssPre === 'sass') { %>
+        minMatch: 2,<% if (cssPre) { %>
         ignoreSassMixins: false,<% } %><% if (cssPre === 'compass') { %>
         compass: true,<% } %><% if (!cssPre) { %>
         showParserErrors: true,<% } %>
@@ -296,8 +278,8 @@ module.exports = function (grunt) {
         src: ['{.tmp,<%%= yeoman.app %>}/<%= cssDir %>/**/*.css']
       }
     },
-    // UseminPrepare will only scan a single page for usemin blocks. If you have
-    // usemin blocks that aren't used in index.html, create a usemin manifest
+    // UseminPrepare will only scan a single page for usemin blocks. If you
+    // use usemin blocks that aren't in index.html, create a usemin manifest
     // page (hackery!) and point this task there.
     useminPrepare: {
       options: {
@@ -319,8 +301,7 @@ module.exports = function (grunt) {
           collapseWhitespace: true,
           collapseBooleanAttributes: true,
           removeAttributeQuotes: true,
-          removeRedundantAttributes: true,
-          removeOptionalTags: true
+          removeRedundantAttributes: true
         },
         files: [{
           expand: true,
@@ -409,7 +390,7 @@ module.exports = function (grunt) {
             '<%%= yeoman.dist %>/<%= jsDir %>/**/*.js',
             '<%%= yeoman.dist %>/<%= cssDir %>/**/*.css',
             '<%%= yeoman.dist %>/<%= imgDir %>/**/*.{gif,jpg,jpeg,png,svg,webp}',
-            '<%%= yeoman.dist %>/<%= fontsDir %>/**/*.{eot*,svg,ttf,woff}'
+            '<%%= yeoman.dist %>/<%= fontsDir %>/**/*.{eot*,otf,svg,ttf,woff}'
           ]
         }
       }
@@ -418,7 +399,7 @@ module.exports = function (grunt) {
       server: [<% if (cssPre === 'sass') { %>
         'sass:server',<% } %><% if (cssPre === 'compass') { %>
         'compass:server',<% } %><% if (jsPre === 'coffeescript') { %>
-        'coffee:server',<% } %><% if (autoPre) { %>
+        'coffee:dist',<% } %><% if (autoPre) { %>
         'copy:stageCss',<% } %>
         'jekyll:server'
       ],
@@ -458,8 +439,8 @@ module.exports = function (grunt) {
     'clean:server',<% if (cssPre === 'sass') { %>
     'sass:server',<% } %><% if (cssPre === 'compass') { %>
     'compass:server',<% } %><% if (jsPre === 'coffeescript') { %>
-    'coffee:server',<% } %>
-    'jshint:report',
+    'coffee:dist',<% } %>
+    'jshint:all',
     'csscss:report',
     'csslint:report'
   ]);
