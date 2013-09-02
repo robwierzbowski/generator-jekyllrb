@@ -1,6 +1,6 @@
 # Generator-jekyllrb 
 
-**Supercharged Jekyll development with Yeoman. Yo, Jekyllrb!**
+**Supercharge Jekyll development with Yeoman. Yo, Jekyllrb!**
 
 Generator-jekyllrb wraps the [Jekyll](http://jekyllrb.com/) static site generator in a [Yeoman](http://yeoman.io/) development workflow. Scaffold a site with Yo, manage front end packages with [Bower](http://bower.io/), and run development and build tasks with [Grunt](http://gruntjs.com/). Generator-jekyllrb aims to provide a solid baseline for modern development with a flexible structure and toolset to accommodate a variety of developer preferences. It's also a great way to get familiar with Yeoman generators and workflow if you don't know any javascript MVx frameworks.
 
