@@ -85,6 +85,7 @@ Report bugs and feature proposals in the [Github issue tracker](https://github.c
 
 ## Release History
 
+0.4.0-alpha, Sept 2, 2013: Re-alignment with generator-webapp, more Bower integration, bugfixes, code and ux improvements.
 0.3.8, July 15, 2013: Chalk fixes, update generator dependency.
 0.3.6, July 15, 2013: Easier install, package updates, and bugfixes.  
 0.3.5, July 15, 2013: Switch default markdown parser to Redcarpet.  

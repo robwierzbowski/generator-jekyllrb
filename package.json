@@ -1,6 +1,6 @@
 {
   "name": "generator-jekyllrb",
-  "version": "0.3.8",
+  "version": "0.4.0-alpha",
   "description": "Supercharge Jekyll development with Yeoman. Yo, Jekyllrb!",
   "keywords": [
     "yeoman-generator",
