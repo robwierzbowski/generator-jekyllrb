@@ -10,9 +10,9 @@
 //   fonts: <%= fontsDir %>
 
 module.exports = function (grunt) {
-  // show elapsed time at the end
+  // Show elapsed time after tasks run
   require('time-grunt')(grunt);
-  // load all grunt tasks
+  // Load all Grunt tasks
   require('load-grunt-tasks')(grunt);
 
   grunt.initConfig({
@@ -238,8 +238,7 @@ module.exports = function (grunt) {
         'Gruntfile.js',
         '<%%= yeoman.app %>/<%= jsDir %>/**/*.js',
         'test/spec/**/*.js',
-        '!<%%= yeoman.app %>/<%= jsDir %>/vendor/**/*',
-        '!<%%= yeoman.app %>/_bower_components/**/*'
+        '!<%%= yeoman.app %>/<%= jsDir %>/vendor/**/*'
       ]
     },
     csscss: {
