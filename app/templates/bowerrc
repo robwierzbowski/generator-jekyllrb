@@ -1,4 +1,3 @@
 {
-  "directory": "app/_bower_components",
-  "json": "bower.json"
+  "directory": "app/_bower_components"
 }
