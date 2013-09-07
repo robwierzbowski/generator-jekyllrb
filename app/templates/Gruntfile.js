@@ -15,14 +15,12 @@ module.exports = function (grunt) {
   // load all grunt tasks
   require('load-grunt-tasks')(grunt);
 
-  // Configurable paths
-  var yeomanConfig = {
-    app: 'app',
-    dist: 'dist'
-  };
-
   grunt.initConfig({
-    yeoman: yeomanConfig,
+    // Configurable paths
+    yeoman: {
+      app: 'app',
+      dist: 'dist'
+    },
     watch: {<% if (cssPre) { %>
       <%= cssPre %>: {
         files: ['<%%= yeoman.app %>/<%= cssPreDir %>/**/*.{scss,sass}'],
@@ -74,7 +72,7 @@ module.exports = function (grunt) {
           base: [
             '.tmp',
             '.jekyll',
-            yeomanConfig.app
+            '<%%= yeoman.app %>'
           ]
         }
       },
@@ -82,7 +80,7 @@ module.exports = function (grunt) {
         options: {
           open: true,
           base: [
-            yeomanConfig.dist
+            '<%%= yeoman.dist %>'
           ]
         }
       },
@@ -92,7 +90,7 @@ module.exports = function (grunt) {
             '.tmp',
             '.jekyll',
             'test',
-            yeomanConfig.app
+            '<%%= yeoman.app %>'
           ]
         }
       }
