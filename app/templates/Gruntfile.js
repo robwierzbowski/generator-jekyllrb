@@ -28,7 +28,7 @@ module.exports = function (grunt) {
         files: ['<%%= yeoman.app %>/<%= cssPreDir %>/**/*.{scss,sass}'],
         tasks: ['<%= cssPre %>:server'<% if (autoPre) { %>, 'autoprefixer:server'<% } %>]
       },<% } %><% if (autoPre) { %>
-      prefixCss: {
+      autoprefixer: {
         files: ['<%%= yeoman.app %>/<%= cssDir %>/**/*.css'],
         tasks: ['copy:stageCss', 'autoprefixer:server']
       },<% } %><% if (jsPre === 'coffeescript') { %>
