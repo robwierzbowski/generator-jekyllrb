@@ -1,10 +1,5 @@
 // Generated on <%= (new Date).toISOString().split('T')[0] %> using <%= pkg.name %> <%= pkg.version %>
 'use strict';
-var LIVERELOAD_PORT = 35729;
-var lrSnippet = require('connect-livereload')({port: LIVERELOAD_PORT});
-var mountFolder = function (connect, dir) {
-  return connect.static(require('path').resolve(dir));
-};
 
 // Directory reference:
 //   css: <%= cssDir %><% if (cssPre) { %>
@@ -55,7 +50,7 @@ module.exports = function (grunt) {
       },
       livereload: {
         options: {
-          livereload: LIVERELOAD_PORT
+          livereload: '<%%= connect.options.livereload %>'
         },
         files: [
           '.jekyll/**/*.html',<% if (autoPre) { %>
@@ -69,45 +64,37 @@ module.exports = function (grunt) {
     connect: {
       options: {
         port: 9000,
-        // Change hostname to '0.0.0.0' to access the server from outside
+        livereload: 35729,
+        // change this to '0.0.0.0' to access the server from outside
         hostname: 'localhost'
       },
       livereload: {
         options: {
-          middleware: function (connect) {
-            return [
-              lrSnippet,
-              mountFolder(connect, '.tmp'),
-              mountFolder(connect, '.jekyll'),
-              mountFolder(connect, yeomanConfig.app)
-            ];
-          }
+          open: true,
+          base: [
+            '.tmp',
+            '.jekyll',
+            yeomanConfig.app
+          ]
         }
       },
       dist: {
         options: {
-          middleware: function (connect) {
-            return [
-              mountFolder(connect, yeomanConfig.dist)
-            ];
-          }
+          open: true,
+          base: [
+            yeomanConfig.dist
+          ]
         }
       },
       test: {
         options: {
-          middleware: function (connect) {
-            return [
-              mountFolder(connect, '.tmp'),
-              mountFolder(connect, 'test'),
-              mountFolder(connect, yeomanConfig.app)
-            ];
-          }
+          base: [
+            '.tmp',
+            '.jekyll',
+            'test',
+            yeomanConfig.app
+          ]
         }
-      }
-    },
-    open: {
-      server: {
-        path: 'http://localhost:<%%= connect.options.port %>'
       }
     },
     clean: {
@@ -418,7 +405,7 @@ module.exports = function (grunt) {
   // Define Tasks
   grunt.registerTask('server', function (target) {
     if (target === 'dist') {
-      return grunt.task.run(['build', 'open', 'connect:dist:keepalive']);
+      return grunt.task.run(['build', 'connect:dist:keepalive']);
     }
 
     grunt.task.run([
@@ -426,7 +413,6 @@ module.exports = function (grunt) {
       'concurrent:server',<% if (autoPre) { %>
       'autoprefixer:server',<% } %>
       'connect:livereload',
-      'open',
       'watch'
     ]);
   });
