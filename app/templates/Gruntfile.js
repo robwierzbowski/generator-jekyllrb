@@ -109,7 +109,10 @@ module.exports = function (grunt) {
           ]
         }]
       },
-      server: ['.tmp', '.jekyll']
+      server: [
+        '.tmp',
+        '.jekyll'
+      ]
     },<% if (cssPre === 'sass') { %>
     sass: {
       options: {
@@ -277,8 +280,8 @@ module.exports = function (grunt) {
     },
     usemin: {
       options: {
-          basedir: '<%%= yeoman.dist %>',
-          dirs: ['<%%= yeoman.dist %>/**/*']
+        basedir: '<%%= yeoman.dist %>',
+        dirs: ['<%%= yeoman.dist %>/**/*']
       },
       html: ['<%%= yeoman.dist %>/**/*.html'],
       css: ['<%%= yeoman.dist %>/<%= cssDir %>/**/*.css']
