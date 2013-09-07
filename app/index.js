@@ -90,7 +90,7 @@ Generator.prototype.askForTools = function askForTools() {
     name: 'cssPre',
     type: 'list',
     message: 'CSS preprocessor',
-    choices: ['None', 'Sass', 'Compass']
+    choices: ['Compass', 'Sass', 'None']
   },
   {
     name: 'autoPre',
@@ -101,7 +101,7 @@ Generator.prototype.askForTools = function askForTools() {
     name: 'jsPre',
     type: 'list',
     message: 'Javascript preprocessor',
-    choices: ['None', 'Coffeescript'],
+    choices: ['Coffeescript', 'None'],
   }];
 
   this.prompt(prompts, function (props) {
