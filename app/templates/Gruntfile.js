@@ -230,44 +230,6 @@ module.exports = function (grunt) {
         }
       }
     },
-    jshint: {
-      options: {
-        jshintrc: '.jshintrc'
-      },
-      all: [
-        'Gruntfile.js',
-        '<%%= yeoman.app %>/<%= jsDir %>/**/*.js',
-        'test/spec/**/*.js',
-        '!<%%= yeoman.app %>/<%= jsDir %>/vendor/**/*'
-      ]
-    },
-    csscss: {
-      options: {
-        bundleExec: true,
-        minMatch: 2,<% if (cssPre) { %>
-        ignoreSassMixins: false,<% } %><% if (cssPre === 'compass') { %>
-        compass: true,<% } %><% if (!cssPre) { %>
-        showParserErrors: true,<% } %>
-        colorize: true,
-        shorthand: false,
-        verbose: true
-      },
-      check: {
-       src: ['<%%= yeoman.app %>/<%= cssDir %>/**/*.css'<% if (cssPre === 'compass' || cssPre === 'sass') { %>,
-             '<%%= yeoman.app %>/<%= cssPreDir %>/**/*.scss'<% } %>]
-      }
-    },
-    csslint: {
-      options: {
-        csslintrc: '.csslintrc'
-      },
-      check: {
-        src: [
-          '<%%= yeoman.app %>}/<%= cssDir %>/**/*.css',
-          '<%%= yeoman.app %>}/<%= cssPreDir %>/**/*.scss'
-        ]
-      }
-    },
     // UseminPrepare will only scan a single page for usemin blocks. If you
     // use usemin blocks that aren't in index.html, create a usemin manifest
     // page (hackery!) and point this task there.
@@ -383,6 +345,44 @@ module.exports = function (grunt) {
             '<%%= yeoman.dist %>/<%= fontsDir %>/**/*.{eot*,otf,svg,ttf,woff}'
           ]
         }
+      }
+    },
+    jshint: {
+      options: {
+        jshintrc: '.jshintrc'
+      },
+      all: [
+        'Gruntfile.js',
+        '<%%= yeoman.app %>/<%= jsDir %>/**/*.js',
+        'test/spec/**/*.js',
+        '!<%%= yeoman.app %>/<%= jsDir %>/vendor/**/*'
+      ]
+    },
+    csscss: {
+      options: {
+        bundleExec: true,
+        minMatch: 2,<% if (cssPre) { %>
+        ignoreSassMixins: false,<% } %><% if (cssPre === 'compass') { %>
+        compass: true,<% } %><% if (!cssPre) { %>
+        showParserErrors: true,<% } %>
+        colorize: true,
+        shorthand: false,
+        verbose: true
+      },
+      check: {
+       src: ['<%%= yeoman.app %>/<%= cssDir %>/**/*.css'<% if (cssPre === 'compass' || cssPre === 'sass') { %>,
+             '<%%= yeoman.app %>/<%= cssPreDir %>/**/*.scss'<% } %>]
+      }
+    },
+    csslint: {
+      options: {
+        csslintrc: '.csslintrc'
+      },
+      check: {
+        src: [
+          '<%%= yeoman.app %>}/<%= cssDir %>/**/*.css',
+          '<%%= yeoman.app %>}/<%= cssPreDir %>/**/*.scss'
+        ]
       }
     },
     concurrent: {
