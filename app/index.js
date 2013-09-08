@@ -415,7 +415,7 @@ Generator.prototype.templates = function templates() {
 
     // Pull H5BP in from Github
     // Use a pre-release commit because there's so much good stuff in it.
-    this.remote('h5bp', 'html5-boilerplate', '23f5e084e559177b434f702ff6be1d83e66374d3', function (err, remote) {
+    this.remote('h5bp', 'html5-boilerplate', '71ca9fb7a06bfcd2359c924ca261d41d1dd03e8d', function (err, remote) {
       if (err) {
         return cb(err);
       }
@@ -449,7 +449,7 @@ Generator.prototype.templates = function templates() {
 
       // Touch and favicon
       if (this.h5bpIco) {
-        remote.copy('apple-touch-icon-144x144-precomposed.png', 'app/apple-touch-icon-precomposed.png');
+        remote.copy('apple-touch-icon-precomposed.png', 'app/apple-touch-icon-precomposed.png');
         remote.copy('favicon.ico', 'app/favicon.ico');
       }
 
