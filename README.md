@@ -76,13 +76,6 @@ Using the generator's Yeoman workflow with an existing site is easy, but require
 
 Report bugs and feature proposals in the [Github issue tracker](https://github.com/robwierzbowski/generator-jekyllrb/issues). In lieu of a formal styleguide, take care to maintain the existing coding style. Lint and test your code using [Grunt](https://github.com/gruntjs/grunt).
 
-## To Do
-
-- Add deployment options
-- Add stylus and require.js
-- Add a categories subgenerator
-- Add grunt-bower-install
-
 ## Release History
 
 See the [changelog](//github.com/robwierzbowski/generator-jekyllrb/blob/master/CHANGELOG).
