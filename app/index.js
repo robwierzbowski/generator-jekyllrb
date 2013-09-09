@@ -472,7 +472,7 @@ Generator.prototype.pygments = function pygments() {
   if (this.jekPyg) {
     this.copy(path.join(this.jekTmpDir, 'css/syntax.css'), path.join('app', this.cssDir, 'syntax.css'));
   }
-}
+};
 
 Generator.prototype.cssPreprocessor = function cssPreprocessor() {
   if (this.cssPre) {
@@ -486,7 +486,6 @@ Generator.prototype.cssPreprocessor = function cssPreprocessor() {
 
     // Copy CSS files to SCSS
     var files = globule.find('**/*.css', {srcBase: path.join('app', this.cssDir)});
-    var cssDir = this.cssDir;
     var cssDir = this.cssDir;
 
     files.forEach(function (file) {
