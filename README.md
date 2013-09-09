@@ -2,83 +2,87 @@
 
 **Supercharge Jekyll development with Yeoman. Yo, Jekyllrb!**
 
-Generator-jekyllrb wraps the [Jekyll](http://jekyllrb.com/) static site generator in a [Yeoman](http://yeoman.io/) development workflow. Scaffold a site with Yo, manage front end packages with [Bower](http://bower.io/), and run development and build tasks with [Grunt](http://gruntjs.com/). Generator-jekyllrb aims to provide a solid baseline for modern development with a flexible structure and toolset to accommodate a variety of developer preferences. It's also a great way to get familiar with Yeoman generators and workflow if you don't know any javascript MVx frameworks.
+Generator-jekyllrb wraps the [Jekyll](http://jekyllrb.com/) static site generator in a [Yeoman](http://yeoman.io/) development workflow. Scaffold your site with Yo, manage front end packages with [Bower](http://bower.io/), and automate development and build tasks with [Grunt](http://gruntjs.com/). 
 
-**Generator options:**
+Generator-jekyllrb is ideal for developing performant static sites and prototyping dynamic sites and apps (especially if the final version uses Yeoman too). It's also a great introduction to Yeoman if you're not familiar with JavaScript MV* frameworks.
 
+## Features
+
+**During setup you can choose:**
+
+- [Compass](http://compass-style.org/), [Sass](http://sass-lang.com/), [Stylus with Nib](http://learnboost.github.io/stylus/), or vanilla CSS
+- [CoffeeScript](http://coffeescript.org/) or vanilla JavaScript
+- Optional CSS vendor prefixing with [Autoprefixer](https://github.com/ai/autoprefixer)
 - Default Jekyll or [HTML5 Boilerplate](http://html5boilerplate.com/) templates
-- Fully configurable directory structure
-- Your choice of [Compass](http://compass-style.org/), [Sass](http://sass-lang.com/), [Stylus with Nib](http://learnboost.github.io/stylus/), or vanilla CSS
-- [Autoprefixer](https://github.com/ai/autoprefixer) CSS post-processor
-- [Coffeescript](http://coffeescript.org/) or vanilla javascript
 - Common Jekyll configuration options
 
-**Workflow features:**
+**Generator-jekyllrb always includes:**
 
-- Built in server with livereload
-- Code linting with [Jshint](http://www.jshint.com/), [CssLint](http://csslint.net/), and [CSSCSS](http://zmoazeni.github.io/csscss/)
-- Build process with asset minification, uglification, and revving
+- Built in preview server with LiveReload
+- Automatic Jekyll and preprocessor compiling
+- Code quality checks with [Jshint](http://www.jshint.com/), [CssLint](http://csslint.net/), [CSSCSS](http://zmoazeni.github.io/csscss/), and `jekyll doctor`
+- An automatic build process that includes concatenation, image optimization, CSS and HTML minification, JS uglification, and asset revving to bust those caches
 
-## Requirements
+## Getting Started
 
-Just the basics: [Node.js](http://nodejs.org/) and npm, [Ruby](http://www.ruby-lang.org/) 1.9+ and [Bundler](http://gembundler.com/). The generator will install everything else.
-
-## Quick start
-
+- Check that you have [Node.js](http://nodejs.org/), [Ruby](http://www.ruby-lang.org/), and [Bundler](http://gembundler.com/) installed
 - Install the generator: `npm install -g generator-jekyllrb`
 - Run: `yo jekyllrb`
 
-## Workflow
+## Grunt Workflow
 
-Once you've scaffolded your site there are some handy Grunt tasks available to help you develop, test, and build.
+#### grunt server
 
-#### `grunt server`
+Compiles all files and opens the site in your default browser. A watch task watches for changes to files, recompiles if necessary, and injects the changes into the browser with LiveReload.
 
-This is your development workhorse. Running `grunt server` starts a watch task for preprocessor files, starts a server, and opens the site in your default browser. The server uses livereload to inject code changes into the browser automatically — there's no need to manually refresh.
+#### grunt check
 
-You can use the `:build` target (`grunt server:build`) to run the build process, start a server, and review your site before deployment.
+Checks code quality with Jshint, CSS Lint and CSSCSS, and Jekyll health with `jekyll doctor`.
 
-#### `grunt check`
+#### grunt build
 
-Check your code quality with [Jshint](http://www.jshint.com/), [CSS Lint](http://csslint.net/) and [CSSCSS](http://zmoazeni.github.io/csscss/). Also runs `jekyll doctor` to make sure your Jekyll site is up to date with no url conflicts. BAMF! You just became a better developer. 
+Builds an optimized site to the dist directory. [Usemin blocks](https://github.com/yeoman/grunt-usemin#the-useminprepare-task) are concatenated, [CSS](https://github.com/gruntjs/grunt-contrib-cssmin), [images](https://github.com/gruntjs/grunt-contrib-imagemin), and [HTML](https://github.com/gruntjs/grunt-contrib-htmlmin) are minified, [JavaScript is uglified](https://github.com/gruntjs/grunt-contrib-uglify), and assets are [revved](https://github.com/cbas/grunt-rev) for cache busting.
 
-You can configure linter plugin options in the Gruntfile or their '.rc' files in the project root direcory.
+`grunt server:dist` will run `grunt build` and open the result in your default browser
 
-#### `grunt build`
+#### grunt (default)
 
-When you're ready to publish your site, run `grunt build` to send it through a build process. [Usemin blocks](https://github.com/yeoman/grunt-usemin#the-useminprepare-task) are concatenated, [CSS](https://github.com/gruntjs/grunt-contrib-cssmin), [images](https://github.com/gruntjs/grunt-contrib-imagemin), and [HTML](https://github.com/gruntjs/grunt-contrib-htmlmin) are minified, [javascript is uglified](https://github.com/gruntjs/grunt-contrib-uglify), assets are [revved](https://github.com/cbas/grunt-rev), and the final optimized site is output to the 'dist' directory. 
+`grunt` on its own is a special task that runs code checks, any tests you've added, and builds the site.
 
-#### `grunt (default)` and individual tasks
+#### Individual tasks and :targets
 
-`grunt` is a custom task that runs reports and then builds your site.
+Every task and target in the Gruntfile can be run individually (e.g., `grunt jshint:all` or `grunt compass:server`). Edit the tasks and [add new ones to fit your needs](http://gruntjs.com/configuring-tasks).
 
-There are many tasks and targets in the Gruntfile, all of which are available for individual use on the command line. Read through the Gruntfile to familiarize yourself with the complete list; it can be very useful to run tasks like `jshint:all` and `compass:server` by themselves. Edit them when necessary, and [set up some of your own](http://gruntjs.com/configuring-tasks).
- 
-#### Bower, components, and Usemin
+## Bower, components, and Usemin
 
-[Bower](http://bower.io/) is a package manager for front-end components. Use it to download and manage CSS, javascript, and preprocessor components for your site. Everything in your bower_components directory is available while running `grunt server`.
+[Bower](http://bower.io/) is a package manager for front-end components. Use it to download and manage CSS, JavaScript, and [preprocessor tools](https://github.com/Team-Sass) for your site. Everything in the _bower_components directory is available while running `grunt server`.
 
-To include components in the build place them inside of a Usemin block or add them manually to the `copy:dist`, `uglify`, and `cssmin` tasks. This workflow will be streamlined with the release of Usemin 2.0.
+To include components in the build, place them inside of a Usemin block or add them to the `copy:dist` task. This workflow will be streamlined with the release of Usemin 2.0.
+
+## More on Yeoman and Grunt
+
+[Getting started with Yeoman](http://yeoman.io/gettingstarted.html)  
+[Getting started with Grunt](http://gruntjs.com/getting-started)
 
 ## Migrating an existing site
 
-Using the generator's Yeoman workflow with an existing site is easy, but requires a little manual editing.
+Wrapping an existing site in Yeoman isn't hard, but it takes a little manual editing.
 
-1. Generate a new site with the same tools and directory structure as your own. Don't worry about the templating options.
-2. Transfer any custom configuration from your _config.yml to the new generated _config.yml.
-3. If you're using Compass, transfer custom configuration from your config.rb to the `compass` task in the generated Gruntfile.
-4. Delete your site's original _config.yml, config.rb, and any files generated by Jekyll, CSS preprocessors, or Coffeescript.
-5. Delete the contents of the generated app directory. Move your remaining site source files there.
-6. Test that everything is working correctly by running `grunt server`, `grunt dist`, and `grunt server:dist`. Check that all the files you expect are being transferred to the dist directory.
-7. If you were versioning the _site directory separately, move its .git folder to the dist directory.
+1. Generate a new Yeoman/Jekyll app with the same tools and directory structure as your own. Ignore the templating options.
+2. Transfer any custom configuration from your _config.yml to the newly generated _config.yml.
+3. If you're using Compass, transfer custom configuration from your config.rb to the `compass` task in the Gruntfile.
+5. Delete everything inside the Yeoman app directory.
+4. Delete your site's original _config.yml, config.rb, and any files generated by Jekyll, CSS preprocessors, or CoffeeScript. Copy the remaining site into the app directory
+6. Test that everything is working correctly by running `grunt server`, `grunt dist`, and `grunt server:dist`. Check that the files you expect are being transferred to the dist directory.
+7. If you were versioning the _site directory, move its .git folder to the dist directory.
 
 ## Contribute
 
-Report bugs and feature proposals in the [Github issue tracker](https://github.com/robwierzbowski/generator-jekyllrb/issues). In lieu of a formal styleguide, take care to maintain the existing coding style. Lint and test your code using [Grunt](https://github.com/gruntjs/grunt).
+Post bugs and feature requests to the [Github issue tracker](https://github.com/robwierzbowski/generator-jekyllrb/issues). In lieu of a formal styleguide, take care to maintain the existing coding style. Lint and test your code using [Grunt](https://github.com/gruntjs/grunt).
 
 ## Release History
 
-See the [changelog](//github.com/robwierzbowski/generator-jekyllrb/blob/master/CHANGELOG).
+[Changelog](//github.com/robwierzbowski/generator-jekyllrb/blob/master/CHANGELOG)
 
 ## License
-[BSD-new License](http://en.wikipedia.org/wiki/BSD_License)
+[BSD-new](http://en.wikipedia.org/wiki/BSD_License)
