@@ -40,9 +40,9 @@ You can use the `:build` target (`grunt server:build`) to run the build process,
 
 #### `grunt check`
 
-Check your code quality with [Jshint](http://www.jshint.com/), [CSS Lint](http://csslint.net/) and [CSSCSS](http://zmoazeni.github.io/csscss/). BAMF! You just became a better developer. 
+Check your code quality with [Jshint](http://www.jshint.com/), [CSS Lint](http://csslint.net/) and [CSSCSS](http://zmoazeni.github.io/csscss/). Also runs `jekyll doctor` to make sure your Jekyll site is up to date with no url conflicts. BAMF! You just became a better developer. 
 
-You can configure the `check` plugin options in the Gruntfile or the '.rc' files in the project root direcory.
+You can configure linter plugin options in the Gruntfile or their '.rc' files in the project root direcory.
 
 #### `grunt build`
 

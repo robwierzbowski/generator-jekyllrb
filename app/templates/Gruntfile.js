@@ -215,18 +215,23 @@ module.exports = function (grunt) {
     jekyll: {
       options: {
         bundleExec: true,
-        config: '_config.yml',
+        config: '_config.yml,_config.build.yml',
         src: '<%%= yeoman.app %>'
       },
       dist: {
         options: {
           dest: '<%%= yeoman.dist %>',
-          config: '_config.yml,_config.build.yml'
         }
       },
       server: {
         options: {
-          dest: '.jekyll',
+          config: '_config.yml',
+          dest: '.jekyll'
+        }
+      },
+      check: {
+        options: {
+          doctor: true
         }
       }
     },
@@ -424,7 +429,8 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('check', [
-    'clean:server',<% if (cssPre === 'sass') { %>
+    'clean:server',
+    'jekyll:check',<% if (cssPre === 'sass') { %>
     'sass:server',<% } %><% if (cssPre === 'compass') { %>
     'compass:server',<% } %><% if (jsPre === 'coffeescript') { %>
     'coffee:dist',<% } %>
