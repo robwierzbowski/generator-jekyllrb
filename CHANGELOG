@@ -1,0 +1,135 @@
+0.4.0
+  date: 2013-9-8
+  changes:
+  - Bring into line with generator-webapp
+  - Switch `reports` to `check`
+  - Add `jekyll doctor` to `check`
+  - Make compass and coffee prompt defaults
+  - Switch back to jQuery 1.x to track H5BP
+  - Add experimental Stylus support
+  - Bugfixes
+
+0.4.0-alpha
+  date: 2013-9-2
+  changes:
+  - Re-alignment with generator-webapp
+  - More Bower integration
+  - Code and ux improvements
+  - Bugfixes
+
+0.3.8
+  date: 2013-7-15
+  changes:
+  - Chalk fixes
+  - Update generator dependency
+
+0.3.6
+  date: 2013-7-15
+  changes:
+  - Easier install
+  - Package updates
+  - Bugfixes
+
+0.3.5
+  date: 2013-7-15
+  changes:
+  - Switch default markdown parser to Redcarpet
+
+0.3.4
+  date: 2013-6-24
+  changes:
+  - Refinements
+  - Update to grunt-jekyll 3.8
+
+0.3.3
+  date: 2013-6-20
+  changes:
+  - Minor improvements
+
+0.3.2
+  date: 2013-6-16
+  changes:
+  - Update livereload
+  - Improve usemin workflow
+
+0.3.1
+  date: 2013-6-13
+  changes:
+  - Remove stray debug code
+
+0.3.0
+  date: 2013-6-13
+  changes:
+  - Switch to Generator 0.12
+  - New prompt
+  - Simplify Gruntfile
+
+0.2.8
+  date: 2013-6-12
+  changes:
+  - Fix race condition bug (Issue [#11](https://github.com/robwierzbowski/
+  generator-jekyllrb/issues/11))
+0.2.7
+  date: 2013-6-4
+  changes:
+  - Update grunt-csscss to test (s)css directories
+  - Improve readme
+
+0.2.6
+  date: 2013-6-1
+  changes:
+  - Coffeescript bugfixes
+
+0.2.5
+  date: 2013-6-1
+  changes:
+  - Improve Sass and Autoprefixer tasks
+
+0.2.4
+  date: 2013-5-31
+  changes:
+  - Minor improvements
+  - Documentation update
+
+0.2.3
+  date: 2013-5-30
+  changes:
+  - Documentation update
+
+0.2.2
+  date: 2013-5-30
+  changes:
+  - Gruntfile and Bower workflow refinement
+
+0.2.1
+  date: 2013-5-30
+  changes:
+  - Bugfixes
+
+0.2.0
+  date: 2013-5-29
+  changes:
+  - Add Autoprefixer
+  - Rewrite Grunt workflow
+  - Bugfixes
+
+0.1.3
+  date: 2013-5-29
+  changes:
+  - Bugfixes
+
+0.1.2
+  date: 2013-5-24
+  changes:
+  - Documentation updates
+  - Name change
+
+0.1.1
+  date: 2013-5-21
+  changes:
+  - Documentation updates
+
+0.1.0
+  date: 2013-5-21
+  changes:
+  - Initial release

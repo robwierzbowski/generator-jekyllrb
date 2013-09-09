@@ -8,7 +8,7 @@ Generator-jekyllrb wraps the [Jekyll](http://jekyllrb.com/) static site generato
 
 - Default Jekyll or [HTML5 Boilerplate](http://html5boilerplate.com/) templates
 - Fully configurable directory structure
-- [Compass](http://compass-style.org/), [Sass](http://sass-lang.com/), or vanilla CSS
+- Your choice of [Compass](http://compass-style.org/), [Sass](http://sass-lang.com/), [Stylus with Nib](http://learnboost.github.io/stylus/), or vanilla CSS
 - [Autoprefixer](https://github.com/ai/autoprefixer) CSS post-processor
 - [Coffeescript](http://coffeescript.org/) or vanilla javascript
 - Common Jekyll configuration options
@@ -85,28 +85,7 @@ Report bugs and feature proposals in the [Github issue tracker](https://github.c
 
 ## Release History
 
-0.4.0-alpha, Sept 2, 2013: Re-alignment with generator-webapp, more Bower  integration, bugfixes, code and ux improvements.  
-0.3.8, July 15, 2013: Chalk fixes, update generator dependency.  
-0.3.6, July 15, 2013: Easier install, package updates, and bugfixes.  
-0.3.5, July 15, 2013: Switch default markdown parser to Redcarpet.  
-0.3.4, June 24, 2013: Refinements, update to grunt-jekyll 3.8.  
-0.3.3, June 20, 2013: Minor improvements.  
-0.3.2, June 16, 2013: Update livereload, improve usemin workflow.  
-0.3.1, June 13, 2013: Remove stray debug code.  
-0.3.0, June 13, 2013: Switch to Generator 0.12, new prompt, simplify Gruntfile.  
-0.2.8, June 12, 2013: Fix race condition bug (Issue [#11](https://github.com/robwierzbowski/generator-jekyllrb/issues/11)).  
-0.2.7, June 4, 2013: Update grunt-csscss to test (s)css directories, improve readme.  
-0.2.6, June 1, 2013: Coffeescript bugfixes.  
-0.2.5, June 1, 2013: Improve Sass and Autoprefixer tasks.  
-0.2.4, May 31, 2013: Minor improvements, documentation update.  
-0.2.3, May 30, 2013: Documentation update.  
-0.2.2, May 30, 2013: Gruntfile and Bower workflow refinement.  
-0.2.1, May 30, 2013: Bugfixes.  
-0.2.0, May 29, 2013: Add Autoprefixer, rewrite Grunt workflow, bugfixes.  
-0.1.3, May 29, 2013: Bugfixes.  
-0.1.2, May 24, 2013: Documentation updates, name change.  
-0.1.1, May 21, 2013: Documentation updates.  
-0.1.0, May 21, 2013: Initial release.
+See the [changelog](//github.com/robwierzbowski/generator-jekyllrb/blob/master/CHANGELOG).
 
 ## License
 [BSD-new License](http://en.wikipedia.org/wiki/BSD_License)
