@@ -21,10 +21,14 @@ module.exports = function (grunt) {
       app: 'app',
       dist: 'dist'
     },
-    watch: {<% if (cssPre) { %>
+    watch: {<% if (cssPre === 'sass' || cssPre === 'compass' ) { %>
       <%= cssPre %>: {
         files: ['<%%= yeoman.app %>/<%= cssPreDir %>/**/*.{scss,sass}'],
         tasks: ['<%= cssPre %>:server'<% if (autoPre) { %>, 'autoprefixer:server'<% } %>]
+      },<% } else if (cssPre === 'stylus') { %>
+      stylus: {
+        files: ['<%%= yeoman.app %>/<%= cssPreDir %>/**/*.styl'],
+        tasks: ['stylus:dist'<% if (autoPre) { %>, 'autoprefixer:server'<% } %>]
       },<% } %><% if (autoPre) { %>
       autoprefixer: {
         files: ['<%%= yeoman.app %>/<%= cssDir %>/**/*.css'],
@@ -169,6 +173,20 @@ module.exports = function (grunt) {
           debugInfo: true,
           generatedImagesDir: '.tmp/<%= imgDir %>/generated'
         }
+      }
+    },<% } %><% if (cssPre === 'stylus') { %>
+    stylus: {
+      options: {
+        paths: ['app/_bower_components']
+      },
+      dist: {
+        files: [{
+          expand: true,
+          cwd: '<%%= yeoman.app %>/<%= cssPreDir %>',
+          src: '**/*.styl',
+          dest: '.tmp/<%= cssDir %>',
+          ext: '.css'
+        }]
       }
     },<% } %><% if (autoPre) { %>
     autoprefixer: {
@@ -392,14 +410,16 @@ module.exports = function (grunt) {
     concurrent: {
       server: [<% if (cssPre === 'sass') { %>
         'sass:server',<% } %><% if (cssPre === 'compass') { %>
-        'compass:server',<% } %><% if (jsPre === 'coffeescript') { %>
+        'compass:server',<% } %><% if (cssPre === 'stylus') { %>
+        'stylus:dist',<% } %><% if (jsPre === 'coffeescript') { %>
         'coffee:dist',<% } %><% if (autoPre) { %>
         'copy:stageCss',<% } %>
         'jekyll:server'
       ],
       dist: [<% if (cssPre === 'sass') { %>
         'sass:dist',<% } %><% if (cssPre === 'compass') { %>
-        'compass:dist',<% } %><% if (jsPre === 'coffeescript') { %>
+        'compass:dist',<% } %><% if (cssPre === 'stylus') { %>
+        'stylus:dist',<% } %><% if (jsPre === 'coffeescript') { %>
         'coffee:dist',<% } %>
         'copy:dist'
       ]
@@ -432,7 +452,8 @@ module.exports = function (grunt) {
     'clean:server',
     'jekyll:check',<% if (cssPre === 'sass') { %>
     'sass:server',<% } %><% if (cssPre === 'compass') { %>
-    'compass:server',<% } %><% if (jsPre === 'coffeescript') { %>
+    'compass:server',<% } %><% if (cssPre === 'stylus') { %>
+    'stylus:dist',<% } %><% if (jsPre === 'coffeescript') { %>
     'coffee:dist',<% } %>
     'jshint:all',
     'csscss:check',

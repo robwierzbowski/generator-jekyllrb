@@ -90,7 +90,7 @@ Generator.prototype.askForTools = function askForTools() {
     name: 'cssPre',
     type: 'list',
     message: 'CSS preprocessor',
-    choices: ['Compass', 'Sass', 'None']
+    choices: ['Compass', 'Sass', 'Stylus', 'None']
   },
   {
     name: 'autoPre',
@@ -121,6 +121,7 @@ Generator.prototype.askForStructure = function askForStructure() {
   console.log(chalk.yellow('\nSet up some directories.') + ' ☛' +
     '\nNested directories are fine.');
 
+  var cssPreDirDefault = this.cssPre === 'stylus' ? '_styl' : '_scss';
   var slashFilter = function (input) {
     return input.replace(/^\/*|\/*$/g, '');
   };
@@ -152,7 +153,7 @@ Generator.prototype.askForStructure = function askForStructure() {
   var cssPreDirPrompt = {
     name: 'cssPreDir',
     message: 'CSS preprocessor directory',
-    default: '_scss',
+    default: cssPreDirDefault,
     filter: slashFilter
   };
   var jsPreDirPrompt = {
@@ -475,23 +476,20 @@ Generator.prototype.pygments = function pygments() {
 };
 
 Generator.prototype.cssPreprocessor = function cssPreprocessor() {
+  var files = globule.find('**/*.css', {srcBase: path.join('app', this.cssDir)});
+  var cssDir = this.cssDir;
+  var filetype = this.cssPre === 'stylus' ? '.styl' : '.scss';
+
   if (this.cssPre) {
     this.mkdir(path.join('app', this.cssPreDir));
-  }
 
-  // Sass and Compass
-  if (['sass', 'compass'].indexOf(this.cssPre) !== -1) {
+    // Copy CSS preprocessor readme
+    this.template('conditional/css-pre/readme.md', path.join('app', this.cssPreDir, 'readme.md'));
 
-    this.template('conditional/sass-compass/readme.md', path.join('app', this.cssPreDir, 'readme.md'));
-
-    // Copy CSS files to SCSS
-    var files = globule.find('**/*.css', {srcBase: path.join('app', this.cssDir)});
-    var cssDir = this.cssDir;
-
+    // Copy CSS files to preprocessor files
     files.forEach(function (file) {
-
       this.copy(path.join(process.cwd(), 'app', cssDir, file),
-                path.join('app', this.cssPreDir, file.replace(/\.css$/, '.scss')));
+                path.join('app', this.cssPreDir, file.replace(/\.css$/, filetype)));
 
       // Wait until copy is completely finished and then delete files.
       this.conflicter.resolve(function (err) {
