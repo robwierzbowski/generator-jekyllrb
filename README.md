@@ -59,6 +59,10 @@ Every task and target in the Gruntfile can be run individually (e.g., `grunt jsh
 
 To include components in the build, place them inside of a Usemin block or add them to the `copy:dist` task. This workflow will be streamlined with the release of Usemin 2.0.
 
+## Deployment
+
+To deploy your built code to GitHub pages, Heroku, or wherever, try grunt-build-control: https://github.com/robwierzbowski/grunt-build-control. Coming soon preconfigured as a generator option.
+
 ## More on Yeoman and Grunt
 
 [Getting started with Yeoman](http://yeoman.io/gettingstarted.html)  
