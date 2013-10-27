@@ -1,3 +1,11 @@
+0.4.1
+  date: 2013-10-27
+  changes:
+  - Bump Jekyll version
+  - Add jshint-stylish
+  - Remove stylus support
+  - Update server task to serve
+
 0.4.0
   date: 2013-9-8
   changes:
