@@ -90,7 +90,7 @@ Generator.prototype.askForTools = function askForTools() {
     name: 'cssPre',
     type: 'list',
     message: 'CSS preprocessor',
-    choices: ['Compass', 'Sass', 'Stylus', 'None']
+    choices: ['Compass', 'Sass', 'None']
   },
   {
     name: 'autoPre',
@@ -121,7 +121,6 @@ Generator.prototype.askForStructure = function askForStructure() {
   console.log(chalk.yellow('\nSet up some directories.') + ' ☛' +
     '\nNested directories are fine.');
 
-  var cssPreDirDefault = this.cssPre === 'stylus' ? '_styl' : '_scss';
   var slashFilter = function (input) {
     return input.replace(/^\/*|\/*$/g, '');
   };
@@ -153,7 +152,7 @@ Generator.prototype.askForStructure = function askForStructure() {
   var cssPreDirPrompt = {
     name: 'cssPreDir',
     message: 'CSS preprocessor directory',
-    default: cssPreDirDefault,
+    default: '_scss',
     filter: slashFilter
   };
   var jsPreDirPrompt = {
@@ -478,7 +477,7 @@ Generator.prototype.pygments = function pygments() {
 Generator.prototype.cssPreprocessor = function cssPreprocessor() {
   var files = globule.find('**/*.css', {srcBase: path.join('app', this.cssDir)});
   var cssDir = this.cssDir;
-  var filetype = this.cssPre === 'stylus' ? '.styl' : '.scss';
+  var filetype = '.scss';
 
   if (this.cssPre) {
     this.mkdir(path.join('app', this.cssPreDir));

@@ -10,7 +10,7 @@ Generator-jekyllrb is ideal for developing performant static sites and prototypi
 
 **During setup you can choose:**
 
-- [Compass](http://compass-style.org/), [Sass](http://sass-lang.com/), [Stylus+Nib](http://learnboost.github.io/stylus/), or vanilla CSS
+- [Compass](http://compass-style.org/), [Sass](http://sass-lang.com/), or vanilla CSS
 - [CoffeeScript](http://coffeescript.org/) or vanilla JavaScript
 - Automatic CSS vendor prefixing with [Autoprefixer](https://github.com/ai/autoprefixer)
 - Default Jekyll or [HTML5 Boilerplate](http://html5boilerplate.com/) templates
