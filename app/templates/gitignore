@@ -37,3 +37,4 @@ app/_bower_components
 dist
 node_modules
 .tmp
+Gemfile.lock
