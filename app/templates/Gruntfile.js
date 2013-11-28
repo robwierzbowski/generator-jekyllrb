@@ -51,10 +51,13 @@ module.exports = function (grunt) {
           livereload: '<%%= connect.options.livereload %>'
         },
         files: [
-          '.jekyll/**/*.html',<% if (autoPre) { %>
+          // '.jekyll/**/*.html',
+          <% if (autoPre) { %>
           '.tmp/<%= cssDir %>/**/*.css',<% } else { %>
           '{.tmp,<%%= yeoman.app %>}/<%= cssDir %>/**/*.css',<% } %>
           '{.tmp,<%%= yeoman.app %>}/<%%= js %>/**/*.js',
+          '<%= yeoman.app %>/<%= posts %>/**/*.md',
+          '<%= yeoman.app %>/**/*.html',
           '<%%= yeoman.app %>/<%= imgDir %>/**/*.{gif,jpg,jpeg,png,svg,webp}'
         ]
       }
