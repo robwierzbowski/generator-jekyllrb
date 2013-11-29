@@ -17,12 +17,11 @@ exclude: ['<%= imgDir %>', '<%= cssDir %>', '<%= jsDir %>', '<%= fontsDir %>',
 
 include: ['.htaccess']
 
-permalink: <%= jekPost %>
-
 # _config.build.yml sets future and show_drafts to false on `grunt build`
 future: true
 show_drafts: true<% if (jekPage) { %>
 
+permalink: <%= jekPost %>
 paginate: <%= jekPage %>
 paginate_path: 'page:num'<% } %>
 
