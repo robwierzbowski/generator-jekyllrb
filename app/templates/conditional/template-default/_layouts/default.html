@@ -17,31 +17,29 @@
     </head>
     <body>
 
-        <div class="container">
-          <div class="site">
-            <div class="header">
-              <h1 class="title"><a href="/">{{ site.name }}</a></h1>
-              <a class="extra" href="/">home</a>
+        <div class="site">
+          <div class="header">
+            <h1 class="title"><a href="/">{{ site.name }}</a></h1>
+            <a class="extra" href="/">home</a>
+          </div>
+
+          {{ content }}
+
+          <div class="footer">
+            <div class="contact">
+              <p>
+                <%= author %><br />
+                <a href="mailto:<%= email %>"><%= email %></a>
+              </p>
             </div>
-
-                {{ content }}
-
-            <div class="footer">
-              <div class="contact">
-                <p>
-                  <%= author %><br />
-                  <a href="mailto:<%= email %>"><%= email %></a>
-                </p>
-              </div>
-              <div class="contact">
-                <p>
-                  <a href="http://github.com/<%= github %>/">github.com/<%= github %></a><br />
-                  <a href="http://twitter.com/<%= twitter %>/">twitter.com/<%= twitter %></a><br />
-                </p>
-              </div>
+            <div class="contact">
+              <p>
+                <a href="https://github.com/<%= github %>/">github.com/<%= github %></a><br />
+                <a href="https://twitter.com/<%= twitter %>/">twitter.com/<%= twitter %></a><br />
+              </p>
             </div>
           </div>
-        </div> <!-- /container -->
+        </div>
 
     <!-- build:js<% if (jsPre) { %>({app,.tmp})<% } else { %>(app)<% } %> /<%= jsDir %>/scripts.js -->
     <script src="/<%= jsDir %>/main.js"></script>
