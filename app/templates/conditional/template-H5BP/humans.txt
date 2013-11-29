@@ -3,7 +3,7 @@
 
 # TEAM
 
-    <%= author %> -- Site Maker<% if (twitter) { %> --  http://twitter.com/<%= twitter %><% } %>
+    <%= author %>
 
 # THANKS
 
@@ -18,4 +18,3 @@
     HTML5 ★ Boilerplate <% } %><% if (h5bpCss) { %>
     Normalize.css <% } %><% if (h5bpJs) { %>
     jQuery, Modernizr <% } %>
-

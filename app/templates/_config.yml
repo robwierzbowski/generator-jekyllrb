@@ -8,8 +8,6 @@ description: <%= jekDescript %>
 author:
   name: <%= author %>
   email: <%= email %>
-  github: <%= github %>
-  twitter: <%= twitter %>
 
 # Grunt handles images and assets.
 exclude: ['<%= imgDir %>', '<%= cssDir %>', '<%= jsDir %>', '<%= fontsDir %>',

@@ -27,7 +27,6 @@ var Generator = module.exports = function Generator(args, options) {
   this.gitInfo = {
     name: this.user.git.username,
     email: this.user.git.email,
-    github: shelljs.exec('git config github.user', {silent: true}).output.replace(/\n/g, ''),
   };
 
   this.on('end', function () {
@@ -58,24 +57,12 @@ Generator.prototype.askForUser = function askForUser() {
     name: 'email',
     message: 'Email',
     default: this.gitInfo.email
-  },
-  {
-    name: 'github',
-    message: 'GitHub username',
-    default: this.gitInfo.github
-  },
-  {
-    name: 'twitter',
-    message: 'Twitter username',
-    default: '@' + this.gitInfo.github
   }];
 
   this.prompt(prompts, function (props) {
 
     this.author  = props.author;
     this.email   = props.email;
-    this.github  = props.github;
-    this.twitter = props.twitter[0] === '@' ? props.twitter.substr(1) : props.twitter;
 
     cb();
   }.bind(this));
