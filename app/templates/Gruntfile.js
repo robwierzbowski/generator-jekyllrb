@@ -310,14 +310,14 @@ module.exports = function (grunt) {
           dot: true,
           cwd: '<%%= yeoman.app %>',
           src: [
-            // Jekyll processes and moves HTML and text files
-            // Usemin moves CSS and javascript inside of Usemin blocks
-            // Copy moves asset files and directories
+            // Jekyll processes and moves HTML and text files.
+            // Usemin moves CSS and javascript inside of Usemin blocks.
+            // Copy moves asset files and directories.
             '<%= imgDir %>/**/*',
             '<%= fontsDir %>/**/*',
-            // Like Jekyll, exclude files & folders prefixed with an underscore
+            // Like Jekyll, exclude files & folders prefixed with an underscore.
             '!**/_*{,/**}'<% if (h5bpJs) { %>,<% } %>
-            // Explicitly add any files your site needs for distribution here
+            // Explicitly add any files your site needs for distribution here.
             <% if (!h5bpJs) { %>//<% } %>'_bower_components/jquery/jquery.js',
             <% if (!h5bpJs) { %>//<% } %>'favicon.ico',
             <% if (!h5bpJs) { %>//<% } %>'apple-touch*.png'
