@@ -25,7 +25,7 @@ Generator-jekyllrb is ideal for developing performant static sites and prototypi
 
 ## Getting Started
 
-- Check that you have [Node.js](http://nodejs.org/), [Ruby](http://www.ruby-lang.org/), and [Bundler](http://gembundler.com/) installed
+- generator-jekyllrb requires [Node.js](http://nodejs.org/) `>= 0.10`, [Ruby](http://www.ruby-lang.org/) `>= 1.9`, and the [Bundler](http://gembundler.com/) gem
 - Install the generator: `npm install -g generator-jekyllrb`
 - Run: `yo jekyllrb`
 
