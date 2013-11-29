@@ -101,7 +101,7 @@ Generator.prototype.askForTools = function askForTools() {
     name: 'jsPre',
     type: 'list',
     message: 'Javascript preprocessor',
-    choices: ['Coffeescript', 'None'],
+    choices: ['None', 'Coffeescript'],
   }];
 
   this.prompt(prompts, function (props) {
