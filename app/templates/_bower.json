@@ -8,7 +8,7 @@
     }
     if (h5bpJs) {
       depn.push('\n    "jquery": "~1.10.2"');
-      depn.push('\n    "modernizr": "~2.6.2"');
+      depn.push('\n    "modernizr": "~2.7"');
     }
     print(depn.join(','));
   %>
