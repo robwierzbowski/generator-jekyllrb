@@ -391,7 +391,6 @@ Generator.prototype.templates = function templates() {
     // H5BP files tailored for Yeoman and Jekyll
     this.copy('conditional/template-h5bp/index.html', 'app/index.html');
     this.copy('conditional/template-h5bp/_layouts/post.html', 'app/_layouts/post.html');
-    this.template('conditional/template-h5bp/humans.txt', 'app/humans.txt');
     this.template('conditional/template-h5bp/_includes/scripts.html', 'app/_includes/scripts.html');
     this.template('conditional/template-h5bp/_layouts/default.html', 'app/_layouts/default.html');
 
@@ -402,7 +401,8 @@ Generator.prototype.templates = function templates() {
 
     // Pull H5BP in from Github
     // Use a pre-release commit because there's so much good stuff in it.
-    this.remote('h5bp', 'html5-boilerplate', '71ca9fb7a06bfcd2359c924ca261d41d1dd03e8d', function (err, remote) {
+    // Should switch to an official release soon.
+    this.remote('h5bp', 'html5-boilerplate', 'fbffd2322d37f920825629c385f905a05d141061', function (err, remote) {
       if (err) {
         return cb(err);
       }
@@ -413,6 +413,7 @@ Generator.prototype.templates = function templates() {
       remote.copy('crossdomain.xml', 'app/crossdomain.xml');
       remote.copy('LICENSE.md', 'app/_h5bp-docs/LICENSE.md');
       remote.copy('robots.txt', 'app/robots.txt');
+      remote.copy('humans.txt', 'app/humans.txt');
 
       // CSS boilerplate
       if (this.h5bpCss) {
@@ -424,7 +425,6 @@ Generator.prototype.templates = function templates() {
       }
 
       // Js boilerplate
-      // Vendor javascript is handled by Bower
       if (this.h5bpJs) {
         remote.copy('js/main.js', path.join('app', this.jsDir, 'main.js'));
         remote.copy('js/plugins.js', path.join('app', this.jsDir, 'plugins.js'));
