@@ -33,8 +33,15 @@ var Generator = module.exports = function Generator(args, options) {
     // Clean up temp files
     spawn('rm', ['-r', '.jekyll'], { stdio: 'inherit' });
 
-    // Install Grunt and Bower dependencies
-    this.installDependencies({ skipInstall: options['skip-install'] });
+    // Install Grunt, Bower, and gem dependencies
+    this.installDependencies({
+      skipInstall: options['skip-install'],
+      callback: function () {
+        console.log('\nRunning ' + chalk.yellow.bold('bundle install') + ' to install the required gems. If this fails, try running the command yourself.\n');
+
+        this.spawnCommand('bundle', ['install']);
+      }.bind(this)
+    });
   });
 };
 
@@ -299,16 +306,6 @@ Generator.prototype.askForJekyll = function askForJekyll() {
 };
 
 // Generate App
-Generator.prototype.rubyDependencies = function rubyDependencies() {
-  this.template('Gemfile');
-  this.conflicter.resolve(function (err) {
-    if (err) {
-      return this.emit('error', err);
-    }
-    shelljs.exec('bundle install');
-  });
-};
-
 Generator.prototype.git = function git() {
   this.template('gitignore', '.gitignore');
   this.copy('gitattributes', '.gitattributes');
@@ -325,6 +322,10 @@ Generator.prototype.packageJSON = function packageJSON() {
 Generator.prototype.bower = function bower() {
   this.copy('bowerrc', '.bowerrc');
   this.template('_bower.json', 'bower.json');
+};
+
+Generator.prototype.gemfile = function gemfile() {
+  this.template('Gemfile');
 };
 
 Generator.prototype.jshint = function jshint() {
