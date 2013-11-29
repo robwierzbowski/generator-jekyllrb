@@ -1,7 +1,7 @@
 {
   "name": "generator-jekyllrb",
   "description": "Supercharge Jekyll development with Yeoman. Yo, Jekyllrb!",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "homepage": "https://github.com/robwierzbowski/generator-jekyllrb",
   "author": "Rob Wierzbowski <hello@robwierzbowski.com> (http://robwierzbowski.com)",
   "repository": {

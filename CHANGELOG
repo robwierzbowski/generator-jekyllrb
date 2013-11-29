@@ -1,3 +1,12 @@
+0.5.0
+  date: 2013-11-29
+  changes:
+  - Update to Jekyll 3.1 compatability
+  - Update H5BP compatability to latest version
+  - Remove some templating to simplify installation
+  - Pin -contrib-watch at pre-release to fix livereload bug
+  - Reduce comments and minor code streamlining
+
 0.4.1
   date: 2013-10-27
   changes:
