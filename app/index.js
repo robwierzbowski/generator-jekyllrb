@@ -464,7 +464,6 @@ Generator.prototype.pygments = function pygments() {
 Generator.prototype.cssPreprocessor = function cssPreprocessor() {
   var files = globule.find('**/*.css', {srcBase: path.join('app', this.cssDir)});
   var cssDir = this.cssDir;
-  var filetype = '.scss';
 
   if (this.cssPre) {
     this.mkdir(path.join('app', this.cssPreDir));
@@ -475,7 +474,7 @@ Generator.prototype.cssPreprocessor = function cssPreprocessor() {
     // Copy CSS files to preprocessor files
     files.forEach(function (file) {
       this.copy(path.join(process.cwd(), 'app', cssDir, file),
-                path.join('app', this.cssPreDir, file.replace(/\.css$/, filetype)));
+                path.join('app', this.cssPreDir, file.replace(/\.css$/, '.scss')));
 
       // Wait until copy is completely finished and then delete files.
       this.conflicter.resolve(function (err) {
