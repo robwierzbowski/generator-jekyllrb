@@ -18,7 +18,7 @@
     "grunt-contrib-imagemin": "~0.2.0",
     "grunt-contrib-jshint": "~0.6.3",
     "grunt-contrib-uglify": "~0.2.0",
-    "grunt-contrib-watch": "~0.5.2",
+    "grunt-contrib-watch": "git://github.com/gruntjs/grunt-contrib-watch.git#a1cb33b83458b72d068fdef7e4c8e51b8f76b8ec",
     "grunt-concurrent": "~0.3.0",
     "grunt-csscss": "~0.5.0",
     "grunt-jekyll": "git://github.com/dannygarcia/grunt-jekyll.git#aa03074ee0f5b69dc9d7a0e6ced6bb8cd923add6",
