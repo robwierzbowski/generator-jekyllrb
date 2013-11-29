@@ -1,11 +1,7 @@
-# Build Jekyll configuration
-# These settings override _config.yml on `grunt build`
+# Jekyll configuration precedence:
+# 1. Gruntfile task
+# 2. config.build.yml
+# 3. config.yml
 
-# Note: Grunt handles some Jekyll configuration. If you set something here and
-# it doesn't work, check if it is set in the Gruntfile.
-
-# Publish posts with future date.
 future: false
-
-# Compile posts in the _drafts directory.
 show_drafts: false

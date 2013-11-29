@@ -1,72 +1,51 @@
-# Base Jekyll configuration
-
-# Grunt handles some Jekyll configuration. If you set something here and
-# it doesn't work, check if it is set in the Gruntfile.
-
-# Use _config.build.yml to override these settings on `grunt build`.
+# Jekyll configuration precedence:
+# 1. Gruntfile task
+# 2. config.build.yml
+# 3. config.yml
 
 name: <%= appname %>
 description: <%= jekDescript %>
-
 author:
   name: <%= author %>
   email: <%= email %>
   github: <%= github %>
   twitter: <%= twitter %>
 
-# Exclude directories and/or files from the conversion.
-# Grunt moves image files and asset directories.
+# Grunt handles images and assets.
 exclude: ['<%= imgDir %>', '<%= cssDir %>', '<%= jsDir %>', '<%= fontsDir %>',
           '**.png', '**.jpg', '**.jpeg', '**.gif', '**.webp', '**.svg', '**.ico']
 
-# Force inclusion of directories and/or files in the conversion.
-# .htaccess is a good example since dotfiles are excluded by default.
 include: ['.htaccess']
 
-# Default post path style
-# date  /:categories/:year/:month/:day/:title.html
-# pretty  /:categories/:year/:month/:day/:title/
-# none  /:categories/:title.html
 permalink: <%= jekPost %>
 
-# Publish posts with future date.
-# _config.build.yml sets this to false on `grunt build`
+# _config.build.yml sets future and show_drafts to false on `grunt build`
 future: true
-
-# Compile posts in the _drafts directory.
-# _config.build.yml sets this to false on `grunt build`
 show_drafts: true<% if (jekPage) { %>
 
-# Split posts over multiple subdirectories called “page2”, “page3”, … “pageN”
 paginate: <%= jekPage %>
 paginate_path: 'page:num'<% } %>
 
 # Markdown library
-markdown: <%= jekMkd %>
-# Markdown library options<% if (jekMkd === 'maruku') { %>
-# maruku:
-  # use_tex:    false
-  # use_divs:   false
-  # png_engine: blahtex
-  # png_dir:    images/latex
-  # png_url:    /images/latex<% } %><% if (jekMkd === 'rdiscount') {%>
-# rdiscount:
-  # extensions: []<% } %><% if (jekMkd === 'kramdown') {%>
-# kramdown:
-  # auto_ids: true
-  # footnote_nr: 1
-  # entity_output: as_char
-  # toc_levels: 1..6
-  # use_coderay: false
-  # coderay:
-  #   coderay_wrap: div
-  #   coderay_line_numbers: inline
-  #   coderay_line_numbers_start: 1
-  #   coderay_tab_width: 4
-  #   coderay_bold_every: 10
-  #   coderay_css: style<% } %><% if (jekMkd === 'redcarpet') {%>
-# redcarpet:
-  # extensions: ['fenced_code_blocks', 'smart']<% } %>
+markdown: <%= jekMkd %><% if (jekMkd === 'maruku') { %>
+#   use_tex:    false
+#   use_divs:   false
+#   png_engine: blahtex
+#   png_dir:    images/latex
+#   png_url:    /images/latex<% } %><% if (jekMkd === 'rdiscount') {%>
+#   extensions: []<% } %><% if (jekMkd === 'kramdown') {%>
+#   auto_ids: true
+#   footnote_nr: 1
+#   entity_output: as_char
+#   toc_levels: 1..6
+#   use_coderay: false
+#   coderay:
+#     coderay_wrap: div
+#     coderay_line_numbers: inline
+#     coderay_line_numbers_start: 1
+#     coderay_tab_width: 4
+#     coderay_bold_every: 10
+#     coderay_css: style<% } %><% if (jekMkd === 'redcarpet') {%>
+#   extensions: ['fenced_code_blocks', 'smart']<% } %>
 
-# Use Pygments to highlight code blocks
 pygments: <%= jekPyg %>
