@@ -8,8 +8,6 @@ var globule = require('globule');
 var shelljs = require('shelljs');
 
 var Generator = module.exports = function Generator(args, options) {
-  yeoman.generators.Base.apply(this, arguments);
-
   var dependenciesInstalled = ['bundle', 'ruby'].every(function (depend) {
     return shelljs.which(depend);
   });
@@ -20,6 +18,8 @@ var Generator = module.exports = function Generator(args, options) {
       '\nMake sure ' + chalk.white('Ruby') + ' and the ' + chalk.white('Bundler gem') + ' are installed, then run again.');
     shelljs.exit(1);
   }
+
+  yeoman.generators.Base.apply(this, arguments);
 
   // Get static info for templating
   this.appname = path.basename(process.cwd());
@@ -50,11 +50,6 @@ util.inherits(Generator, yeoman.generators.Base);
 // User input
 Generator.prototype.askForUser = function askForUser() {
   var cb = this.async();
-
-  console.log(this.yeoman);
-  console.log(chalk.yellow.bold('This generator will scaffold and wire a Jekyll site. Yo, Jekyllrb!') +
-    chalk.yellow('\n\nTell us a little about yourself.') + ' ☛');
-
   var prompts = [{
     name: 'author',
     message: 'Name',
@@ -65,6 +60,10 @@ Generator.prototype.askForUser = function askForUser() {
     message: 'Email',
     default: this.gitInfo.email
   }];
+
+  console.log(this.yeoman);
+  console.log(chalk.yellow.bold('This generator will scaffold and wire a Jekyll site. Yo, Jekyllrb!') +
+    chalk.yellow('\n\nTell us a little about yourself.') + ' ☛');
 
   this.prompt(prompts, function (props) {
 
@@ -77,9 +76,6 @@ Generator.prototype.askForUser = function askForUser() {
 
 Generator.prototype.askForTools = function askForTools() {
   var cb = this.async();
-
-  console.log(chalk.yellow('\nWire tools and preprocessors.') + ' ☛');
-
   var prompts = [{
     name: 'cssPre',
     type: 'list',
@@ -98,6 +94,8 @@ Generator.prototype.askForTools = function askForTools() {
     choices: ['None', 'Coffeescript'],
   }];
 
+  console.log(chalk.yellow('\nWire tools and preprocessors.') + ' ☛');
+
   this.prompt(prompts, function (props) {
 
     // Multiple choice 'None' to false
@@ -111,16 +109,11 @@ Generator.prototype.askForTools = function askForTools() {
 
 Generator.prototype.askForStructure = function askForStructure() {
   var cb = this.async();
-
-  console.log(chalk.yellow('\nSet up some directories.') + ' ☛' +
-    '\nNested directories are fine.');
-
   var cssPre = this.cssPre;
   var jsPre  = this.jsPre;
   var slashFilter = function (input) {
     return input.replace(/^\/*|\/*$/g, '');
   };
-
   var prompts = [{
     name: 'cssDir',
     message: 'CSS directory',
@@ -164,6 +157,9 @@ Generator.prototype.askForStructure = function askForStructure() {
     }
   }];
 
+  console.log(chalk.yellow('\nSet up some directories.') + ' ☛' +
+    '\nNested directories are fine.');
+
   this.prompt(prompts, function (props) {
 
     this.cssDir    = props.cssDir;
@@ -179,9 +175,6 @@ Generator.prototype.askForStructure = function askForStructure() {
 
 Generator.prototype.askForTemplates = function askForTemplates() {
   var cb = this.async();
-
-  console.log(chalk.yellow('\nChoose a template.') + ' ☛');
-
   var prompts = [{
     name: 'templateType',
     type: 'list',
@@ -229,6 +222,8 @@ Generator.prototype.askForTemplates = function askForTemplates() {
     }
   }];
 
+  console.log(chalk.yellow('\nChoose a template.') + ' ☛');
+
   this.prompt(prompts, function (props) {
 
     if (props.templateType === 'Default Jekyll') {
@@ -250,9 +245,6 @@ Generator.prototype.askForTemplates = function askForTemplates() {
 
 Generator.prototype.askForDeployment = function askForDeployment() {
   var cb = this.async();
-
-  console.log(chalk.yellow('\nChoose deployment options.') + ' ☛');
-
   var prompts = [{
     name: 'deploy',
     message: 'Use grunt-build-control for deployment?',
@@ -275,6 +267,8 @@ Generator.prototype.askForDeployment = function askForDeployment() {
     }
   }];
 
+  console.log(chalk.yellow('\nChoose deployment options.') + ' ☛');
+
   this.prompt(prompts, function (props) {
 
     this.deploy       = props.deploy;
@@ -287,10 +281,6 @@ Generator.prototype.askForDeployment = function askForDeployment() {
 
 Generator.prototype.askForJekyll = function askForJekyll() {
   var cb = this.async();
-
-  console.log(chalk.yellow('\nAnd finally, configure Jekyll.') + ' ☛' +
-              '\nYou can change all of these options in _config.yml.');
-
   var prompts = [{
     name: 'jekDescript',
     message: 'Site description'
@@ -326,6 +316,9 @@ Generator.prototype.askForJekyll = function askForJekyll() {
       return 'Must be a number or \'all\'';
     }
   }];
+
+  console.log(chalk.yellow('\nAnd finally, configure Jekyll.') + ' ☛' +
+              '\nYou can change all of these options in _config.yml.');
 
   this.prompt(prompts, function (props) {
 
