@@ -45,6 +45,10 @@ Builds an optimized site to the dist directory. [Usemin blocks](https://github.c
 
 `grunt serve:dist` will run `grunt build` and open the result in your default browser
 
+#### grunt deploy
+
+During scaffolding the generator gives you the option to configure [grunt-build-control](https://github.com/robwierzbowski/grunt-build-control) to version and deploy your built code to a remote repository. If you configure build-control, `grunt build` will run `grunt check`, `grunt test`, `grunt build`, and then commit and deploy your built code to the specified remote repository. 
+
 #### grunt (default)
 
 `grunt` on its own is a special task that runs `grunt check`, any tests you've added, and `grunt build`.
@@ -58,10 +62,6 @@ Every task and target in the Gruntfile can be run individually (e.g., `grunt jsh
 [Bower](http://bower.io/) is a package manager for front-end components. Use it to download and manage CSS, JavaScript, and [preprocessor tools](https://github.com/Team-Sass) for your site. Everything in the _bower_components directory is available while running `grunt serve`.
 
 To include components in the build, place them inside of a Usemin block or add them to the `copy:dist` task. This workflow will be streamlined with the release of Usemin 2.0.
-
-## Deployment
-
-To deploy your built code to GitHub pages, Heroku, or wherever, try grunt-build-control: https://github.com/robwierzbowski/grunt-build-control. Coming soon preconfigured as a generator option.
 
 ## More on Yeoman and Grunt
 
