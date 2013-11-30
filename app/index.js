@@ -12,7 +12,6 @@ var Generator = module.exports = function Generator(args, options) {
     return shelljs.which(depend);
   });
 
-  // Exit if Ruby dependencies aren't installed
   if (!dependenciesInstalled) {
     console.log('Looks like you\'re missing some dependencies.' +
       '\nMake sure ' + chalk.white('Ruby') + ' and the ' + chalk.white('Bundler gem') + ' are installed, then run again.');
@@ -22,6 +21,7 @@ var Generator = module.exports = function Generator(args, options) {
   yeoman.generators.Base.apply(this, arguments);
 
   // Get static info for templating
+  this.jekyllTmp = path.join(process.cwd(), '.jekyll');
   this.appname = path.basename(process.cwd());
   this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
   this.gitInfo = {
@@ -33,7 +33,6 @@ var Generator = module.exports = function Generator(args, options) {
     // Clean up temp files
     spawn('rm', ['-r', '.jekyll'], { stdio: 'inherit' });
 
-    // Install Grunt, Bower, and gem dependencies
     this.installDependencies({
       skipInstall: options['skip-install'],
       callback: function () {
@@ -47,7 +46,7 @@ var Generator = module.exports = function Generator(args, options) {
 
 util.inherits(Generator, yeoman.generators.Base);
 
-// User input
+// Prompts
 Generator.prototype.askForUser = function askForUser() {
   var cb = this.async();
   var prompts = [{
@@ -368,14 +367,11 @@ Generator.prototype.editor = function editor() {
 };
 
 Generator.prototype.jekyllInit = function jekyllInit() {
-
   // Create the default Jekyll site in a temp folder
-  this.jekTmpDir = path.join(process.cwd(), '.jekyll');
-  shelljs.exec('bundle exec jekyll new ' + this.jekTmpDir);
+  shelljs.exec('bundle exec jekyll new ' + this.jekyllTmp);
 };
 
 Generator.prototype.templates = function templates() {
-
   // Format date for posts
   var date = new Date();
   var formattedDate = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
@@ -395,19 +391,20 @@ Generator.prototype.templates = function templates() {
   this.template('_config.yml');
 
   // Project posts
-  this.copy(path.join(this.jekTmpDir, '_posts', formattedDate + '-welcome-to-jekyll.markdown'), path.join('app/_posts', formattedDate + '-welcome-to-jekyll.md'));
+  this.copy(path.join(this.jekyllTmp, '_posts', formattedDate + '-welcome-to-jekyll.markdown'), path.join('app/_posts', formattedDate + '-welcome-to-jekyll.md'));
   this.template('app/_posts/yo-jekyllrb.md', 'app/_posts/' + formattedDate + '-yo-jekyllrb.md');
 
   // Jekyll default template
   if (this.templateType === 'default') {
 
     // Default Jekyll files
-    this.copy(path.join(this.jekTmpDir, 'index.html'), 'app/index.html');
-    this.copy(path.join(this.jekTmpDir, '_layouts/post.html'), 'app/_layouts/post.html');
-    this.copy(path.join(this.jekTmpDir, 'css/main.css'), path.join('app', this.cssDir, 'main.css'));
+    this.copy(path.join(this.jekyllTmp, 'index.html'), 'app/index.html');
+    this.copy(path.join(this.jekyllTmp, '_layouts/post.html'), 'app/_layouts/post.html');
+    this.copy(path.join(this.jekyllTmp, 'css/main.css'), path.join('app', this.cssDir, 'main.css'));
 
     // Jekyll files tailored for Yeoman
     this.template('conditional/template-default/_layouts/default.html', 'app/_layouts/default.html');
+
     // Empty file for Usemin defaults
     this.write(path.join('app', this.jsDir, 'main.js'), '');
   }
@@ -428,8 +425,8 @@ Generator.prototype.templates = function templates() {
     }
 
     // Pull H5BP in from Github
-    // Use a pre-release commit because there's so much good stuff in it.
-    // Should switch to an official release soon.
+    // Use a pre-release commit because there's so much good stuff in it, but
+    // we should switch to an official release soon.
     this.remote('h5bp', 'html5-boilerplate', 'fbffd2322d37f920825629c385f905a05d141061', function (err, remote) {
       if (err) {
         return cb(err);
@@ -482,10 +479,9 @@ Generator.prototype.templates = function templates() {
 };
 
 Generator.prototype.pygments = function pygments() {
-
   // Pygments styles
   if (this.jekPyg) {
-    this.copy(path.join(this.jekTmpDir, 'css/syntax.css'), path.join('app', this.cssDir, 'syntax.css'));
+    this.copy(path.join(this.jekyllTmp, 'css/syntax.css'), path.join('app', this.cssDir, 'syntax.css'));
   }
 };
 
@@ -495,8 +491,6 @@ Generator.prototype.cssPreprocessor = function cssPreprocessor() {
 
   if (this.cssPre) {
     this.mkdir(path.join('app', this.cssPreDir));
-
-    // Copy CSS preprocessor readme
     this.template('conditional/css-pre/readme.md', path.join('app', this.cssPreDir, 'readme.md'));
 
     // Copy CSS files to preprocessor files
@@ -520,7 +514,6 @@ Generator.prototype.jsPreprocessor = function jsPreprocessor() {
     this.mkdir(path.join('app', this.jsPreDir));
   }
 
-  // Coffeescript
   if (this.jsPre === 'coffeescript') {
     this.template('conditional/coffee/readme.md', path.join('app', this.jsPreDir, 'readme.md'));
   }
