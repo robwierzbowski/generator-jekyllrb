@@ -251,6 +251,43 @@ Generator.prototype.askForh5bp = function askForh5bp() {
   }
 };
 
+Generator.prototype.askForDeployment = function askForDeployment() {
+  var cb = this.async();
+
+  console.log(chalk.yellow('\nChoose deployment options.') + ' ☛');
+
+  var prompts = [{
+    name: 'deploy',
+    message: 'Use grunt-build-control for deployment?',
+    type: 'confirm'
+  },
+  {
+    name: 'deployRemote',
+    message: 'Remote to deploy to',
+    default: '../',
+    when: function (answers) {
+      return answers.deploy;
+    }
+  },
+  {
+    name: 'deployBranch',
+    message: 'Branch to deploy to',
+    default: 'gh-pages',
+    when: function (answers) {
+      return answers.deploy;
+    }
+  }];
+
+  this.prompt(prompts, function (props) {
+
+    this.deploy       = props.deploy;
+    this.deployRemote = props.deployRemote;
+    this.deployBranch = props.deployBranch;
+
+    cb();
+  }.bind(this));
+};
+
 Generator.prototype.askForJekyll = function askForJekyll() {
   var cb = this.async();
 

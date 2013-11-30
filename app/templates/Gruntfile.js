@@ -350,7 +350,17 @@ module.exports = function (grunt) {
           ]
         }
       }
-    },
+    },<% if (deploy) { %>
+    buildcontrol: {
+      dist: {
+        options: {
+          remote: '<%= deployRemote %>',
+          branch: '<%= deployBranch %>',
+          commit: true,
+          push: true
+        }
+      }
+    },<% } %>
     jshint: {
       options: {
         jshintrc: '.jshintrc',
@@ -460,7 +470,14 @@ module.exports = function (grunt) {
     'rev',
     'usemin',
     'htmlmin'
-    ]);
+    ]);<% if (deploy) { %>
+
+  grunt.registerTask('deploy', [
+    'check',
+    'test',
+    'build',
+    'buildcontrol'
+    ]);<% } %>
 
   grunt.registerTask('default', [
     'check',

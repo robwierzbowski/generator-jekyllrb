@@ -5,7 +5,8 @@
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",<% if (autoPre) { %>
-    "grunt-autoprefixer": "~0.2.0",<% } %>
+    "grunt-autoprefixer": "~0.2.0",<% } %><% if (deploy) { %>
+    "grunt-build-control": "~0.1.2",<% } %>
     "grunt-concurrent": "~0.3.0",
     "grunt-contrib-clean": "~0.5.0",<% if (jsPre === 'coffeescript') { %>
     "grunt-contrib-coffee": "~0.7.0",<% } %><% if (cssPre === 'compass') { %>
