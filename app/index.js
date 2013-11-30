@@ -185,7 +185,47 @@ Generator.prototype.askForTemplates = function askForTemplates() {
     name: 'templateType',
     type: 'list',
     message: 'Site template',
-    choices: ['Default Jekyll', 'HTML5 ★ Boilerplate']
+    choices: ['Default Jekyll', 'HTML5 ★ Boilerplate'],
+  },
+  {
+    name: 'h5bpCss',
+    type: 'confirm',
+    message: 'Add H5★BP CSS files?',
+    when: function (answers) {
+      return answers.templateType === 'HTML5 ★ Boilerplate';
+    }
+  },
+  {
+    name: 'h5bpJs',
+    type: 'confirm',
+    message: 'Add H5★BP javascript files?',
+    when: function (answers) {
+      return answers.templateType === 'HTML5 ★ Boilerplate';
+    }
+  },
+  {
+    name: 'h5bpIco',
+    type: 'confirm',
+    message: 'Add H5★BP favorite and touch icons?',
+    when: function (answers) {
+      return answers.templateType === 'HTML5 ★ Boilerplate';
+    }
+  },
+  {
+    name: 'h5bpDocs',
+    type: 'confirm',
+    message: 'Add H5★BP documentation?',
+    when: function (answers) {
+      return answers.templateType === 'HTML5 ★ Boilerplate';
+    }
+  },
+  {
+    name: 'h5bpAnalytics',
+    type: 'confirm',
+    message: 'Include Google Analytics?',
+    when: function (answers) {
+      return answers.templateType === 'HTML5 ★ Boilerplate';
+    }
   }];
 
   this.prompt(prompts, function (props) {
@@ -197,58 +237,14 @@ Generator.prototype.askForTemplates = function askForTemplates() {
       this.templateType = 'h5bp';
     }
 
+    this.h5bpCss       = props.h5bpCss;
+    this.h5bpJs        = props.h5bpJs;
+    this.h5bpIco       = props.h5bpIco;
+    this.h5bpDocs      = props.h5bpDocs;
+    this.h5bpAnalytics = props.h5bpAnalytics;
+
     cb();
   }.bind(this));
-};
-
-Generator.prototype.askForh5bp = function askForh5bp() {
-  if (this.templateType === 'h5bp') {
-    var cb = this.async();
-
-    var prompts = [{
-      name: 'h5bpCss',
-      type: 'confirm',
-      message: 'Add H5★BP CSS files?'
-    },
-    {
-      name: 'h5bpJs',
-      type: 'confirm',
-      message: 'Add H5★BP javascript files?',
-    },
-    {
-      name: 'h5bpIco',
-      type: 'confirm',
-      message: 'Add H5★BP favorite and touch icons?'
-    },
-    {
-      name: 'h5bpDocs',
-      type: 'confirm',
-      message: 'Add H5★BP documentation?'
-    },
-    {
-      name: 'h5bpAnalytics',
-      type: 'confirm',
-      message: 'Include Google Analytics?'
-    }];
-
-    this.prompt(prompts, function (props) {
-
-      this.h5bpCss       = props.h5bpCss;
-      this.h5bpJs        = props.h5bpJs;
-      this.h5bpIco       = props.h5bpIco;
-      this.h5bpDocs      = props.h5bpDocs;
-      this.h5bpAnalytics = props.h5bpAnalytics;
-
-      cb();
-    }.bind(this));
-  }
-  else {
-    this.h5bpCss       = false;
-    this.h5bpJs        = false;
-    this.h5bpIco       = false;
-    this.h5bpDocs      = false;
-    this.h5bpAnalytics = false;
-  }
 };
 
 Generator.prototype.askForDeployment = function askForDeployment() {
