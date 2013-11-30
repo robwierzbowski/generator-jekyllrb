@@ -115,6 +115,8 @@ Generator.prototype.askForStructure = function askForStructure() {
   console.log(chalk.yellow('\nSet up some directories.') + ' ☛' +
     '\nNested directories are fine.');
 
+  var cssPre = this.cssPre;
+  var jsPre  = this.jsPre;
   var slashFilter = function (input) {
     return input.replace(/^\/*|\/*$/g, '');
   };
@@ -142,26 +144,25 @@ Generator.prototype.askForStructure = function askForStructure() {
     message: 'Webfont directory',
     default: 'fonts',
     filter: slashFilter
-  }];
-  var cssPreDirPrompt = {
+  },
+  {
     name: 'cssPreDir',
     message: 'CSS preprocessor directory',
     default: '_scss',
-    filter: slashFilter
-  };
-  var jsPreDirPrompt = {
+    filter: slashFilter,
+    when: function () {
+      return cssPre;
+    }
+  },
+  {
     name: 'jsPreDir',
     message: 'Javascript preprocessor directory',
     default: '_src',
-    filter: slashFilter
-  };
-
-  if (this.cssPre) {
-    prompts.push(cssPreDirPrompt);
-  }
-  if (this.jsPre) {
-    prompts.push(jsPreDirPrompt);
-  }
+    filter: slashFilter,
+    when: function () {
+      return jsPre;
+    }
+  }];
 
   this.prompt(prompts, function (props) {
 
