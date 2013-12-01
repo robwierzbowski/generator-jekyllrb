@@ -90,3 +90,7 @@ Post bugs and feature requests to the [Github issue tracker](https://github.com/
 
 ## License
 [BSD-new](http://en.wikipedia.org/wiki/BSD_License)
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/robwierzbowski/generator-jekyllrb/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
