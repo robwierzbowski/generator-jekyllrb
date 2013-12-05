@@ -82,6 +82,8 @@ Wrapping an existing site in Yeoman isn't hard, but it takes a little manual edi
 
 ## Contribute
 
+**[Please read the contributing guidelines before posting an issue.](https://github.com/robwierzbowski/generator-jekyllrb/blob/master/CONTRIBUTING.md)**
+
 Post bugs and feature requests to the [Github issue tracker](https://github.com/robwierzbowski/generator-jekyllrb/issues). In lieu of a formal styleguide, take care to maintain the existing coding style. Lint and test your code using [Grunt](https://github.com/gruntjs/grunt).
 
 ## Release History
