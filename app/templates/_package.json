@@ -9,6 +9,7 @@
     "grunt-build-control": "~0.1.2",<% } %>
     "grunt-concurrent": "~0.3.0",
     "grunt-contrib-clean": "~0.5.0",<% if (jsPre === 'coffeescript') { %>
+    "grunt-coffeelint": "~0.0.8",
     "grunt-contrib-coffee": "~0.7.0",<% } %><% if (cssPre === 'compass') { %>
     "grunt-contrib-compass": "~0.5.0",<% } %>
     "grunt-contrib-concat": "~0.3.0",
