@@ -211,14 +211,6 @@ module.exports = function (grunt) {
           ext: '.js'
         }]
       }
-    },
-    coffeelint: {
-      options: {
-        'max_line_length': {
-          'level': 'ignore'
-        }
-      },
-      check: ['<%%= yeoman.app %>/<%= jsPreDir %>/*.coffee']
     },<% } %>
     jekyll: {
       options: {
@@ -368,6 +360,14 @@ module.exports = function (grunt) {
           push: true
         }
       }
+    },<% } %><% if (jsPre === 'coffeescript') { %>
+    coffeelint: {
+      options: {
+        'max_line_length': {
+          'level': 'ignore'
+        }
+      },
+      check: ['<%%= yeoman.app %>/<%= jsPreDir %>/*.coffee']
     },<% } %>
     jshint: {
       options: {
