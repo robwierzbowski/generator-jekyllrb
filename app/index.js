@@ -168,6 +168,18 @@ Generator.prototype.askForStructure = function askForStructure() {
     this.cssPreDir = props.cssPreDir;
     this.jsPreDir  = props.jsPreDir;
 
+    // Split asset directories on slashes
+    var cssParts   = props.cssDir.split('/');
+    var jsParts    = props.jsDir.split('/');
+    var imgParts   = props.imgDir.split('/');
+    var fontsParts = props.fontsDir.split('/');
+
+    // Build Jekyll exclude directories
+    this.cssExDir   = cssParts[cssParts.length - 1];
+    this.jsExDir    = jsParts[jsParts.length - 1];
+    this.imgExDir   = imgParts[imgParts.length - 1];
+    this.fontsExDir = fontsParts[fontsParts.length - 1];
+
     cb();
   }.bind(this));
 };

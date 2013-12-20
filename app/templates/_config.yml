@@ -10,7 +10,7 @@ author:
   email: <%= email %>
 
 # Grunt handles images and assets.
-exclude: ['<%= imgDir %>', '<%= cssDir %>', '<%= jsDir %>', '<%= fontsDir %>',
+exclude: ['<%= imgExDir %>', '<%= cssExDir %>', '<%= jsExDir %>', '<%= fontsExDir %>',
           '**.png', '**.jpg', '**.jpeg', '**.gif', '**.webp', '**.svg', '**.ico']
 
 include: ['.htaccess']
