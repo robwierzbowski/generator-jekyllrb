@@ -33,14 +33,8 @@ var Generator = module.exports = function Generator(args, options) {
     // Clean up temp files
     spawn('rm', ['-r', '.jekyll'], { stdio: 'inherit' });
 
-    this.installDependencies({
-      skipInstall: options['skip-install'],
-      callback: function () {
-        console.log('\nRunning ' + chalk.yellow.bold('bundle install') + ' to install the required gems. If this fails, try running the command yourself.\n');
-
-        this.spawnCommand('bundle', ['install']);
-      }.bind(this)
-    });
+    // Install Grunt and Bower dependencies
+    this.installDependencies({ skipInstall: options['skip-install'] });
   });
 };
 
@@ -364,6 +358,17 @@ Generator.prototype.csslint = function csslint() {
 
 Generator.prototype.editor = function editor() {
   this.copy('editorconfig', '.editorconfig');
+};
+
+Generator.prototype.rubyDependencies = function rubyDependencies() {
+  console.log('\nRunning ' + chalk.yellow.bold('bundle install') + ' to install the required gems. If this fails, try running the command yourself.\n');
+
+  this.conflicter.resolve(function (err) {
+    if (err) {
+      return this.emit('error', err);
+    }
+    shelljs.exec('bundle install');
+  });
 };
 
 Generator.prototype.jekyllInit = function jekyllInit() {
