@@ -11,7 +11,7 @@ Generator-jekyllrb is ideal for developing performant static sites and prototypi
 **During setup you can choose:**
 
 - [Compass](http://compass-style.org/), [Sass](http://sass-lang.com/), or vanilla CSS
-- [CoffeeScript](http://coffeescript.org/) (with [CoffeeLint](http://www.coffeelint.org/)) or vanilla JavaScript
+- [CoffeeScript](http://coffeescript.org/) or vanilla JavaScript
 - Automatic CSS vendor prefixing with [Autoprefixer](https://github.com/ai/autoprefixer)
 - Default Jekyll or [HTML5 Boilerplate](http://html5boilerplate.com/) templates
 - Common Jekyll configuration options
@@ -20,7 +20,7 @@ Generator-jekyllrb is ideal for developing performant static sites and prototypi
 
 - Built in preview server with LiveReload
 - Automatic Jekyll and preprocessor compiling
-- Code quality checks with [Jshint](http://www.jshint.com/), [CssLint](http://csslint.net/), [CSSCSS](http://zmoazeni.github.io/csscss/), and `jekyll doctor`
+- Code quality checks with [Jshint](http://www.jshint.com/) and/or [CoffeeLint](http://www.coffeelint.org/), [CssLint](http://csslint.net/), [CSSCSS](http://zmoazeni.github.io/csscss/), and `jekyll doctor`
 - An automatic build process that includes concatenation, image optimization, CSS and HTML minification, JS uglification, and asset revving to bust those caches
 
 ## Getting Started
