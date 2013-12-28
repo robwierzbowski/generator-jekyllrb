@@ -6,6 +6,7 @@ var chalk = require('chalk');
 var yeoman = require('yeoman-generator');
 var globule = require('globule');
 var shelljs = require('shelljs');
+var bundle = false;
 
 var Generator = module.exports = function Generator(args, options) {
   var dependenciesInstalled = ['bundle', 'ruby'].every(function (depend) {
@@ -35,6 +36,10 @@ var Generator = module.exports = function Generator(args, options) {
 
     // Install Grunt and Bower dependencies
     this.installDependencies({ skipInstall: options['skip-install'] });
+
+    if (bundle === false) {
+      console.log(chalk.yellow.bold('Bundle install failed. Try running the command yourself.'));
+    }
   });
 };
 
@@ -361,13 +366,20 @@ Generator.prototype.editor = function editor() {
 };
 
 Generator.prototype.rubyDependencies = function rubyDependencies() {
-  console.log('\nRunning ' + chalk.yellow.bold('bundle install') + ' to install the required gems. If this fails, try running the command yourself.\n');
+  var execComplete;
+
+  console.log('\nRunning ' + chalk.yellow.bold('bundle install') + ' to install the required gems.');
 
   this.conflicter.resolve(function (err) {
     if (err) {
       return this.emit('error', err);
     }
-    shelljs.exec('bundle install');
+
+    execComplete = shelljs.exec('bundle install');
+
+    if (execComplete.code === 0) {
+      bundle = true;
+    }
   });
 };
 
