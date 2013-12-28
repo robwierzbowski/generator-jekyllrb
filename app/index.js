@@ -156,7 +156,7 @@ Generator.prototype.askForStructure = function askForStructure() {
   }];
 
   console.log(chalk.yellow('\nSet up some directories.') + ' ☛' +
-    '\nNested directories are fine.');
+    '\nSee note about nested directories in the README.');
 
   this.prompt(prompts, function (props) {
 

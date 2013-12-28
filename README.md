@@ -80,6 +80,12 @@ Wrapping an existing site in Yeoman isn't hard, but it takes a little manual edi
 6. Test that everything is working correctly by running `grunt serve`, `grunt dist`, and `grunt serve:dist`. Check that the files you expect are being transferred to the dist directory.
 7. If you were versioning the _site directory, move its .git folder to the dist directory.
 
+## Notes
+
+#### Nested asset directories and Jekyll
+
+Jekyll [can't exclude nested directories](https://github.com/jekyll/jekyll/issues/906), so we must exclude all directories that match the innermost asset directory. For example, `assets/css` will exclude all directories named `css` from Jekyll compilation. This will cause issues if your site has a tag or category named `css`; if you're worried about accidental exclusions prefix all asset directories with an underscore (`assets/_css`).
+
 ## Contribute
 
 **[Please read the contributing guidelines before posting an issue.](https://github.com/robwierzbowski/generator-jekyllrb/blob/master/CONTRIBUTING.md)**
