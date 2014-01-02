@@ -10,6 +10,12 @@
       depn.push('\n    "jquery": "~1.10.2"');
       depn.push('\n    "modernizr": "~2.7"');
     }
+    if (bourbon) {
+      depn.push('\n    "bourbon": "~v3.1.8"');
+    }
+    if (neat) {
+      depn.push('\n    "neat": "~1.5.0"');
+    }
     print(depn.join(','));
   %>
   }

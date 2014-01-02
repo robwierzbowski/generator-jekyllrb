@@ -26,7 +26,7 @@
     "grunt-csscss": "~0.5.0",
     "grunt-jekyll": "git://github.com/dannygarcia/grunt-jekyll.git#aa03074ee0f5b69dc9d7a0e6ced6bb8cd923add6",
     "grunt-rev": "~0.1.0",<% if (cssPre === 'sass') { %>
-    "grunt-contrib-sass": "~0.5.0",<% } %>
+    "grunt-contrib-sass": "~0.6.0",<% } %>
     "grunt-svgmin": "~0.2.0",
     "grunt-usemin": "~0.1.12",
     "jshint-stylish": "~0.1.3",
