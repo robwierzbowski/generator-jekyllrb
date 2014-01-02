@@ -83,7 +83,10 @@ Generator.prototype.askForTools = function askForTools() {
   {
     name: 'bourbon',
     type: 'confirm',
-    message: 'Use Bourbon?'
+    message: 'Use Bourbon?',
+    when: function(answers) {
+      return answers.cssPre == 'Sass';
+    }
   },
   {
     name: 'neat',
