@@ -78,12 +78,39 @@ Generator.prototype.askForTools = function askForTools() {
     name: 'cssPre',
     type: 'list',
     message: 'CSS preprocessor',
-    choices: ['Compass', 'Sass', 'None']
+    choices: ['Sass', 'Compass', 'None']
+  },
+  {
+    name: 'bourbon',
+    type: 'confirm',
+    message: 'Use Bourbon?',
+    when: function(answers) {
+      return answers.cssPre == 'Sass';
+    }
+  },
+  {
+    name: 'neat',
+    type: 'confirm',
+    message: 'Use Neat?',
+    when: function(answers) {
+      return answers.bourbon;
+    }
+  },
+  {
+    name: 'bitters',
+    type: 'confirm',
+    message: 'Use Bitters?',
+    when: function(answers) {
+      return answers.bourbon;
+    }
   },
   {
     name: 'autoPre',
     type: 'confirm',
-    message: 'Use Autoprefixer?'
+    message: 'Use Autoprefixer?',
+    when: function(answers) {
+      return !answers.bourbon;
+    }
   },
   {
     name: 'jsPre',
@@ -99,6 +126,9 @@ Generator.prototype.askForTools = function askForTools() {
     // Multiple choice 'None' to false
     this.cssPre  = props.cssPre === 'None' ? false : props.cssPre.toLowerCase();
     this.jsPre   = props.jsPre === 'None' ? false : props.jsPre.toLowerCase();
+    this.bourbon = props.bourbon;
+    this.neat    = props.neat;
+    this.bitters = props.bitters;
     this.autoPre = props.autoPre;
 
     cb();
@@ -531,6 +561,41 @@ Generator.prototype.cssPreprocessor = function cssPreprocessor() {
     }, this);
   }
 };
+
+Generator.prototype.importBourbon = function importBourbon() {
+  var bourbonImport = shelljs.echo('@import "bourbon/app/assets/stylesheets/bourbon";\n');
+
+  if (this.bourbon) {
+    bourbonImport.toEnd(path.join('app', this.cssPreDir, 'main.scss'));
+  }
+}
+
+Generator.prototype.installBitters = function installBitters() {
+  var cssPreDir     = this.cssPreDir;
+  var appPath       = shelljs.pwd();
+  var bittersImport = shelljs.echo('@import "bitters/bitters";\n');
+
+  if (this.bitters) {
+    // Install Bitters
+    shelljs.cd(path.join('app', cssPreDir));
+    shelljs.exec('bitters install');
+    shelljs.cd(appPath);
+
+    // Remove styled ID's that cause csslint check to fail
+    shelljs.sed('-i', /(, #flash_)(?:failure|notice|success)\s{/g, ' {', path.join('app', cssPreDir, '/bitters/_flashes.scss'));
+
+    // Import Bitters
+    bittersImport.toEnd(path.join('app', cssPreDir, 'main.scss'));
+  }
+};
+
+Generator.prototype.importNeat = function importNeat() {
+  var neatImport = shelljs.echo('@import "neat/app/assets/stylesheets/neat";\n');
+
+  if (this.neat) {
+    neatImport.toEnd(path.join('app', this.cssPreDir, 'main.scss'));
+  }
+}
 
 Generator.prototype.jsPreprocessor = function jsPreprocessor() {
   if (this.jsPre) {

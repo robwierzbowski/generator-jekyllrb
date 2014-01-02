@@ -1,8 +1,8 @@
-# Generator-jekyllrb 
+# Generator-jekyllrb
 
 **Supercharge Jekyll development with Yeoman. Yo, Jekyllrb!**
 
-Generator-jekyllrb wraps the [Jekyll](http://jekyllrb.com/) static site generator in a [Yeoman](http://yeoman.io/) development workflow. Scaffold your site with Yo, manage front end packages with [Bower](http://bower.io/), and automate development and build tasks with [Grunt](http://gruntjs.com/). 
+Generator-jekyllrb wraps the [Jekyll](http://jekyllrb.com/) static site generator in a [Yeoman](http://yeoman.io/) development workflow. Scaffold your site with Yo, manage front end packages with [Bower](http://bower.io/), and automate development and build tasks with [Grunt](http://gruntjs.com/).
 
 Generator-jekyllrb is ideal for developing performant static sites and prototyping dynamic sites and apps (especially if the final version uses Yeoman too). It's also a great introduction to Yeoman if you're not familiar with JavaScript MV* frameworks.
 
@@ -12,6 +12,7 @@ Generator-jekyllrb is ideal for developing performant static sites and prototypi
 
 - [Compass](http://compass-style.org/), [Sass](http://sass-lang.com/), or vanilla CSS
 - [CoffeeScript](http://coffeescript.org/) or vanilla JavaScript
+- Sass mixins, grid and predefined styles with thoughtbot's [Bourbon](http://bourbon.io/), [Neat](http://neat.bourbon.io/) and [Bitters](http://bitters.bourbon.io/)
 - Automatic CSS vendor prefixing with [Autoprefixer](https://github.com/ai/autoprefixer)
 - Default Jekyll or [HTML5 Boilerplate](http://html5boilerplate.com/) templates
 - Common Jekyll configuration options
@@ -47,7 +48,7 @@ Builds an optimized site to the dist directory. [Usemin blocks](https://github.c
 
 #### grunt deploy
 
-During scaffolding the generator gives you the option to configure [grunt-build-control](https://github.com/robwierzbowski/grunt-build-control) to version and deploy your built code to a remote repository. If you configure build-control, `grunt deploy` will run `grunt check`, `grunt test`, `grunt build`, and then commit and deploy your built code to the specified remote repository. 
+During scaffolding the generator gives you the option to configure [grunt-build-control](https://github.com/robwierzbowski/grunt-build-control) to version and deploy your built code to a remote repository. If you configure build-control, `grunt deploy` will run `grunt check`, `grunt test`, `grunt build`, and then commit and deploy your built code to the specified remote repository.
 
 #### grunt (default)
 
@@ -65,7 +66,7 @@ To include components in the build, place them inside of a Usemin block or add t
 
 ## More on Yeoman and Grunt
 
-[Getting started with Yeoman](http://yeoman.io/gettingstarted.html)  
+[Getting started with Yeoman](http://yeoman.io/gettingstarted.html)
 [Getting started with Grunt](http://gruntjs.com/getting-started)
 
 ## Migrating an existing site
