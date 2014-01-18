@@ -24,7 +24,7 @@
     "grunt-contrib-uglify": "~0.3.0",
     "grunt-contrib-watch": "git://github.com/gruntjs/grunt-contrib-watch.git#b884948805940c663b1cbb91a3c28ba8afdebf78",
     "grunt-jekyll": "~0.4.1",
-    "grunt-rev": "~0.1.0",<% if (cssPre === 'sass') { %>
+    "grunt-filerev": "~0.2.0",<% if (cssPre === 'sass') { %>
     "grunt-contrib-sass": "~0.6.0",<% } %>
     "grunt-svgmin": "~0.3.0",
     "grunt-usemin": "~0.1.12",

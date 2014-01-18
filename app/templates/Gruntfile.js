@@ -336,19 +336,19 @@ module.exports = function (grunt) {
         }]
       }<% } %>
     },
-    rev: {
+    filerev: {
       options: {
         length: 4
       },
       dist: {
-        files: {
+        files: [{
           src: [
             '<%%= yeoman.dist %>/<%= jsDir %>/**/*.js',
             '<%%= yeoman.dist %>/<%= cssDir %>/**/*.css',
             '<%%= yeoman.dist %>/<%= imgDir %>/**/*.{gif,jpg,jpeg,png,svg,webp}',
             '<%%= yeoman.dist %>/<%= fontsDir %>/**/*.{eot*,otf,svg,ttf,woff}'
           ]
-        }
+        }]
       }
     },<% if (deploy) { %>
     buildcontrol: {
@@ -459,7 +459,7 @@ module.exports = function (grunt) {
     'uglify',
     'imagemin',
     'svgmin',
-    'rev',
+    'filerev',
     'usemin',
     'htmlmin'
     ]);<% if (deploy) { %>
