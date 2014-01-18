@@ -20,7 +20,7 @@ Generator-jekyllrb is ideal for developing performant static sites and prototypi
 
 - Built in preview server with LiveReload
 - Automatic Jekyll and preprocessor compiling
-- Code quality checks with [Jshint](http://www.jshint.com/) and/or [CoffeeLint](http://www.coffeelint.org/), [CssLint](http://csslint.net/), [CSSCSS](http://zmoazeni.github.io/csscss/), and `jekyll doctor`
+- Code quality checks with [Jshint](http://www.jshint.com/) and/or [CoffeeLint](http://www.coffeelint.org/), [CssLint](http://csslint.net/), and `jekyll doctor`
 - An automatic build process that includes concatenation, image optimization, CSS and HTML minification, JS uglification, and asset revving to bust those caches
 
 ## Getting Started
@@ -37,7 +37,7 @@ Compiles all files and opens the site in your default browser. A watch task watc
 
 #### grunt check
 
-Checks code quality with Jshint, CSS Lint and CSSCSS, and Jekyll health with `jekyll doctor`.
+Checks code quality with Jshint and CSS Lint, and Jekyll health with `jekyll doctor`.
 
 #### grunt build
 

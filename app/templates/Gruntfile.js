@@ -381,22 +381,6 @@ module.exports = function (grunt) {
         '!<%%= yeoman.app %>/<%= jsDir %>/vendor/**/*'
       ]
     },
-    csscss: {
-      options: {
-        bundleExec: true,
-        minMatch: 2,<% if (cssPre) { %>
-        ignoreSassMixins: false,<% } %><% if (cssPre === 'compass') { %>
-        compass: true,<% } %><% if (!cssPre) { %>
-        showParserErrors: true,<% } %>
-        colorize: true,
-        shorthand: false,
-        verbose: true
-      },
-      check: {
-       src: ['<%%= yeoman.app %>/<%= cssDir %>/**/*.css'<% if (cssPre === 'compass' || cssPre === 'sass') { %>,
-             '<%%= yeoman.app %>/<%= cssPreDir %>/**/*.scss'<% } %>]
-      }
-    },
     csslint: {
       options: {
         csslintrc: '.csslintrc'
@@ -460,7 +444,6 @@ module.exports = function (grunt) {
     'coffeelint:check',
     'coffee:dist',<% } %>
     'jshint:all',
-    'csscss:check',
     'csslint:check'
   ]);
 
