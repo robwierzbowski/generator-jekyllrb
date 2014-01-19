@@ -371,8 +371,7 @@ module.exports = function (grunt) {
       all: [
         'Gruntfile.js',
         '<%%= yeoman.app %>/<%= jsDir %>/**/*.js',
-        'test/spec/**/*.js',
-        '!<%%= yeoman.app %>/<%= jsDir %>/vendor/**/*'
+        'test/spec/**/*.js'
       ]
     },
     csslint: {
