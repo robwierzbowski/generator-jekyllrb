@@ -1,3 +1,8 @@
+1.2.1
+  date: 2014-01-18
+  changes:
+  - Minor glob optimizations and comment fixes
+
 1.2.0
   date: 2014-01-18
   changes:
