@@ -53,7 +53,7 @@ module.exports = function (grunt) {
           '.jekyll/**/*.html',<% if (autoPre) { %>
           '.tmp/<%= cssDir %>/**/*.css',<% } else { %>
           '{.tmp,<%%= yeoman.app %>}/<%= cssDir %>/**/*.css',<% } %>
-          '{.tmp,<%%= yeoman.app %>}/<%%= js %>/**/*.js',
+          '{.tmp,<%%= yeoman.app %>}/<%= jsDir %>/**/*.js',
           '<%%= yeoman.app %>/<%= imgDir %>/**/*.{gif,jpg,jpeg,png,svg,webp}'
         ]
       }
