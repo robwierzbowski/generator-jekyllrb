@@ -86,6 +86,25 @@ Wrapping an existing site in Yeoman isn't hard, but it takes a little manual edi
 
 Jekyll [can't exclude nested directories](https://github.com/jekyll/jekyll/issues/906), so we must exclude all directories that match the innermost asset directory. For example, `assets/css` will exclude all directories named `css` from Jekyll compilation. This will cause issues if your site has a tag or category named `css`; if you're worried about accidental exclusions prefix all asset directories with an underscore (`assets/_css`).
 
+#### Absolute path to assets in CSS
+
+Since we revision assets such as images, make sure that your CSS calls them using their absolute path, so on ``grunt build`` those images will be replaced properly.
+
+Incorrect:
+```css
+body {
+  background: url('../images/foo.jpg');
+}
+```
+
+Correct:
+```css
+body {
+  background: url('/images/foo.jpg');
+}
+```
+
+
 ## Contribute
 
 **[Please read the contributing guidelines before posting an issue.](https://github.com/robwierzbowski/generator-jekyllrb/blob/master/CONTRIBUTING.md)**
