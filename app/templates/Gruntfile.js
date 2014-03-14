@@ -24,11 +24,11 @@ module.exports = function (grunt) {
     watch: {<% if (cssPre === 'sass' || cssPre === 'compass' ) { %>
       <%= cssPre %>: {
         files: ['<%%= yeoman.app %>/<%= cssPreDir %>/**/*.{scss,sass}'],
-        tasks: ['<%= cssPre %>:server'<% if (autoPre) { %>, 'autoprefixer:server'<% } %>]
+        tasks: ['<%= cssPre %>:server'<% if (autoPre) { %>, 'autoprefixer:dist'<% } %>]
       },<% } %><% if (autoPre) { %>
       autoprefixer: {
         files: ['<%%= yeoman.app %>/<%= cssDir %>/**/*.css'],
-        tasks: ['copy:stageCss', 'autoprefixer:server']
+        tasks: ['copy:stageCss', 'autoprefixer:dist']
       },<% } %><% if (jsPre === 'coffeescript') { %>
       coffee: {
         files: ['<%%= yeoman.app %>/<%= jsPreDir %>/**/*.coffee'],
@@ -174,20 +174,10 @@ module.exports = function (grunt) {
         browsers: ['last 2 versions']
       },
       dist: {
-        files: [{
-          expand: true,
-          cwd: '<%%= yeoman.dist %>/<%= cssDir %>',
-          src: '**/*.css',
-          dest: '<%%= yeoman.dist %>/<%= cssDir %>'
-        }]
-      },
-      server: {
-        files: [{
-          expand: true,
-          cwd: '.tmp/<%= cssDir %>',
-          src: '**/*.css',
-          dest: '.tmp/<%= cssDir %>'
-        }]
+        expand: true,
+        cwd: '.tmp',
+        src: '**/{<%= cssDir %>,concat}/*.css',
+        dest: '.tmp'
       }
     },<% } %><% if (jsPre === 'coffeescript') { %>
     coffee: {
@@ -410,7 +400,7 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server',
       'concurrent:server',<% if (autoPre) { %>
-      'autoprefixer:server',<% } %>
+      'autoprefixer:dist',<% } %>
       'connect:livereload',
       'watch'
     ]);
