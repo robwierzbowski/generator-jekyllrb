@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 
-gem 'jekyll', '~>1.4.0'
+gem 'jekyll', '~>2.0.3'
 gem '<%= jekMkd %>'<% if (cssPre === 'sass') { %>
-gem 'sass', '>=3.2'<% } %><%  if (cssPre === 'compass') { %>
+gem 'sass', '>=3.3.7'<% } %><%  if (cssPre === 'compass') { %>
 gem 'compass', '>=0.12'<%     } %>
