@@ -302,7 +302,7 @@ module.exports = function (grunt) {
             // Like Jekyll, exclude files & folders prefixed with an underscore.
             '!**/_*{,/**}'<% if (h5bpJs) { %>,<% } %>
             // Explicitly add any files your site needs for distribution here.
-            <% if (!h5bpJs) { %>//<% } %>'_bower_components/jquery/jquery.js',
+            <% if (!h5bpJs) { %>//<% } %>'_bower_components/jquery/jquery.min.js',
             <% if (!h5bpJs) { %>//<% } %>'favicon.ico',
             <% if (!h5bpJs) { %>//<% } %>'apple-touch*.png'
           ],
