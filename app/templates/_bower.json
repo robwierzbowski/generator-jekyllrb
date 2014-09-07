@@ -4,11 +4,11 @@
   "dependencies": {<%
     var depn = [];
     if (h5bpCss) {
-      depn.push('\n    "normalize-css": "~2.1.3"');
+      depn.push('\n    "normalize-css": "~3.0.1"');
     }
     if (h5bpJs) {
-      depn.push('\n    "jquery": "~1.10.2"');
-      depn.push('\n    "modernizr": "~2.7"');
+      depn.push('\n    "jquery": "~1.11.1"');
+      depn.push('\n    "modernizr": "~2.8.3"');
     }
     print(depn.join(','));
   %>
