@@ -6,16 +6,15 @@ var chalk = require('chalk');
 var yeoman = require('yeoman-generator');
 var globule = require('globule');
 var shelljs = require('shelljs');
-var bundle = false;
 
 var Generator = module.exports = function Generator(args, options) {
-  var dependenciesInstalled = ['bundle', 'ruby'].every(function (depend) {
+  var dependenciesInstalled = ['ruby'].every(function (depend) {
     return shelljs.which(depend);
   });
 
   if (!dependenciesInstalled) {
     console.log('Looks like you\'re missing some dependencies.' +
-      '\nMake sure ' + chalk.white('Ruby') + ' and the ' + chalk.white('Bundler gem') + ' are installed, then run again.');
+      '\nMake sure ' + chalk.white('Ruby') + ' is installed, then run again.');
     shelljs.exit(1);
   }
 
@@ -37,9 +36,6 @@ var Generator = module.exports = function Generator(args, options) {
     // Install Grunt and Bower dependencies
     this.installDependencies({ skipInstall: options['skip-install'] });
 
-    if (bundle === false) {
-      console.log(chalk.yellow.bold('Bundle install failed. Try running the command yourself.'));
-    }
   });
 };
 
@@ -374,24 +370,17 @@ Generator.prototype.editor = function editor() {
 Generator.prototype.rubyDependencies = function rubyDependencies() {
   var execComplete;
 
-  console.log('\nRunning ' + chalk.yellow.bold('bundle install') + ' to install the required gems.');
-
   this.conflicter.resolve(function (err) {
     if (err) {
       return this.emit('error', err);
     }
 
-    execComplete = shelljs.exec('bundle install');
-
-    if (execComplete.code === 0) {
-      bundle = true;
-    }
   });
 };
 
 Generator.prototype.jekyllInit = function jekyllInit() {
   // Create the default Jekyll site in a temp folder
-  shelljs.exec('bundle exec jekyll new ' + this.jekyllTmp);
+  shelljs.exec('jekyll new ' + this.jekyllTmp);
 };
 
 Generator.prototype.templates = function templates() {
