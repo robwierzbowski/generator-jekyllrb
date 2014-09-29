@@ -438,9 +438,9 @@ module.exports = function (grunt) {
     'jekyll:dist',
     'concurrent:dist',
     'useminPrepare',
-    'concat',<% if (autoPre) { %>
+    'concat',
+    'cssmin',<% if (autoPre) { %>
     'autoprefixer:dist',<% } %>
-    'cssmin',
     'uglify',
     'imagemin',
     'svgmin',
