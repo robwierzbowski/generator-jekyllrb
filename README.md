@@ -65,7 +65,7 @@ To include components in the build, place them inside of a Usemin block or add t
 
 ## More on Yeoman and Grunt
 
-[Getting started with Yeoman](http://yeoman.io/gettingstarted.html)  
+[Getting started with Yeoman](http://yeoman.io/learning/index.html)  
 [Getting started with Grunt](http://gruntjs.com/getting-started)
 
 ## Migrating an existing site
