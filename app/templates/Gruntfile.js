@@ -52,7 +52,7 @@ module.exports = function (grunt) {
           src: [
             '.jekyll/**/*.html',
             '.tmp/css/**/*.css',
-            '{.tmp,<%%= yeoman.app %>}/<%= js %>/**/*.js',
+            '{.tmp,<%%= yeoman.app %>}/<%= jsDir %>/**/*.js',
             '{<%%= yeoman.app %>}/_bower_components/**/*.js',
             '<%%= yeoman.app %>/img/**/*.{gif,jpg,jpeg,png,svg,webp}'
           ]
@@ -80,7 +80,7 @@ module.exports = function (grunt) {
           src: [
             '.jekyll/**/*.html',
             '.tmp/css/**/*.css',
-            '{.tmp,<%%= yeoman.app %>}/<%= js %>/**/*.js',
+            '{.tmp,<%%= yeoman.app %>}/<%= jsDir %>/**/*.js',
             '{<%%= yeoman.app %>}/_bower_components/**/*.js',
             '<%%= yeoman.app %>/img/**/*.{gif,jpg,jpeg,png,svg,webp}'
           ]
