@@ -52,9 +52,9 @@ module.exports = function (grunt) {
           src: [
             '.jekyll/**/*.html',
             '.tmp/css/**/*.css',
-            '{.tmp,<%= yeoman.app %>}/<%= js %>/**/*.js',
-            '{<%= yeoman.app %>}/_bower_components/**/*.js',
-            '<%= yeoman.app %>/img/**/*.{gif,jpg,jpeg,png,svg,webp}'
+            '{.tmp,<%%= yeoman.app %>}/<%= js %>/**/*.js',
+            '{<%%= yeoman.app %>}/_bower_components/**/*.js',
+            '<%%= yeoman.app %>/img/**/*.{gif,jpg,jpeg,png,svg,webp}'
           ]
         },
         options: {
@@ -62,7 +62,7 @@ module.exports = function (grunt) {
             baseDir: [
               ".jekyll",
               ".tmp",
-              "<%= yeoman.app %>"
+              "<%%= yeoman.app %>"
             ]
           },
           watchTask: true
@@ -71,7 +71,7 @@ module.exports = function (grunt) {
       dist: {
         options: {
           server: {
-            baseDir: "<%= yeoman.dist %>"
+            baseDir: "<%%= yeoman.dist %>"
           }
         }
       },
@@ -80,9 +80,9 @@ module.exports = function (grunt) {
           src: [
             '.jekyll/**/*.html',
             '.tmp/css/**/*.css',
-            '{.tmp,<%= yeoman.app %>}/<%= js %>/**/*.js',
-            '{<%= yeoman.app %>}/_bower_components/**/*.js',
-            '<%= yeoman.app %>/img/**/*.{gif,jpg,jpeg,png,svg,webp}'
+            '{.tmp,<%%= yeoman.app %>}/<%= js %>/**/*.js',
+            '{<%%= yeoman.app %>}/_bower_components/**/*.js',
+            '<%%= yeoman.app %>/img/**/*.{gif,jpg,jpeg,png,svg,webp}'
           ]
         },
         options: {
@@ -90,7 +90,7 @@ module.exports = function (grunt) {
             baseDir: [
               ".jekyll",
               ".tmp",
-              "<%= yeoman.app %>"
+              "<%%= yeoman.app %>"
             ]
           },
           watchTask: true
