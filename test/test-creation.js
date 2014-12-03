@@ -12,9 +12,10 @@ describe('jekyll generator', function () {
         return done(err);
       }
 
-      this.app = helpers.createGenerator('jekyll:app', [
+      this.app = helpers.createGenerator('jekyllrb:app', [
         '../../app'
       ]);
+      // XXX: can't change options with yeoman-generator 0.13.4
       done();
     }.bind(this));
   });
@@ -27,7 +28,7 @@ describe('jekyll generator', function () {
     ];
 
     helpers.mockPrompt(this.app, {
-      'someOption': 'Y'
+      'localInstall': true
     });
 
     this.app.run({}, function () {
