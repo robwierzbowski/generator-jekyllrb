@@ -39,7 +39,13 @@ var Generator = module.exports = function Generator(args, options) {
     email: this.user.git.email,
   };
 
-  this.skipInstall = options['skip-install'];
+  this.skipInstall = options['skip-install'] || false;
+
+  // for test purposes in particular
+  this.localInstall = (this.appname == 'temp');
+  if (this.localInstall) {
+    this.bundlerPath = path.join(process.cwd(), '.gem');
+  }
 
   this.on('end', function () {
     // Clean up temp files
@@ -396,6 +402,10 @@ Generator.prototype.editor = function editor() {
 Generator.prototype.rubyDependencies = function rubyDependencies() {
   var execComplete;
 
+  if (this.bundlerPath) {
+    shelljs.env['GEM_HOME'] = this.bundlerPath;
+  }
+
   console.log('\nRunning ' + chalk.yellow.bold('bundle install') + ' to install the required gems.');
 
   this.conflicter.resolve(function (err) {
@@ -412,6 +422,9 @@ Generator.prototype.rubyDependencies = function rubyDependencies() {
 };
 
 Generator.prototype.jekyllInit = function jekyllInit() {
+  if (this.bundlerPath) {
+    shelljs.env['GEM_HOME'] = this.bundlerPath;
+  }
   // Create the default Jekyll site in a temp folder
   shelljs.exec('bundle exec jekyll new ' + this.jekyllTmp);
 };
