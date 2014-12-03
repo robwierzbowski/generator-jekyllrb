@@ -8,6 +8,15 @@ var globule = require('globule');
 var shelljs = require('shelljs');
 var bundle = false;
 
+function setPromptDefaults(prompts, answers) {
+    prompts.forEach(function (prompt) {
+        if (answers[prompt.name] === undefined) {
+            // this can be undefined if there is no default. no silver bullet.
+            answers[prompt.name] = prompt.default;
+        }
+    });
+}
+
 var Generator = module.exports = function Generator(args, options) {
   var dependenciesInstalled = ['bundle', 'ruby'].every(function (depend) {
     return shelljs.which(depend);
@@ -30,12 +39,14 @@ var Generator = module.exports = function Generator(args, options) {
     email: this.user.git.email,
   };
 
+  this.skipInstall = options['skip-install'];
+
   this.on('end', function () {
     // Clean up temp files
     spawn('rm', ['-r', '.jekyll'], { stdio: 'inherit' });
 
     // Install Grunt and Bower dependencies
-    this.installDependencies({ skipInstall: options['skip-install'] });
+    this.installDependencies({ skipInstall: this.skipInstall });
 
     if (bundle === false) {
       console.log(chalk.yellow.bold('Bundle install failed. Try running the command yourself.'));
@@ -65,6 +76,7 @@ Generator.prototype.askForUser = function askForUser() {
 
   this.prompt(prompts, function (props) {
 
+    setPromptDefaults(prompts, props);
     this.author  = props.author;
     this.email   = props.email;
 
@@ -78,24 +90,28 @@ Generator.prototype.askForTools = function askForTools() {
     name: 'cssPre',
     type: 'list',
     message: 'CSS preprocessor',
-    choices: ['Compass', 'Sass', 'None']
+    choices: ['Compass', 'Sass', 'None'],
+    default: 'None'
   },
   {
     name: 'autoPre',
     type: 'confirm',
-    message: 'Use Autoprefixer?'
+    message: 'Use Autoprefixer?',
+    default: false
   },
   {
     name: 'jsPre',
     type: 'list',
     message: 'Javascript preprocessor',
     choices: ['None', 'Coffeescript'],
+    default: 'None'
   }];
 
   console.log(chalk.yellow('\nWire tools and preprocessors.') + ' ☛');
 
   this.prompt(prompts, function (props) {
 
+    setPromptDefaults(prompts, props);
     // Multiple choice 'None' to false
     this.cssPre  = props.cssPre === 'None' ? false : props.cssPre.toLowerCase();
     this.jsPre   = props.jsPre === 'None' ? false : props.jsPre.toLowerCase();
@@ -160,6 +176,7 @@ Generator.prototype.askForStructure = function askForStructure() {
 
   this.prompt(prompts, function (props) {
 
+    setPromptDefaults(prompts, props);
     this.cssDir    = props.cssDir;
     this.jsDir     = props.jsDir;
     this.imgDir    = props.imgDir;
@@ -184,6 +201,7 @@ Generator.prototype.askForTemplates = function askForTemplates() {
     type: 'list',
     message: 'Site template',
     choices: ['Default Jekyll', 'HTML5 ★ Boilerplate'],
+    default: 'default'
   },
   {
     name: 'h5bpCss',
@@ -230,18 +248,20 @@ Generator.prototype.askForTemplates = function askForTemplates() {
 
   this.prompt(prompts, function (props) {
 
+    setPromptDefaults(prompts, props);
+    this.h5bpCss       = props.h5bpCss;
+    this.h5bpJs        = props.h5bpJs;
+    this.h5bpIco       = props.h5bpIco;
+    this.h5bpDocs      = props.h5bpDocs;
+    this.h5bpAnalytics = props.h5bpAnalytics;
+    this.templateType  = props.templateType;
+
     if (props.templateType === 'Default Jekyll') {
       this.templateType = 'default';
     }
     else if (props.templateType === 'HTML5 ★ Boilerplate') {
       this.templateType = 'h5bp';
     }
-
-    this.h5bpCss       = props.h5bpCss;
-    this.h5bpJs        = props.h5bpJs;
-    this.h5bpIco       = props.h5bpIco;
-    this.h5bpDocs      = props.h5bpDocs;
-    this.h5bpAnalytics = props.h5bpAnalytics;
 
     cb();
   }.bind(this));
@@ -275,6 +295,7 @@ Generator.prototype.askForDeployment = function askForDeployment() {
 
   this.prompt(prompts, function (props) {
 
+    setPromptDefaults(prompts, props);
     this.deploy       = props.deploy;
     this.deployRemote = props.deployRemote;
     this.deployBranch = props.deployBranch;
@@ -326,6 +347,7 @@ Generator.prototype.askForJekyll = function askForJekyll() {
 
   this.prompt(prompts, function (props) {
 
+    setPromptDefaults(prompts, props);
     this.jekPyg      = props.jekPyg;
     this.jekMkd      = props.jekMkd;
     this.jekPost     = props.jekPost;
