@@ -37,3 +37,8 @@ app/_bower_components
 dist
 node_modules
 .tmp
+
+# Ignore for RVM users #
+.ruby-version
+.ruby-gemset
+.rvmrc
