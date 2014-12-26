@@ -458,7 +458,7 @@ Generator.prototype.templates = function templates() {
     // Default Jekyll files
     this.copy(path.join(this.jekyllTmp, 'index.html'), 'app/index.html');
     this.copy(path.join(this.jekyllTmp, '_layouts/post.html'), 'app/_layouts/post.html');
-    this.copy(path.join(this.jekyllTmp, 'css/main.css'), path.join('app', this.cssDir, 'main.css'));
+    this.copy(path.join(this.jekyllTmp, 'css/main.scss'), path.join('app', this.cssDir, 'main.scss'));
 
     // Jekyll files tailored for Yeoman
     this.template('conditional/template-default/_layouts/default.html', 'app/_layouts/default.html');
