@@ -377,6 +377,13 @@ module.exports = function (grunt) {
         ]
       }
     },
+    // https://github.com/robwierzbowski/generator-jekyllrb/issues/106
+    // scsslint: {
+    //   // See https://www.npmjs.org/package/grunt-scss-lint for options.
+    //   allFiles: [
+    //     '<%%= yeoman.app %>/<%= cssPreDir %>/**/*.scss'
+    //   ]
+    // },
     concurrent: {
       server: [<% if (cssPre === 'sass') { %>
         'sass:server',<% } %><% if (cssPre === 'compass') { %>
@@ -430,6 +437,7 @@ module.exports = function (grunt) {
     'coffee:dist',<% } %>
     'jshint:all',
     'csslint:check'
+    // 'scsslint'
   ]);
 
   grunt.registerTask('build', [
