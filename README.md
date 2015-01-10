@@ -1,5 +1,7 @@
 # Generator-jekyllrb 
 
+[![Build Status](https://travis-ci.org/dnozay/generator-jekyllrb.svg?branch=master)](https://travis-ci.org/dnozay/generator-jekyllrb)
+
 **Supercharge Jekyll development with Yeoman. Yo, Jekyllrb!**
 
 Generator-jekyllrb wraps the [Jekyll](http://jekyllrb.com/) static site generator in a [Yeoman](http://yeoman.io/) development workflow. Scaffold your site with Yo, manage front end packages with [Bower](http://bower.io/), and automate development and build tasks with [Grunt](http://gruntjs.com/). 
