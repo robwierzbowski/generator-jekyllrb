@@ -1,3 +1,13 @@
 language: node_js
 node_js:
   - 0.10
+
+env:
+  matrix:
+    - ruby=1.9.3
+    - ruby=2.0.0-p353
+
+before_script:
+  - rvm install ruby $ruby
+  - rvm use $ruby
+  - ruby -v
