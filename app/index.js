@@ -72,7 +72,11 @@ Generator.prototype.askForUser = function askForUser() {
     default: this.gitInfo.email
   }];
 
+
+  var pjson = require('../package.json');
+
   console.log(this.yeoman);
+  console.log(chalk.green.bold('generator-jekyllrb version: ' + pjson.version));
   console.log(chalk.yellow.bold('This generator will scaffold and wire a Jekyll site. Yo, Jekyllrb!') +
     chalk.yellow('\n\nTell us a little about yourself.') + ' ☛');
 
