@@ -521,7 +521,8 @@ Generator.prototype.templates = function templates() {
 Generator.prototype.pygments = function pygments() {
   // Pygments styles
   if (this.jekPyg) {
-    this.copy(path.join(this.jekyllTmp, 'css/syntax.css'), path.join('app', this.cssDir, 'syntax.css'));
+    // BROKEN.
+    // this.copy(path.join(this.jekyllTmp, 'css/syntax.css'), path.join('app', this.cssDir, 'syntax.css'));
   }
 };
 
