@@ -117,7 +117,6 @@ module.exports = function (grunt) {
     },<% if (cssPre === 'sass') { %>
     sass: {
       options: {
-        bundleExec: true,
         debugInfo: false,
         lineNumbers: false,
         loadPath: 'app/_bower_components'
@@ -149,7 +148,6 @@ module.exports = function (grunt) {
       options: {
         // If you're using global Sass gems, require them here.
         // require: ['singularity', 'jacket'],
-        bundleExec: true,
         sassDir: '<%%= yeoman.app %>/<%= cssPreDir %>',
         cssDir: '.tmp/<%= cssDir %>',
         imagesDir: '<%%= yeoman.app %>/<%= imgDir %>',
@@ -205,7 +203,6 @@ module.exports = function (grunt) {
     },<% } %>
     jekyll: {
       options: {
-        bundleExec: true,
         config: '_config.yml,_config.build.yml',
         src: '<%%= yeoman.app %>'
       },
