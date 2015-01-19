@@ -23,8 +23,26 @@ describe('jekyll generator', function () {
     .on('end', function () {
       var expected = [
         // add files you expect to exist here.
+        '.bowerrc',
+        '.csslintrc',
+        '.editorconfig',
+        '.gitattributes',
+        '.gitignore',
         '.jshintrc',
-        '.editorconfig'
+        '_config.build.yml',
+        '_config.yml',
+        'app/_layouts/default.html',
+        'app/_layouts/post.html',
+        // todo: have to be careful with dates.
+        // 'app/_posts/2015-01-18-welcome-to-jekyll.md',
+        // 'app/_posts/2015-01-18-yo-jekyllrb.md',
+        'app/css/main.scss',
+        'app/index.html',
+        'app/js/main.js',
+        'bower.json',
+        'Gemfile',
+        'Gruntfile.js',
+        'package.json'
       ];
       assert.file(expected);
       done();
