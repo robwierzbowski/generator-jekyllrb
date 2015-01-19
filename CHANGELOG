@@ -1,3 +1,17 @@
+1.4.0
+  date: 2015-01-19
+  changes:
+  - Remove explicit use of bundler
+  - Run autoprefixer after cssmin
+  - Fix generated Gruntfile (some % were not escaped)
+  - Add a jekyllrb:post command
+  - Use node >= 0.10.0
+  - Add images to usemin block
+  - Use yeoman-generator 0.18.6
+  - Clean up tests
+  - Handle case where appname has special characters
+  - Update README
+
 1.3.0-rc
   date: 2014-09-07
   changes:
