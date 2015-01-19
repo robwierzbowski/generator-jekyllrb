@@ -408,7 +408,7 @@ Generator.prototype.jekyllInit = function jekyllInit() {
     shelljs.env['GEM_HOME'] = this.bundlerPath;
   }
   // Create the default Jekyll site in a temp folder
-  shelljs.exec('jekyll new ' + this.jekyllTmp);
+  shelljs.exec('jekyll new "'+ this.jekyllTmp +'"');
 };
 
 Generator.prototype.templates = function templates() {
