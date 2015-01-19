@@ -11,3 +11,4 @@ before_script:
   - rvm install ruby $ruby
   - rvm use $ruby
   - ruby -v
+  - gem install jekyll
