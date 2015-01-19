@@ -15,10 +15,11 @@ describe('jekyll generator', function () {
         .run(path.join(__dirname, '../app'))
         .inDir(path.join(__dirname, 'temp'))
         .withGenerators([[helpers.createDummyGenerator(), 'mocha:app']]);
+    done();
   });
 
   it('creates expected files', function (done) {
-    runGen.withOptions({'localInstall':true})
+    runGen.withOptions({'skipInstall':true})
     .on('end', function () {
       var expected = [
         // add files you expect to exist here.
