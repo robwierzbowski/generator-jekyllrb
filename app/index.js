@@ -207,7 +207,7 @@ Generator.prototype.askForTemplates = function askForTemplates() {
     type: 'list',
     message: 'Site template',
     choices: ['Default Jekyll', 'HTML5 ★ Boilerplate'],
-    default: 'default'
+    default: 'Default Jekyll'
   },
   {
     name: 'h5bpCss',
