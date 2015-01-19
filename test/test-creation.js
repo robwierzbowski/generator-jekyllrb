@@ -3,37 +3,31 @@
 
 var path    = require('path');
 var helpers = require('yeoman-generator').test;
+var assert = require('yeoman-generator').assert;
 
 
 describe('jekyll generator', function () {
-  beforeEach(function (done) {
-    helpers.testDirectory(path.join(__dirname, 'temp'), function (err) {
-      if (err) {
-        return done(err);
-      }
 
-      this.app = helpers.createGenerator('jekyllrb:app', [
-        '../../app'
-      ]);
-      // XXX: can't change options with yeoman-generator 0.13.4
-      done();
-    }.bind(this));
+  var runGen;
+
+  beforeEach(function (done) {
+    runGen = helpers
+        .run(path.join(__dirname, '../app'))
+        .inDir(path.join(__dirname, 'temp'))
+        .withGenerators([[helpers.createDummyGenerator(), 'mocha:app']]);
   });
 
   it('creates expected files', function (done) {
-    var expected = [
-      // add files you expect to exist here.
-      '.jshintrc',
-      '.editorconfig'
-    ];
-
-    helpers.mockPrompt(this.app, {
-      'localInstall': true
-    });
-
-    this.app.run({}, function () {
-      helpers.assertFiles(expected);
+    runGen.withOptions({'localInstall':true})
+    .on('end', function () {
+      var expected = [
+        // add files you expect to exist here.
+        '.jshintrc',
+        '.editorconfig'
+      ];
+      assert.file(expected);
       done();
     });
   });
+
 });
