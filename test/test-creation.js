@@ -24,13 +24,20 @@ describe('jekyll generator', function () {
     // todo: have to be careful with dates.
     // 'app/_posts/2015-01-18-welcome-to-jekyll.md',
     // 'app/_posts/2015-01-18-yo-jekyllrb.md',
-    'app/css/main.scss',
-    'app/index.html',
-    'app/js/main.js',
     'bower.json',
     'Gemfile',
     'Gruntfile.js',
     'package.json'
+  ];
+  var expectedDefault = [
+    'app/css/main.scss',
+    'app/index.html',
+    'app/js/main.js'
+  ];
+  var expectedH5BP = [
+    'app/css/main.css',
+    'app/index.html',
+    'app/js/main.js'
   ];
 
   beforeEach(function (done) {
@@ -45,6 +52,18 @@ describe('jekyll generator', function () {
     .inDir(path.join(__dirname, 'temp'))
     .on('end', function () {
       assert.file(expected);
+      assert.file(expectedDefault);
+      done();
+    });
+  });
+
+  it('creates expected files', function (done) {
+    runGen.withOptions({'skipInstall':true})
+    .withPrompts({ templateType: 'HTML5 ★ Boilerplate' })
+    .inDir(path.join(__dirname, 'temp'))
+    .on('end', function () {
+      assert.file(expected);
+      assert.file(expectedH5BP);
       done();
     });
   });
@@ -54,6 +73,7 @@ describe('jekyll generator', function () {
     .inDir(path.join(__dirname, 'temp', 'with characters (special)'))
     .on('end', function () {
       assert.file(expected);
+      assert.file(expectedDefault);
       done();
     });
   });
