@@ -458,14 +458,14 @@ Generator.prototype.templates = function templates() {
     var cb = this.async();
 
     // H5BP files tailored for Yeoman and Jekyll
-    this.copy('conditional/template-h5bp/index.html', 'app/index.html');
-    this.copy('conditional/template-h5bp/_layouts/post.html', 'app/_layouts/post.html');
-    this.template('conditional/template-h5bp/_includes/scripts.html', 'app/_includes/scripts.html');
-    this.template('conditional/template-h5bp/_layouts/default.html', 'app/_layouts/default.html');
+    this.copy('conditional/template-H5BP/index.html', 'app/index.html');
+    this.copy('conditional/template-H5BP/_layouts/post.html', 'app/_layouts/post.html');
+    this.template('conditional/template-H5BP/_includes/scripts.html', 'app/_includes/scripts.html');
+    this.template('conditional/template-H5BP/_layouts/default.html', 'app/_layouts/default.html');
 
     // Google analytics include
     if (this.h5bpAnalytics) {
-      this.copy('conditional/template-h5bp/_includes/googleanalytics.html', 'app/_includes/googleanalytics.html');
+      this.copy('conditional/template-H5BP/_includes/googleanalytics.html', 'app/_includes/googleanalytics.html');
     }
 
     // Pull H5BP in from Github
