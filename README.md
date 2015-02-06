@@ -8,6 +8,10 @@ Generator-jekyllrb wraps the [Jekyll](http://jekyllrb.com/) static site generato
 
 Generator-jekyllrb is ideal for developing performant static sites and prototyping dynamic sites and apps (especially if the final version uses Yeoman too). It's also a great introduction to Yeoman if you're not familiar with JavaScript MV* frameworks.
 
+## FAQ
+
+Common problems? Common questions? Check out the [FAQ.md](FAQ.md)
+
 ## Features
 
 **During setup you can choose:**
