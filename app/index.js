@@ -49,10 +49,6 @@ var Generator = module.exports = function Generator(args, options) {
   this.on('end', function () {
     // Clean up temp files
     spawn('rm', ['-r', '.jekyll'], { stdio: 'inherit' });
-
-    // Install Grunt and Bower dependencies
-    this.installDependencies({ skipInstall: this.skipInstall });
-
   });
 };
 
@@ -562,4 +558,11 @@ Generator.prototype.jsPreprocessor = function jsPreprocessor() {
   if (this.jsPre === 'coffeescript') {
     this.template('conditional/coffee/readme.md', path.join('app', this.jsPreDir, 'readme.md'));
   }
+};
+
+// install dependencies -- needs to be at the end
+// https://github.com/robwierzbowski/generator-jekyllrb/issues/137
+Generator.prototype.install = function install() {
+  // Install Grunt and Bower dependencies
+  this.installDependencies({ skipInstall: this.skipInstall });
 };
