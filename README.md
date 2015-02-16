@@ -24,7 +24,7 @@ Common problems? Common questions? Check out the [FAQ.md](FAQ.md)
 
 **Generator-jekyllrb always includes:**
 
-- Built in preview server with LiveReload
+- Built in preview server with [BrowserSync](http://www.browsersync.io/)
 - Automatic Jekyll and preprocessor compiling
 - Code quality checks with [Jshint](http://www.jshint.com/) and/or [CoffeeLint](http://www.coffeelint.org/), [CssLint](http://csslint.net/), and `jekyll doctor`
 - An automatic build process that includes concatenation, image optimization, CSS and HTML minification, JS uglification, and asset revving to bust those caches
