@@ -170,7 +170,13 @@ Generator.prototype.askForStructure = function askForStructure() {
     filter: slashFilter,
     when: function () {
       return jsPre;
-    }
+    },
+    {
+      name: 'react',
+      type: 'confirm',
+      message: 'Use React?',
+      default: false
+    },
   }];
 
   console.log(chalk.yellow('\nSet up some directories.') + ' ☛' +
@@ -185,12 +191,14 @@ Generator.prototype.askForStructure = function askForStructure() {
     this.fontsDir  = props.fontsDir;
     this.cssPreDir = props.cssPreDir;
     this.jsPreDir  = props.jsPreDir;
+    this.react  = props.react;
 
     // Split asset directories on slashes
     this.cssExDir   = props.cssDir.split('/').pop();
     this.jsExDir    = props.jsDir.split('/').pop();
     this.imgExDir   = props.imgDir.split('/').pop();
     this.fontsExDir = props.fontsDir.split('/').pop();
+    this.reactExDir = props.react.split('/').pop();
 
     cb();
   }.bind(this));
