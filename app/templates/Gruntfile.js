@@ -110,10 +110,13 @@ module.exports = function (grunt) {
           ]
         }]
       },
-      server: [
-        '.tmp',
-        '.jekyll'
-      ]
+      server: {
+        options: { force: true },
+        stuff: [
+          '.tmp',
+          '.jekyll'
+        ]
+      }
     },<% if (cssPre === 'sass') { %>
     sass: {
       options: {
