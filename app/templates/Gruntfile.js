@@ -447,7 +447,6 @@ module.exports = function (grunt) {
     'cssmin',<% if (autoPre) { %>
     'autoprefixer:dist',<% } %>
     'uglify',
-    'imagemin',
     'svgmin',
     'filerev',
     'usemin',
@@ -458,6 +457,7 @@ module.exports = function (grunt) {
     'check',
     'test',
     'build',
+    'imagemin',
     'buildcontrol'
     ]);<% } %>
 
